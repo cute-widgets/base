@@ -1,0 +1,214 @@
+@use '@angular/cdk';
+//@use '../core/tokens/m2/mat/stepper' as tokens-mat-stepper;
+//@use '../core/tokens/token-utils';
+@use '../../core/style/layout-common';
+@use './stepper-variables';
+
+.cute-step-header {
+
+  // Class 'btn-{color}' was assigned in 'stepper.scss' file, so we can use its CSS variables.
+  // Default is Angular Material' colors.
+  --cute-stepper-theme-foreground-color: var(--bs-btn-color, white);
+  --cute-stepper-theme-background-color: var(--bs-btn-bg, rgb(0,0,200));
+
+  --cute-header-icon-foreground-color: var(--bs-body-bg, white);
+  --cute-header-icon-background-color: var(--bs-body-color, rgba(var(--bs-body-color-rgb), .54));
+
+  --cute-header-icon-selected-foreground-color: var(--cute-stepper-theme-foreground-color);
+  --cute-header-icon-selected-background-color: var(--cute-stepper-theme-background-color);
+
+  --cute-header-done-state-icon-foreground-color: var(--cute-stepper-theme-foreground-color);
+  --cute-header-done-state-icon-background-color: var(--cute-stepper-theme-background-color);
+
+  --cute-header-edit-state-icon-foreground-color: var(--cute-stepper-theme-foreground-color);
+  --cute-header-edit-state-icon-background-color: var(--cute-stepper-theme-background-color);
+
+  --cute-header-error-state-icon-foreground-color: var(--bs-form-invalid-color);  //#f44336;
+  --cute-header-error-state-icon-background-color: transparent;
+
+  --cute-header-hover-state-layer-color: rgba(var(--bs-body-color-rgb), .04);
+  --cute-header-hover-state-layer-shape: var(--bs-border-radius);
+  --cute-header-focus-state-layer-color: rgba(var(--bs-body-color-rgb), .04);
+  --cute-header-focus-state-layer-shape: var(--bs-border-radius);
+  --cute-header-label-text-color: rgba(var(--bs-body-color-rgb), .54);
+  --cute-header-label-text-weight: inherit;
+  --cute-header-optional-label-text-color: rgba(var(--bs-body-color-rgb), .54);
+  --cute-header-selected-state-label-text-color: rgba(var(--bs-body-color-rgb), .87);
+  --cute-header-selected-state-label-text-weight: 500;
+  --cute-header-error-state-label-text-color: var(--bs-form-invalid-color); //#f44336;
+  --cute-header-error-state-label-text-size:  var(--bs-body-font-size);
+
+  overflow: hidden;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  box-sizing: content-box;
+  -webkit-tap-highlight-color: transparent;
+
+  // Stepper headers have the focus indicator as a descendant,
+  // because `::before` is used for other styling.
+  &:focus .cute-focus-indicator::before {
+    content: '';
+  }
+
+  &:hover[aria-disabled='true'] {
+    cursor: default;
+  }
+
+  &:hover:not([aria-disabled="true"]),
+  &:hover[aria-disabled='false'] {
+    background-color: var(--cute-header-hover-state-layer-color);
+    border-radius: var(--cute-header-hover-state-layer-shape);
+  }
+
+  &.cdk-keyboard-focused,
+  &.cdk-program-focused {
+    background-color: var(--cute-header-focus-state-layer-color);
+    border-radius: var(--cute-header-focus-state-layer-shape);
+  }
+
+  // On touch devices the :hover state will linger on the element after a tap.
+  // Reset it via `@media` after the declaration, because the media query isn't
+  // supported by all browsers yet.
+  @media (hover: none) {
+    &:hover {
+      background: none;
+    }
+  }
+
+  @include cdk.high-contrast(active, off) {
+    outline: solid 1px;
+
+    &[aria-selected='true'] {
+      .cute-step-label {
+        text-decoration: underline;
+      }
+    }
+
+    // When a step header is disabled in high contrast mode, set the text color to the disabled
+    // color, which is (intuitively) named "GrayText".
+    &[aria-disabled='true'] {
+      outline-color: GrayText;
+      .cute-step-label,
+      .cute-step-icon,
+      .cute-step-optional {
+        color: GrayText;
+      }
+    }
+  }
+}
+
+.cute-step-optional {
+  font-size: stepper-variables.$step-sub-label-font-size;
+  color: var(--cute-header-optional-label-text-color);
+}
+
+.cute-step-sub-label-error {
+  font-size: stepper-variables.$step-sub-label-font-size;
+  font-weight: normal;
+}
+
+.cute-step-icon {
+  border-radius: 50%;
+  height: stepper-variables.$label-header-height;
+  width: stepper-variables.$label-header-height;
+  flex-shrink: 0;
+  position: relative;
+  color: var(--cute-header-icon-foreground-color);
+  background-color: var(--cute-header-icon-background-color);
+}
+
+.cute-step-icon-content {
+  // Use absolute positioning to center the content, because it works better with text.
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  // We aren't using any flex features here, but using the `display: flex` prevents
+  // the browser from adding extra whitespace at the bottom of the element.
+  display: flex;
+}
+
+.cute-step-icon .cute-icon {
+  font-size: stepper-variables.$step-header-icon-size;
+  height: stepper-variables.$step-header-icon-size;
+  width: stepper-variables.$step-header-icon-size;
+}
+
+.cute-step-icon-state-error {
+  background-color: var(--cute-header-error-state-icon-background-color);
+  color: var(--cute-header-error-state-icon-foreground-color);
+
+  .cute-icon {
+    font-size: stepper-variables.$step-header-icon-size + 8;
+    height: stepper-variables.$step-header-icon-size + 8;
+    width: stepper-variables.$step-header-icon-size + 8;
+  }
+}
+
+.cute-step-label {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: stepper-variables.$label-min-width;
+  vertical-align: middle;
+
+  font-family: var(--cute-header-label-text-font);
+  font-size: var(--cute-header-label-text-size);
+  font-weight: var(--cute-header-label-text-weight);
+  color: var(--cute-header-label-text-color);
+
+  &.cute-step-label-active {
+    color: var(--cute-header-selected-state-label-text-color);
+  }
+
+  &.cute-step-label-error {
+    color: var(--cute-header-error-state-label-text-color);
+    font-size: var(--cute-header-error-state-label-text-size);
+  }
+
+  &.cute-step-label-selected {
+    font-size: var(--cute-header-selected-state-label-text-size);
+    font-weight: var(--cute-header-selected-state-label-text-weight);
+  }
+}
+
+.cute-step-text-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  //++
+  &:has(> :nth-child(2)) {
+    // We have more than 1 children
+    display: flex;
+    flex-direction: column;
+    & > * {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  //--
+}
+
+// Increase specificity because ripple styles are part of the `cute-core` mixin and can
+// potentially overwrite the absolute position of the container.
+.cute-step-header .cute-step-header-ripple {
+  @include layout-common.fill;
+  pointer-events: none;
+}
+
+.cute-step-icon-selected {
+  background-color: var(--cute-header-icon-selected-background-color);
+  color: var(--cute-header-icon-selected-foreground-color);
+}
+
+.cute-step-icon-state-done {
+  background-color: var(--cute-header-done-state-icon-background-color);
+  color: var(--cute-header-done-state-icon-foreground-color);
+}
+
+.cute-step-icon-state-edit {
+  background-color: var(--cute-header-edit-state-icon-background-color);
+  color: var(--cute-header-edit-state-icon-foreground-color);
+}

@@ -1,0 +1,84 @@
+@use '../../core/style/list-common';
+@use '../../core/style/layout-common';
+//@use '../core/tokens/m2/mat/grid-list' as tokens-mat-grid-list;
+//@use '../core/tokens/token-utils';
+
+
+// height of tile header or footer if it has one line
+$one-line-height: 48px;
+// height of tile header or footer if it has two lines
+$two-line-height: 68px;
+// side padding for text in tile headers and footers
+$text-padding: 16px;
+
+.cute-grid-list {
+  display: block;
+  position: relative;
+}
+
+.cute-grid-tile {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+
+  // Headers & footers
+  .cute-grid-tile-header,
+  .cute-grid-tile-footer {
+    display: flex;
+    align-items: center;
+    height: $one-line-height;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.38);
+    overflow: hidden;
+    padding: 0 $text-padding;
+
+    // Positioning
+    position: absolute;
+    left: 0;
+    right: 0;
+
+    @include list-common.normalize-text();
+
+    &.cute-2-line {
+      height: $two-line-height;
+    }
+  }
+
+  .cute-grid-list-text {
+    @include list-common.wrapper-base();
+  }
+
+  .cute-grid-tile-header {
+    top: 0;
+  }
+
+  .cute-grid-tile-footer {
+    bottom: 0;
+  }
+
+  .cute-grid-avatar {
+    padding-right: $text-padding;
+
+    [dir='rtl'] & {
+      padding-right: 0;
+      padding-left: $text-padding;
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+
+.cute-grid-tile-content {
+  @include layout-common.fill;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  padding: 0;
+  margin: 0;
+}

@@ -1,0 +1,21 @@
+<span class="cute-chip-focus-overlay"></span>
+
+<span class="cute-chip__cell cute-chip__cell--primary">
+  <span cuteChipAction [isInteractive]="false">
+    @if (leadingIcon) {
+      <span class="cute-chip__graphic cute-chip-graphic">
+        <ng-content select="cute-avatar, cute-chip-avatar, [cuteChipAvatar]"></ng-content>
+      </span>
+    }
+    <span class="cute-chip__text-label cute-chip-action-label">
+      <ng-content></ng-content>
+      <span class="cute-chip-primary-focus-indicator cute-focus-indicator"></span>
+    </span>
+  </span>
+</span>
+
+@if (_hasTrailingIcon()) {
+  <span class="cute-chip__cell cute-chip__cell--trailing">
+    <ng-content select="cute-chip-trailing-icon,[cuteChipRemove],[cuteChipTrailingIcon]"></ng-content>
+  </span>
+}

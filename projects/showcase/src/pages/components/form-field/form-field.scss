@@ -1,0 +1,27 @@
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-form-field {
+  width: 400px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.example-right-align {
+  text-align: right;
+  padding-right: 4px;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}

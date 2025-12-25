@@ -1,0 +1,48 @@
+<span class="cute-chip-focus-overlay"></span>
+
+<span class="cute-chip__cell cute-chip__cell--primary">
+  <button
+      cuteButton="outline-button"
+      class="cute-chip-action rounded-pill text-nowrap"
+      [class.active]="selected"
+      magnitude="small"
+      [color]="color"
+      [tabIndex]="tabIndex"
+      [disabled]="disabled"
+      [attr.aria-selected]="ariaSelected"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-describedby]="_ariaDescriptionId"
+      data-bs-toggle="button"
+      role="option"
+      (click)="_handlePrimaryActionInteraction()">
+  @if (_hasLeadingGraphic()) {
+    <span cuteButtonIcon class="cute-chip-graphic cute-chip__graphic">
+        <ng-content select="cute-avatar, cute-chip-avatar, [cuteChipAvatar]"></ng-content>
+        @if (selected && !leadingIcon ) {
+          <span class="cute-chip__checkmark">
+          <svg
+            class="cute-chip__checkmark-svg"
+            viewBox="-2 2 24 24"
+            focusable="false"
+            aria-hidden="true">
+            <path class="cute-chip__checkmark-path"
+                  fill="none" stroke="currentColor" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+          </svg>
+        </span>
+        }
+    </span>
+  }
+    <span class="cute-chip__text-label cute-chip-action-label">
+      <ng-content></ng-content>
+      <span class="cute-chip-primary-focus-indicator"></span>
+    </span>
+  </button>
+</span>
+
+@if (_hasTrailingIcon()) {
+  <span class="cute-chip__cell cute-chip__cell--trailing">
+    <ng-content select="cute-chip-trailing-icon,[cuteChipRemove],[cuteChipTrailingIcon]"></ng-content>
+  </span>
+}
+
+<span class="visually-hidden" [id]="_ariaDescriptionId">{{ariaDescription}}</span>

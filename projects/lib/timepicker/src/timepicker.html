@@ -1,0 +1,19 @@
+<ng-template #panelTemplate>
+  <div
+    role="listbox"
+    class="cute-timepicker-panel shadow"
+    [class.cute-timepicker-panel-animations-enabled]="!_animationsDisabled"
+    [class.cute-timepicker-panel-exit]="!isOpen()"
+    [attr.aria-label]="ariaLabel() || null"
+    [attr.aria-labelledby]="_getAriaLabelledby()"
+    [id]="panelId"
+    (animationend)="_handleAnimationEnd($event)">
+    <div class="cute-timepicker-options">
+      @for (option of _timeOptions; track option.value) {
+        <cute-option
+          [value]="option.value"
+          (onSelectionChange)="_selectValue($event.source)">{{option.label}}</cute-option>
+      }
+    </div>
+  </div>
+</ng-template>

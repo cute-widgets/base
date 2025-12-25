@@ -1,0 +1,161 @@
+@use '@angular/cdk';
+
+@use '../../core/style/layout-common';
+
+$calendar-padding: 8px !default;
+$calendar-header-divider-width: 1px !default;
+$calendar-controls-vertical-padding: 5%;
+// We use the same padding as the month / year label, but subtract 16px since there is padding
+// between the edge of the button and the text. This ensures that the button text lines up with
+// the month / year label text.
+$calendar-controls-side-margin: calc(33% / 7 - 16px);
+
+$calendar-arrow-size: 5px !default;
+$calendar-arrow-disabled-opacity: 0.5 !default;
+
+// Values chosen to approximate https://material.io/icons/#ic_navigate_before and
+// https://material.io/icons/#ic_navigate_next as closely as possible.
+$calendar-prev-next-icon-border-width: 2px;
+$calendar-prev-next-icon-margin: 15.5px;
+$calendar-prev-icon-transform: translateX(2px) rotate(-45deg);
+$calendar-next-icon-transform: translateX(-2px) rotate(45deg);
+
+.cute-calendar {
+  --cute-calendar-text-font: var(--bs-body-font-family);
+  --cute-calendar-text-size: var(--bs-body-font-size);
+  --cute-calendar-header-text-color: var(--bs-body-color);
+  --cute-calendar-header-text-size: var(--bs-body-font-size);
+  --cute-calendar-header-text-weight: calc(var(--bs-body-font-weight) * 1.5);
+  --cute-calendar-period-button-icon-color: currentColor;
+
+  display: block;
+  font-family: var(--cute-calendar-text-font) sans-serif;
+  font-size: var(--cute-calendar-text-size);
+}
+
+.cute-calendar-header {
+  padding: $calendar-padding $calendar-padding 0 $calendar-padding;
+}
+
+.cute-calendar-content {
+  padding: 0 $calendar-padding $calendar-padding $calendar-padding;
+  outline: none;
+}
+
+.cute-calendar-controls {
+  display: flex;
+  align-items: center;
+  margin: $calendar-controls-vertical-padding $calendar-controls-side-margin;
+}
+
+.cute-calendar-spacer {
+  flex: 1 1 auto;
+}
+
+.cute-calendar-period-button {
+  min-width: 0;
+  margin: 0 8px;
+  font-size:    var(--cute-calendar-period-button-text-size);
+  font-weight:  var(--cute-calendar-period-button-text-weight);
+}
+
+.cute-calendar-arrow {
+  display: inline-block;
+  width: $calendar-arrow-size * 2;
+  height: $calendar-arrow-size;
+  margin: 0 0 0 $calendar-arrow-size;
+  vertical-align: middle;
+
+  fill: var(--cute-calendar-period-button-icon-color);
+
+  &.cute-calendar-invert {
+    transform: rotate(180deg);
+  }
+
+  [dir='rtl'] & {
+    margin: 0 $calendar-arrow-size 0 0;
+  }
+
+  @include cdk.high-contrast(active, off) {
+    // Setting the fill to `currentColor` doesn't work on Chromium browsers.
+    fill: CanvasText;
+  }
+}
+
+.cute-calendar-previous-button,
+.cute-calendar-next-button {
+  position: relative;
+
+  // Needs need a bit more specificity to avoid being overwritten by the .mat-icon-button.
+  .cute-datepicker-content &:not(.cute-button-disabled) {
+    color: var(--cute-calendar-navigation-button-icon-color);
+  }
+
+  &::after {
+    @include layout-common.fill;
+    content: '';
+    margin: $calendar-prev-next-icon-margin;
+    border: 0 solid currentColor;
+    border-top-width: $calendar-prev-next-icon-border-width;
+  }
+
+  [dir='rtl'] & {
+    transform: rotate(180deg);
+  }
+}
+
+.cute-calendar-previous-button::after {
+  border-left-width: $calendar-prev-next-icon-border-width;
+  transform: $calendar-prev-icon-transform;
+}
+
+.cute-calendar-next-button::after {
+  border-right-width: $calendar-prev-next-icon-border-width;
+  transform: $calendar-next-icon-transform;
+}
+
+.cute-calendar-table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.cute-calendar-table-header th {
+  text-align: center;
+  padding: 0 0 $calendar-padding 0;
+  color: var(--cute-calendar-header-text-color);
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.cute-calendar-table-header-divider {
+  position: relative;
+  height: $calendar-header-divider-width;
+
+  // We use an absolutely positioned pseudo-element as the divider line for the table header so we
+  // can extend it all the way to the edge of the calendar.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -$calendar-padding;
+    right: -$calendar-padding;
+    height: $calendar-header-divider-width;
+
+    background: var(--cute-calendar-header-divider-color);
+  }
+}
+
+// For the calendar element, default inset/offset values are necessary to ensure that
+// the focus indicator is sufficiently contrastive and renders appropriately.
+.cute-calendar-body-cell-content::before {
+  //$border-width: var(--cute-focus-indicator-border-width, 1px);
+  //$offset: calc(#{$border-width} + 3px);
+  //margin: calc(#{$offset} * -1);
+}
+
+// For calendar cells, render the focus indicator when the parent cell is
+// focused.
+.cute-calendar-body-cell:focus .cute-focus-indicator::before {
+  content: '';
+}

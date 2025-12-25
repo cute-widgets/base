@@ -1,0 +1,48 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "paths": {
+      "@cute-widgets/base": [
+        "dist/lib"
+      ],
+      "@cute-widgets/base/*": [
+        "dist/lib/*"
+      ]
+    },
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve",
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "references": [
+    {
+      "path": "./projects/lib/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/lib/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/showcase/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/showcase/tsconfig.spec.json"
+    }
+  ]
+}

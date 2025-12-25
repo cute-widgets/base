@@ -1,0 +1,37 @@
+@let LINK_CLASSES = "ms-4 text-body-secondary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover";
+<cute-sidenav-container>
+  <cute-sidenav #sidenav mode="side" opened disableClose [fixedInViewport]="true" fixedTopGap="58">
+    <nav cuteNav="pills" orientation="vertical" class="p-3 mb-auto">
+      <!-- Getting started -->
+      <span class="text-body-emphasis">
+        <cute-icon class="me-1" color="primary">book-half</cute-icon>
+        Getting started
+      </span>
+
+      <a cute-nav-link color="secondary-emphasis" [class]="LINK_CLASSES" routerLink="overview"> Overview </a>
+
+      <!-- Components -->
+      <span class="text-body-emphasis">
+        <cute-icon color="primary" class="me-1">ui-radios</cute-icon>
+        Base Components
+      </span>
+
+      @for (item of items; track item) {
+        <a cute-nav-link [class]="LINK_CLASSES" [routerLink]="item.id"> {{item.name}} </a>
+      }
+
+    </nav>
+    <!--      <div class="b-example-divider cute-vr"></div>-->
+  </cute-sidenav>
+
+  <cute-sidenav-content #content>
+
+    <cute-container class="router-outlet-wrapper">
+      <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>
+    </cute-container>
+
+  </cute-sidenav-content>
+
+</cute-sidenav-container>
+
+<!--<app-footer/>-->

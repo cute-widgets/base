@@ -1,0 +1,22 @@
+.cute-dialog-container {
+  --bs-modal-width: 100%;
+
+  display: block;
+  position: static;
+  width: 100%;
+  height: auto;
+  min-height: inherit;
+  max-height: inherit;
+  min-width: inherit;
+  max-width: inherit;
+}
+
+.cute-dialog-component-host {
+  display: contents;
+}
+
+/*
+.cdk-global-scrollblock {
+  overflow: hidden;
+}
+*/

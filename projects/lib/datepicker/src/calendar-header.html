@@ -1,0 +1,31 @@
+<div class="cute-calendar-header">
+  <div class="cute-calendar-controls">
+    <!-- [Firefox Issue: https://bugzilla.mozilla.org/show_bug.cgi?id=1880533]
+      Relocated label next to related button and made visually hidden via cdk-visually-hidden
+      to enable label to appear in a11y tree for SR when using Firefox -->
+    <label [id]="_periodButtonLabelId" class="cdk-visually-hidden" aria-live="polite">{{periodButtonDescription}}</label>
+    <button cute-button type="button" class="cute-calendar-period-button"
+            (click)="currentPeriodClicked()" [attr.aria-label]="periodButtonLabel"
+            [attr.aria-describedby]="_periodButtonLabelId">
+      <span aria-hidden="true">{{periodButtonText}}</span>
+      <svg class="cute-calendar-arrow" [class.cute-calendar-invert]="calendar.currentView !== 'month'"
+           fill="currentColor" viewBox="0 0 10 5" focusable="false" aria-hidden="true">
+        <polygon points="0,0 5,5 10,0"/>
+      </svg>
+    </button>
+
+    <div class="cute-calendar-spacer"></div>
+
+    <ng-content></ng-content>
+
+    <button cuteButton="icon-button" type="button" class="cute-calendar-previous-button"
+            [disabled]="!previousEnabled()" (click)="previousClicked()"
+            [cuteTooltip]="prevButtonLabel" [attr.aria-label]="prevButtonLabel" disabledInteractive>
+    </button>
+
+    <button cuteButton="icon-button" type="button" class="cute-calendar-next-button"
+            [disabled]="!nextEnabled()" (click)="nextClicked()"
+            [cuteTooltip]="nextButtonLabel" [attr.aria-label]="nextButtonLabel" disabledInteractive>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<h5>Chips</h5>
+
+<cute-vstack gap="3" class="my-3">
+
+  <h6>Static Chips</h6>
+  <cute-chip-set aria-label="Dog selection">
+    <cute-chip>
+      <img cuteChipAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"/>
+      Dog one
+    </cute-chip>
+    <cute-chip color="primary">
+      <img cuteChipAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"/>
+      Dog two
+    </cute-chip>
+    <cute-chip color="warning" disabled>
+      <img cuteChipAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"/>
+      Dog three
+    </cute-chip>
+  </cute-chip-set>
+
+
+  <h6>Selection Chips</h6>
+  <cute-chip-listbox aria-label="Fish selection">
+    <cute-chip-option color="tertiary">One fish</cute-chip-option>
+    <cute-chip-option>Two fish</cute-chip-option>
+    <cute-chip-option color="primary">Primary fish</cute-chip-option>
+    <cute-chip-option color="warning" disabled>Warning fish</cute-chip-option>
+  </cute-chip-listbox>
+
+  <h6>Vertical stacked Chips</h6>
+  <cute-chip-listbox class="cute-chip-set-stacked" aria-label="Color selection">
+    @for (chip of availableColors; track chip) {
+      <cute-chip-option selected [color]="chip.color">{{chip.name}}</cute-chip-option>
+    }
+  </cute-chip-listbox>
+
+  <h6>Chips from Control</h6>
+  <chips-from-control></chips-from-control>
+
+  <h6>Chips Autocomplete</h6>
+  <chips-autocomplete></chips-autocomplete>
+
+</cute-vstack>
+

@@ -1,0 +1,32 @@
+<cute-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <cute-tree-node *cuteTreeNodeDef="let node" cuteTreeNodePadding cuteTreeNodePaddingIndent="24px" >
+    <button cuteButton="icon-button" disabled magnitude="small" style="width: 36px"></button>
+    {{node.item}}
+  </cute-tree-node>
+  <cute-tree-node *cuteTreeNodeDef="let node; when: hasChild"
+                  cuteTreeNodePadding cuteTreeNodePaddingIndent="24px"
+                 [cdkTreeNodeTypeaheadLabel]="node.item">
+    <!--
+    <button cuteButton="icon-button" magnitude="small"
+            [attr.aria-label]="'Toggle ' + node.item" >
+      <cute-icon class="mat-icon-rtl-mirror" fontSet="mat">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </cute-icon>
+    </button>
+    -->
+    <button cuteButton
+            cuteTreeNodeToggle
+            withAriaExpandedIndicator
+            [attr.aria-expanded]="node.isExpanded()">
+      {{node.item}}
+    </button>
+
+    @if (node.isLoading()) {
+      <cute-progress-bar
+        thickness="8px"
+        mode="indeterminate"
+        class="example-tree-progress-bar"></cute-progress-bar>
+<!--      <cute-progress-spinner color="primary" magnitude="small"></cute-progress-spinner>-->
+    }
+  </cute-tree-node>
+</cute-tree>

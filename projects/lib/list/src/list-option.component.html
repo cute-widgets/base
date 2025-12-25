@@ -1,0 +1,61 @@
+<ng-template #icons>
+  <ng-content select="[cuteListItemAvatar],[cuteListItemIcon]"></ng-content>
+</ng-template>
+<ng-template #checkbox>
+  <cute-checkbox tabIndex="-1" [checked]="selected" [disabled]="disabled" [iconSize]="iconSize" class="pe-none"></cute-checkbox>
+</ng-template>
+<ng-template #radio>
+  <cute-radio-button tabIndex="-1" [checked]="selected" [disabled]="disabled" [iconSize]="iconSize" class="pe-none"></cute-radio-button>
+</ng-template>
+
+@if (_hasCheckboxAt('before')) {
+  <!-- Container for the checkbox at start. -->
+  <span class="cute-list-option-checkbox-before">
+    <ng-template [ngTemplateOutlet]="checkbox"></ng-template>
+  </span>
+} @else if (_hasRadioAt('before')) {
+  <!-- Container for the radio at the start. -->
+  <span class="cute-list-option-radio cute-list-option-radio-before">
+    <ng-template [ngTemplateOutlet]="radio"></ng-template>
+  </span>
+}
+<!-- Conditionally renders icons/avatars before the list item text. -->
+@if (_hasIconsOrAvatarsAt('before')) {
+  <ng-template [ngTemplateOutlet]="icons"></ng-template>
+}
+
+<!-- Text -->
+<span class="cute-list-item-content">
+  <ng-content select="[cuteListItemTitle]"></ng-content>
+  <ng-content select="[cuteListItemLine]"></ng-content>
+  <span #unscopedContent class="cute-list-item-content-unscoped"
+        (cdkObserveContent)="_updateItemLines(true)">
+    <ng-content></ng-content>
+  </span>
+</span>
+
+@if (_hasCheckboxAt('after')) {
+  <!-- Container for the checkbox at the end. -->
+  <span class="cute-list-item__end">
+    <ng-template [ngTemplateOutlet]="checkbox"></ng-template>
+  </span>
+} @else if (_hasRadioAt('after')) {
+  <!-- Container for the radio at the end. -->
+  <span class="cute-list-option-radio cute-list-item__end">
+    <ng-template [ngTemplateOutlet]="radio"></ng-template>
+  </span>
+}
+
+<!-- Conditionally renders icons/avatars after the list item text. -->
+@if (_hasIconsOrAvatarsAt('after')) {
+  <ng-template [ngTemplateOutlet]="icons"></ng-template>
+}
+
+<!-- Divider -->
+<ng-content select="cute-divider"></ng-content>
+
+<!--
+  Strong focus indicator element. MDC uses the `::before` pseudo element for the default
+  focus/hover/selected state, so we need a separate element.
+-->
+<!--<div class="cute-focus-indicator"></div>-->

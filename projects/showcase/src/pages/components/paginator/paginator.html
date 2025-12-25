@@ -1,0 +1,110 @@
+<h5 class="mb-3">Paginator</h5>
+
+<h6>Basic paginator</h6>
+<cute-paginator [length]="100"
+                [pageSize]="10"
+                middleSectionStyle="5-pages"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                [showFirstLastButtons]="true"
+                class="w-50"
+                aria-label="Select page">
+</cute-paginator>
+
+<h6 class="mt-3">Configurable paginator</h6>
+
+<div class="demo-options">
+  <cute-form-field>
+    <cute-label>Length</cute-label>
+    <input cuteInput placeholder="Length" type="number" [(ngModel)]="length">
+  </cute-form-field>
+
+  <cute-form-field>
+    <cute-label>Page Size</cute-label>
+    <input cuteInput placeholder="Page Size" type="number" [(ngModel)]="pageSize">
+  </cute-form-field>
+
+  <cute-form-field>
+    <cute-label>Page Index</cute-label>
+    <input cuteInput placeholder="Page Index" type="number" [(ngModel)]="pageIndex">
+  </cute-form-field>
+
+  <cute-form-field>
+    <cute-label>Page Size Options</cute-label>
+    <input cuteInput [ngModel]="pageSizeOptions" (ngModelChange)="setPageSizeOptions($event)"
+           [ngModelOptions]="{updateOn: 'blur'}" placeholder="Ex. 10,25,50">
+  </cute-form-field>
+
+  <cute-hstack gap="3">
+    <cute-vstack gap="2">
+      <cute-slide-toggle [(ngModel)]="hidePageSize">Hide page size</cute-slide-toggle>
+      <cute-slide-toggle [(ngModel)]="showPageSizeOptions">Show multiple page size options</cute-slide-toggle>
+      <cute-slide-toggle [(ngModel)]="showFirstLastButtons">Show first/last buttons</cute-slide-toggle>
+      <cute-slide-toggle [(ngModel)]="disabled">Disabled</cute-slide-toggle>
+      <cute-slide-toggle #cbxHideBorders>Hide borders</cute-slide-toggle>
+      <cute-slide-toggle #cbxLabels>Show prev/next labels</cute-slide-toggle>
+    </cute-vstack>
+
+    <cute-vstack gap="2">
+      <label>Magnitude</label>
+      <cute-select #selSize value="middle">
+        <cute-option value="small">Small</cute-option>
+        <cute-option value="middle">Middle</cute-option>
+        <cute-option value="large">Large</cute-option>
+      </cute-select>
+
+      <label>Middle section style</label>
+      <cute-select #selMSS value="range">
+        <cute-option value="pages">Pages</cute-option>
+        <cute-option value="5-pages">5 pages</cute-option>
+        <cute-option value="range">Range</cute-option>
+        <cute-option value="none">None</cute-option>
+      </cute-select>
+
+      <label>Alignment</label>
+      <cute-select #selAlign value="between">
+        <cute-option value="start">Start</cute-option>
+        <cute-option value="end">End</cute-option>
+        <cute-option value="center">Center</cute-option>
+        <cute-option value="between">Between</cute-option>
+      </cute-select>
+
+      <cute-label>Color</cute-label>
+      <cute-select [(ngModel)]="color">
+        <cute-option>None</cute-option>
+        <cute-option value="primary">primary</cute-option>
+        <cute-option value="secondary">secondary</cute-option>
+        <cute-option value="danger">danger</cute-option>
+        <cute-option value="warning">warning</cute-option>
+        <cute-option value="success">success</cute-option>
+        <cute-option value="info">info</cute-option>
+      </cute-select>
+    </cute-vstack>
+
+  </cute-hstack>
+</div>
+
+<cute-divider lineStyle="dashed"></cute-divider>
+
+<cute-paginator #paginator
+                class="demo-paginator"
+                (page)="handlePageEvent($event)"
+                [length]="length"
+                [pageSize]="pageSize"
+                [disabled]="disabled"
+                [color]="color"
+                [showFirstLastButtons]="showFirstLastButtons"
+                [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                [hidePageSize]="hidePageSize"
+                [pageIndex]="pageIndex"
+                [hideBorders]="cbxHideBorders.checked"
+                [showPrevNextLabels]="cbxLabels.checked"
+                [magnitude]="selSize.value"
+                [middleSectionStyle]="selMSS.value"
+                [alignment]="selAlign.value"
+                aria-label="Select page">
+</cute-paginator>
+
+<div class="demo-data">
+  <div> Output event: {{(pageEvent | json) || 'No events dispatched yet'}} </div>
+  <div> getNumberOfPages: {{paginator.getNumberOfPages()}} </div>
+</div>

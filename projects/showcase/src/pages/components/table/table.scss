@@ -1,0 +1,46 @@
+.example-container {
+  height: 400px;
+  width: 600px;
+  max-width: 100%;
+  overflow: auto;
+  margin-bottom: 12px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+table {
+  width: 800px;
+}
+
+td.cute-column-star {
+  width: 20px;
+  padding-right: 8px;
+}
+
+.cute-column-select {
+  width: 16px;
+  text-align: center;
+}
+
+.cute-column-position {
+  width: 32px;
+  //border-right: 1px solid currentColor;
+  //padding-right: 24px;
+  text-align: center;
+}
+
+.cute-column-weight {
+  font-style: italic;
+}
+
+.cute-column-symbol {
+  width: 32px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.demo-row-is-clicked {
+  font-weight: bold;
+}

@@ -1,0 +1,28 @@
+<h5 class="mb-3">Slider</h5>
+
+<cute-vstack>
+
+  <cute-checkbox #cbxMarkers>Use markers</cute-checkbox>
+
+  <cute-slider class="mt-3">
+    <input cuteSliderThumb #inpRange class="example-range-input"
+           [(ngModel)]="rangeValue" min="0" max="10"
+           list="markers"
+           [style]="{appearance: cbxMarkers.checked ? 'auto' : 'none'}">
+  </cute-slider>
+  <span>Range: <b>{{rangeValue}}</b></span>
+</cute-vstack>
+
+<datalist id="markers">
+  <option value="0"></option>
+  <option value="1"></option>
+  <option value="2"></option>
+  <option value="3"></option>
+  <option value="4"></option>
+  <option value="5"></option>
+  <option value="6"></option>
+  <option value="7"></option>
+  <option value="8"></option>
+  <option value="9"></option>
+  <option value="10"></option>
+</datalist>

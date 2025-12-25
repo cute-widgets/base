@@ -1,0 +1,56 @@
+<h5 class="mb-3">Snack-bar</h5>
+
+<cute-vstack gap="3">
+  <cute-hstack gap="3">
+    <cute-form-field>
+      <cute-label>Horizontal position</cute-label>
+      <cute-select [(value)]="horizontalPosition">
+        <cute-option value="start">Start</cute-option>
+        <cute-option value="center">Center</cute-option>
+        <cute-option value="end">End</cute-option>
+        <cute-option value="left">Left</cute-option>
+        <cute-option value="right">Right</cute-option>
+      </cute-select>
+    </cute-form-field>
+    <cute-form-field>
+      <cute-label>Vertical position</cute-label>
+      <cute-select [(value)]="verticalPosition">
+        <cute-option value="top">Top</cute-option>
+        <cute-option value="bottom">Bottom</cute-option>
+      </cute-select>
+    </cute-form-field>
+  </cute-hstack>
+
+  <cute-hstack gap="3">
+    <cute-form-field>
+      <cute-label>Snack bar duration (seconds)</cute-label>
+      <input type="number" [(ngModel)]="duration" cuteInput>
+    </cute-form-field>
+    <cute-form-field>
+      <cute-label>Color</cute-label>
+      <cute-select [(ngModel)]="color">
+        <cute-option>None</cute-option>
+        <cute-option value="primary">primary</cute-option>
+        <cute-option value="secondary">secondary</cute-option>
+        <cute-option value="danger">danger</cute-option>
+        <cute-option value="warning">warning</cute-option>
+        <cute-option value="success">success</cute-option>
+        <cute-option value="info">info</cute-option>
+      </cute-select>
+    </cute-form-field>
+  </cute-hstack>
+
+  <cute-vstack gap="2" class="w-25">
+    <button cuteButton="flat-button" color="secondary"
+            (click)="openSnackBar()" aria-label="Show an example snack-bar">
+      Pool party!
+    </button>
+
+    <button cuteButton="flat-button" color="secondary-emphasis" (click)="openPizzaSnackBar()" aria-label="Show an example snack-bar">
+      Pizza party!
+    </button>
+  </cute-vstack>
+
+</cute-vstack>
+
+

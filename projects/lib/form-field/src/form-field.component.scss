@@ -1,0 +1,283 @@
+.cute-form-field {
+  display: inline-flex;
+  // This container contains the text-field and the subscript. The subscript
+  // should be displayed below the text-field. Hence the column direction.
+  flex-direction: column;
+  // This allows the form-field to shrink down when used inside flex or grid layouts.
+  min-width: 0;
+
+  max-width: 100%;
+  //width: auto;
+
+  // To avoid problems with text-align.
+  text-align: start;
+
+  .cute-text-field {
+    display: inline-flex;
+    // This container contains the text-field and the subscript. The subscript
+    // should be displayed below the text-field. Hence the column direction.
+    flex-direction: column;
+    // The text-field should stretch to the width of the host `<cute-form-field>` element.
+    // This allows developers to control the width without needing custom CSS overrides.
+    width: 100%;
+    justify-content: start;
+
+    .cute-text-field__input {
+      // overflow: hidden; // Break bootstrap's Focus Ring
+    }
+
+  }
+
+  // Overrides Bootstrap's default value (0.5rem)
+  .form-label {
+    margin-bottom: 0.25rem;
+  }
+
+  // Overrides floating label's background color
+  .form-floating > .form-control:focus ~ label::after,
+  .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+  .form-floating > .form-control-plaintext ~ label::after,
+  .form-floating > .form-select ~ label::after {
+    background-color: transparent;
+  }
+
+  // Clears the floats on the hints. This is necessary for the hint animation to work.
+  .cute-form-field-hint-wrapper,
+  .cute-form-field-error-wrapper {
+    display: flex;
+    animation: _cute-form-field-subscript-animation 0ms cubic-bezier(0.55, 0, 0.55, 0.2);
+  }
+
+  &.cute-form-field-animations-enabled {
+    .cute-form-field-hint-wrapper,
+    .cute-form-field-error-wrapper {
+      animation-duration: 300ms;
+    }
+  }
+
+  &.cute-form-field-disabled {
+    input:not([readonly]) {
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    &.cute-input-disabled-interactive {
+      pointer-events: auto;
+    }
+  }
+
+  // Spacer used to make sure start and end hints have enough space between them.
+  .cute-form-field-hint-spacer {
+    flex: 1 0 1em;
+  }
+
+  // Space for `fixed` subscript line
+  .cute-form-field-bottom-align:empty::before {
+    display: block;
+    content: '-';
+    margin-top: 0.125rem;
+    font-size: 0.875em;
+    color: transparent;
+    pointer-events: none;
+  }
+
+  .cute-form-field-required-marker, .cute-floating-label--required {
+    &:after {
+      content: "*";
+      margin-inline-start : 3px;
+      margin-inline-end: 0;
+      vertical-align: top;
+      color: var(--bs-danger);
+    }
+  }
+
+  input {
+    /* Colorize modified fields */
+    &.ng-dirty:not(:placeholder-shown) {
+      background-color: var(--bs-warning-bg-subtle);
+    }
+
+    /* Placeholder */
+    &:placeholder-shown {
+      text-overflow: ellipsis;
+    }
+
+    &::placeholder {
+      //opacity: 0.85;
+      //font-size: 0.9em;
+    }
+  }
+
+}
+
+[dir='rtl'] {
+  // Fixes Bootstrap's default implementation (error) for `rtl` directionality
+  .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback)
+  {
+    margin-left: 0;
+    margin-right: calc(var(--bs-border-width) * -1);
+    //border-radius: 0; // var(--bs-border-radius) 0 0 var(--bs-border-radius);
+    border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius);
+    &:not(:last-child) {
+      border-radius: 0;
+    }
+  }
+
+  .input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
+  .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3),
+  .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-control,
+  .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-select
+  {
+    border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0;
+  }
+}
+
+/* Try to catch cute-select, cute-dropdown, etc. */
+.input-group .cute-widget {
+
+  &:not(:first-child) {
+    & .form-select, .dropdown-toggle {
+
+      :not([dir="rtl"]) & {
+        // default is 'ltr'
+        margin-left: calc(var(--bs-border-width) * -1);
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      [dir="rtl"] & {
+        margin-right: calc(var(--bs-border-width) * 1);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+
+  &:not(:last-child) {
+    & .form-select, .dropdown-toggle {
+      :not([dir="rtl"]) & {
+        // default is 'ltr'
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      [dir="rtl"] & {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+
+        &:first-child {
+          border-top-right-radius: var(--bs-border-radius) ;
+          border-bottom-right-radius: var(--bs-border-radius) ;
+        }
+
+      }
+    }
+  }
+}
+
+//.input-group > :not(:first-child):not(:last-child) .form-select,.dropdown-toggle {
+//  border-radius: inherit;
+//}
+
+.input-group .cute-form-field-control {
+  display: contents;
+  border: 2px gray solid;
+  border-radius: inherit;
+  /*
+  flex: auto;
+  min-width: 0;
+
+  // Infix stretches to fit the container, but naturally wants to be this wide. We set
+  // this in order to have a consistent natural size for the various types of controls
+  // that can go in a form field.
+  width: 180px;
+  */
+
+  & .form-control, .form-select {
+    border: 1px gray solid;
+    border-radius: inherit;
+
+    // Needed so that the floating label does not overlap with prefixes or suffixes.
+    position: relative;
+    box-sizing: border-box;
+  }
+}
+
+/*  */
+.input-group [cutePrefix],[cuteIconPrefix],[cuteSuffix],[cuteIconSuffix] {
+  display: inline-flex !important;
+  justify-content: center;
+}
+
+// Prefix and suffix icons
+.cute-form-field-prefix,
+.cute-form-field-suffix {
+  .cute-icon {
+    display: block;
+  }
+
+  .cute-icon-button .cute-icon {
+    margin: auto;
+  }
+}
+
+// Single hint/error message displayed beneath the form field underline.
+.cute-form-field-hint,
+.cute-form-field-error {
+  display: block;
+  text-align: start;
+  //margin-top: 0.125rem;
+  //line-height: 1.3;
+  font-size: 0.75rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cute-form-field-hint-end {
+  order: 1;
+}
+
+
+// The default Bootstrap's implementation does not support displaying a placeholder when the label is floating.
+// We extend this to show 'placeholder' in any type of label.
+.form-floating > .form-control:focus {
+  &::placeholder {
+    color: var(--bs-body-color);
+    opacity: 0.75;
+  }
+}
+
+// Floating label
+.form-floating > .form-control-plaintext ~ .form-label,
+.form-floating > .form-control:focus ~ .form-label,
+.form-floating > .form-control:not(:placeholder-shown) ~ .form-label,
+.form-floating > .form-select ~ .form-label
+{
+  color: rgba(var(--bs-body-color-rgb),.90);
+  transform: scale(.85) translateY(-0.625rem) translateX(0.15rem);
+}
+
+// Always float label
+.cute-form-field-label-always-float {
+  & .form-label {
+    transform: scale(.85) translateY(-0.625rem) translateX(0.15rem);
+  }
+  & .form-floating > .form-control:not(:focus) {
+    &:placeholder-shown {
+      padding-top: 2rem;
+    }
+    &::placeholder {
+      color: var(--bs-body-color);
+      opacity: 0.75;
+    }
+  }
+}
+
+@keyframes _cute-form-field-subscript-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

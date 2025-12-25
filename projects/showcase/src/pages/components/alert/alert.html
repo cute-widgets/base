@@ -1,0 +1,22 @@
+<h5 class="mb-3">Alert</h5>
+
+<!--@if (holyMessage) {-->
+  <cute-alert color="warning" dismissible="true" (dismissed)="holyMessage=false">
+    <cute-hstack gap="2">
+      <cute-icon> exclamation-triangle-fill </cute-icon>
+      <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+    </cute-hstack>
+  </cute-alert>
+<!--}-->
+
+@if (successAlertShow) {
+<!--  successAlertShow: {{successAlertShow}}-->
+
+  <cute-alert #alert id="myAlert-1" duration="-1" (dismissed)="log('Alert ['+alert.id+'] was closed!'); successAlertShow=false">
+    <h4 cuteAlertHeading>Well done!</h4>
+    <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+    <hr>
+    <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+  </cute-alert>
+
+}

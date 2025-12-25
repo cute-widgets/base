@@ -1,0 +1,50 @@
+.cute-option {
+  $bg-color: rgba(0,0,0, 0.06);
+  /*
+  display: block;
+  */
+  display: flex;
+  gap: 0.25em;
+  position: relative;
+  align-items: center;
+  justify-content: flex-start;
+  user-select: none;
+  padding: var(--cute-option-padding-y, 0.25rem) 1rem;
+  cursor: pointer;
+  background-color: transparent;
+
+  & .cute-list-item__primary-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover, &:active, &.active  {
+    outline: none;
+    background-color: var(--bs-secondary-bg);
+
+    //&,:active {
+    //  color: var(--bs-primary-text-emphasis) !important;
+    //}
+    /*
+    @media screen and (-ms-high-contrast: active) {
+      background-color: $bg-color;
+    }
+    */
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: auto;
+
+    &:hover, &:focus {
+      outline: none;
+      background-color: $bg-color;    //var(--bs-body-bg);
+      /*
+      @media screen and (-ms-high-contrast: active) {
+        background-color: $bg-color;  //var(--bs-body-bg);
+      }
+      */
+    }
+  }
+}

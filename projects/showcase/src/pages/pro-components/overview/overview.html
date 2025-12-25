@@ -1,0 +1,15 @@
+<cute-container fluid class="p-3 pro-components-overview-wrapper">
+
+  <h5 class="mb-3">PRO Components</h5>
+
+  <cute-list flushBorders="partial">
+    @for (item of items; track $index) {
+      <cute-list-item>
+        <cute-icon cuteListItemIcon color="secondary" [fontIcon]="item.icon"></cute-icon>
+        <span cuteListItemTitle>{{item.name}}</span>
+        <div #divSum cuteListItemLine class="text-secondary-emphasis" [innerHTML]="item.summary | safe"></div>
+      </cute-list-item>
+    }
+  </cute-list>
+
+</cute-container>

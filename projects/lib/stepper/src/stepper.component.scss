@@ -1,0 +1,293 @@
+@use 'sass:math';
+@use '@angular/cdk';
+//@use '../core/tokens/m2/mat/stepper' as tokens-mat-stepper;
+//@use '../core/tokens/token-utils';
+@use './stepper-variables';
+
+@include cdk.a11y-visually-hidden();
+
+.cute-stepper {
+  --cute-stepper-container-color: var(--bs-body-bg);
+  --cute-stepper-line-color: var(--bs-border-color-translucent);
+  display: block;
+}
+
+// Gets the `calc` expression for the vertical padding of the stepper header.
+@function _get-vertical-padding-calc() {
+  $height: #{stepper-variables.$header-height};
+  @return calc(calc(#{$height} - #{stepper-variables.$label-header-height}) / 2);
+}
+
+.cute-stepper-vertical,
+.cute-stepper-horizontal {
+  display: block;
+  font-family:  var(--bs-body-font-family);
+  background:   var(--bs-body-bg);
+}
+
+.cute-horizontal-stepper-header-container {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+
+  .cute-stepper-label-position-bottom & {
+    align-items: flex-start;
+  }
+
+  .cute-stepper-header-position-bottom & {
+    order: 1;
+  }
+}
+
+.cute-stepper-horizontal-line {
+  border-top-width: stepper-variables.$line-width;
+  border-top-style: solid;
+  flex: auto;
+  height: 0;
+  margin: 0 stepper-variables.$line-gap - stepper-variables.$side-gap;
+  min-width: stepper-variables.$line-gap + stepper-variables.$side-gap;
+  border-top-color: var(--cute-stepper-line-color);
+
+  .cute-stepper-label-position-bottom & {
+    $vertical-padding: _get-vertical-padding-calc();
+    margin: 0;
+    min-width: 0;
+    position: relative;
+
+    // Ensures that the horizontal line for the step content is aligned centered vertically.
+    top: calc(#{$vertical-padding} + #{math.div(stepper-variables.$label-header-height, 2)});
+  }
+}
+
+%cute-header-horizontal-line-label-position-bottom {
+  $half-side-gap: math.div(stepper-variables.$side-gap, 2);
+  border-top-width: stepper-variables.$line-width;
+  border-top-style: solid;
+  content: '';
+  display: inline-block;
+  height: 0;
+  position: absolute;
+  width: calc(50% - #{$half-side-gap + stepper-variables.$line-gap});
+}
+
+.cute-horizontal-stepper-header {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  padding: 0 stepper-variables.$side-gap;
+  height: stepper-variables.$header-height;
+
+  .cute-step-icon {
+    margin-right: stepper-variables.$line-gap;
+    flex: none;
+
+    [dir='rtl'] & {
+      margin-right: 0;
+      margin-left: stepper-variables.$line-gap;
+    }
+  }
+
+  $vertical-padding: _get-vertical-padding-calc();
+
+  &::before,
+  &::after {
+    border-top-color: var(--cute-stepper-line-color);
+  }
+
+  .cute-stepper-label-position-bottom & {
+    padding: #{$vertical-padding} stepper-variables.$side-gap;
+
+    &::before,
+    &::after {
+      // Ensures that the horizontal lines for the step header are centered vertically.
+      top: calc(#{$vertical-padding} + #{math.div(stepper-variables.$label-header-height, 2)});
+    }
+  }
+
+  .cute-stepper-label-position-bottom & {
+    box-sizing: border-box;
+    flex-direction: column;
+    // We use auto instead of fixed 104px (by spec) because when there is an optional step
+    //  the height is greater than that
+    height: auto;
+
+    &:not(:last-child)::after,
+    [dir='rtl'] &:not(:first-child)::after {
+      @extend %cute-header-horizontal-line-label-position-bottom;
+      right: 0;
+    }
+
+    &:not(:first-child)::before,
+    [dir='rtl'] &:not(:last-child)::before {
+      @extend %cute-header-horizontal-line-label-position-bottom;
+      left: 0;
+    }
+
+    [dir='rtl'] &:last-child::before,
+    [dir='rtl'] &:first-child::after {
+      display: none;
+    }
+
+    & .cute-step-icon {
+      // Cleans margin both for ltr and rtl direction
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    & .cute-step-label {
+      padding: stepper-variables.$label-position-bottom-top-gap 0 0 0;
+      text-align: center;
+      width: 100%;
+    }
+  }
+}
+
+.cute-vertical-stepper-header {
+  display: flex;
+  align-items: center;
+
+  // We can't use `max-height` here, because it breaks the flexbox centering in IE.
+  height: stepper-variables.$label-header-height;
+  padding: #{_get-vertical-padding-calc()} stepper-variables.$side-gap;
+
+  .cute-step-icon {
+    margin-right: stepper-variables.$vertical-stepper-content-margin - stepper-variables.$side-gap;
+
+    [dir='rtl'] & {
+      margin-right: 0;
+      margin-left: stepper-variables.$vertical-stepper-content-margin - stepper-variables.$side-gap;
+    }
+  }
+}
+
+.cute-horizontal-stepper-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.cute-horizontal-stepper-content {
+  visibility: hidden;
+  overflow: hidden;
+  outline: 0;
+  height: 0;
+
+  .cute-stepper-animations-enabled & {
+    transition: transform var(--cute-stepper-animation-duration, 0) cubic-bezier(0.35, 0, 0.25, 1);
+  }
+
+  &.cute-horizontal-stepper-content-previous {
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  &.cute-horizontal-stepper-content-next {
+    transform: translate3d(100%, 0, 0);
+  }
+
+  &.cute-horizontal-stepper-content-current {
+    // TODO(crisbeto): the height and visibility switches are a bit jarring, but that's how the
+    // animation was set up when we still used the Animations module. We should be able to make
+    // it a bit smoother.
+    visibility: visible;
+    transform: none;
+    height: auto;
+  }
+
+  .cute-stepper-horizontal:not(.cute-stepper-animating) &.cute-horizontal-stepper-content-current {
+    overflow: visible;
+  }
+}
+
+.cute-horizontal-content-container {
+//  & {
+    overflow: hidden;
+    padding: 0 stepper-variables.$side-gap stepper-variables.$side-gap stepper-variables.$side-gap;
+//  }
+
+  @include cdk.high-contrast(active, off) {
+    outline: solid 1px;
+  }
+
+  .cute-stepper-header-position-bottom & {
+    padding: stepper-variables.$side-gap stepper-variables.$side-gap 0 stepper-variables.$side-gap;
+  }
+}
+
+.cute-vertical-content-container {
+//  & {
+    display: grid;
+    grid-template-rows: 0fr;
+    grid-template-columns: 100%;
+    margin-left: stepper-variables.$vertical-stepper-content-margin;
+    border: 0;
+    position: relative;
+//  }
+
+  .cute-stepper-animations-enabled & {
+    transition: grid-template-rows var(--cute-stepper-animation-duration, 0)
+    cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.cute-vertical-content-container-active {
+    grid-template-rows: 1fr;
+  }
+
+  .cute-step:last-child & {
+    border: none;
+  }
+
+  @include cdk.high-contrast(active, off) {
+    outline: solid 1px;
+  }
+
+  [dir='rtl'] & {
+    margin-left: 0;
+    margin-right: stepper-variables.$vertical-stepper-content-margin;
+  }
+}
+
+.cute-stepper-vertical-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  border-left-width: stepper-variables.$line-width;
+  border-left-style: solid;
+
+  $vertical-padding: _get-vertical-padding-calc();
+  $vertical-offset: calc(#{stepper-variables.$line-gap} - #{$vertical-padding});
+
+  border-left-color: var(--cute-stepper-line-color);
+
+  // Ensures that the vertical lines for the step content exceed into the step
+  // headers with a given distance (`$cute-stepper-line-gap`) to the step icon.
+  top: $vertical-offset;
+  bottom: $vertical-offset;
+
+  [dir='rtl'] & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.cute-vertical-stepper-content {
+  overflow: hidden;
+  outline: 0;
+  visibility: hidden;
+
+  .cute-stepper-animations-enabled & {
+    transition: visibility var(--cute-stepper-animation-duration, 0) linear;
+  }
+
+  .cute-vertical-content-container-active > & {
+    visibility: visible;
+  }
+}
+
+.cute-vertical-content {
+  padding: 0 stepper-variables.$side-gap stepper-variables.$side-gap stepper-variables.$side-gap;
+}
+
+.cute-step:last-child {
+  .cute-vertical-content-container {
+    border: none;
+  }
+}

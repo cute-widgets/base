@@ -1,0 +1,22 @@
+@use '@angular/cdk';
+
+// We support the case where the form field is disabled, but the datepicker is not.
+.cute-datepicker-toggle {
+  --cute-toggle-icon-color: var(--bs-body-color);
+  --cute-toggle-active-state-icon-color: var(--bs-primary-text-emphasis);
+
+  pointer-events: auto;
+  color: var(--cute-toggle-icon-color);
+}
+
+.cute-datepicker-toggle-active {
+  color: var(--cute-toggle-active-state-icon-color);
+}
+
+@include cdk.high-contrast(active, off) {
+  .cute-datepicker-toggle-default-icon {
+    // On Chromium-based browsers the icon doesn't appear to inherit the text color in high
+    // contrast mode so we have to set it explicitly. This is a no-op on IE and Firefox.
+    color: CanvasText;
+  }
+}

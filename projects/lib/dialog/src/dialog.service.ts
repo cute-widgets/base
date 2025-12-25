@@ -1,0 +1,236 @@
+/**
+ * @license Apache-2.0
+ *
+ * Copyright (c) 2025 CuteWidgets Team. All Rights Reserved.
+ *
+ * You may not use this file except in compliance with the License
+ * that can be found at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This code is a modification of the `@angular/material` original
+ * code licensed under MIT-style License (https://angular.dev/license).
+ */
+import {ComponentType, Overlay, ScrollStrategy} from '@angular/cdk/overlay';
+import {
+  ComponentRef,
+  Inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  OnDestroy,
+  Optional,
+  SkipSelf,
+  TemplateRef,
+  Type,
+  inject,
+} from '@angular/core';
+import {CuteDialogConfig} from './dialog-config';
+import {CuteDialogContainer} from './dialog-container.component';
+import {CuteDialogRef} from './dialog-ref';
+import {defer, Observable, Subject} from 'rxjs';
+import {Dialog, DialogConfig} from '@angular/cdk/dialog';
+import {startWith} from 'rxjs/operators';
+
+/** Injection token that can be used to access the data that was passed in to a dialog. */
+export const CUTE_DIALOG_DATA = new InjectionToken<any>('CuteDialogData');
+
+/** Injection token that can be used to specify default dialog options. */
+export const CUTE_DIALOG_DEFAULT_OPTIONS = new InjectionToken<CuteDialogConfig>(
+  'cute-dialog-default-options',
+);
+
+/** Injection token that determines the scroll handling while the dialog is open. */
+export const CUTE_DIALOG_SCROLL_STRATEGY = new InjectionToken<() => ScrollStrategy>(
+  'cute-dialog-scroll-strategy',
+  {
+    providedIn: 'root',
+    factory: () => {
+      const overlay = inject(Overlay);
+      return () => overlay.scrollStrategies.block();
+    },
+  },
+);
+
+
+// Counter for unique dialog ids.
+let uniqueId = 0;
+
+/**
+ * Service to open `Bootstrap` modal controls
+ */
+@Injectable({providedIn: 'root'})
+export class CuteDialog implements OnDestroy {
+  private _overlay = inject(Overlay);
+  private _defaultOptions = inject<CuteDialogConfig>(CUTE_DIALOG_DEFAULT_OPTIONS, {optional: true});
+  private _scrollStrategy = inject(CUTE_DIALOG_SCROLL_STRATEGY);
+  private _parentDialog = inject(CuteDialog, {optional: true, skipSelf: true});
+  protected _dialog = inject(Dialog);
+
+  private readonly _openDialogsAtThisLevel: CuteDialogRef<any>[] = [];
+  private readonly _afterAllClosedAtThisLevel = new Subject<void>();
+  private readonly _afterOpenedAtThisLevel = new Subject<CuteDialogRef<any>>();
+  private readonly _dialogRefConstructor: Type<CuteDialogRef<any>>;
+  private readonly _dialogContainerType: Type<CuteDialogContainer>;
+  private readonly _dialogDataToken: InjectionToken<any>;
+  protected dialogConfigClass = CuteDialogConfig;
+
+  /** Keeps track of the currently open dialogs. */
+  get openDialogs(): CuteDialogRef<any>[] {
+    return this._parentDialog ? this._parentDialog.openDialogs : this._openDialogsAtThisLevel;
+  }
+
+  /** Stream that emits when a dialog has been opened. */
+  get afterOpened(): Subject<CuteDialogRef<any>> {
+    return (this._parentDialog ? this._parentDialog.afterOpened : this._afterOpenedAtThisLevel) ;
+  }
+
+  private _getAfterAllClosed(): Subject<void> {
+    const parent = this._parentDialog;
+    return parent ? parent._getAfterAllClosed() : this._afterAllClosedAtThisLevel;
+  }
+
+  /**
+   * Stream that emits when all open dialogs have finished closing.
+   * Will emit on subscribing if there are no open dialogs to begin with.
+   */
+  readonly afterAllClosed: Observable<void> = defer(() =>
+    this.openDialogs.length
+      ? this._getAfterAllClosed()
+      : this._getAfterAllClosed().pipe(startWith(undefined)),
+  ) as Observable<any>;
+
+  constructor(...args: unknown[]);
+  constructor() {
+    this._dialogRefConstructor = CuteDialogRef;
+    this._dialogContainerType = CuteDialogContainer;
+    this._dialogDataToken = CUTE_DIALOG_DATA;
+  }
+
+  /**
+   * Opens a modal dialog containing the given component.
+   * @param component Type of the component to load into the dialog.
+   * @param config Extra configuration options.
+   * @returns Reference to the newly opened dialog.
+   */
+  open<T, D = any, R = any>(
+    component: ComponentType<T>,
+    config?: CuteDialogConfig<D>,
+  ): CuteDialogRef<T, R>;
+
+  /**
+   * Opens a modal dialog containing the given template.
+   * @param template TemplateRef to instantiate as the dialog content.
+   * @param config Extra configuration options.
+   * @returns Reference to the newly opened dialog.
+   */
+  open<T, D = any, R = any>(
+    template: TemplateRef<T>,
+    config?: CuteDialogConfig<D>,
+  ): CuteDialogRef<T, R>;
+
+  open<T, D = any, R = any>(
+    template: ComponentType<T> | TemplateRef<T>,
+    config?: CuteDialogConfig<D>,
+  ): CuteDialogRef<T, R>;
+
+  open<T, D = any, R = any>(
+    componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
+    config?: CuteDialogConfig<D>,
+  ): CuteDialogRef<T, R> {
+    let dialogRef: CuteDialogRef<T, R>;
+    config = {...(this._defaultOptions || new CuteDialogConfig()), ...config};
+    config.id = config.id || `cute-dialog-${uniqueId++}`;
+    config.scrollStrategy = config.scrollStrategy || this._scrollStrategy();
+
+    const cdkRef = this._dialog.open<R, D, T>(componentOrTemplateRef, {
+      ...config,
+      positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
+      // Disable closing since we need to sync it up to the animation ourselves.
+      disableClose: true,
+      // Disable closing on destroying, because this service cleans up its open dialogs as well.
+      // We want to do the cleanup here, rather than the CDK service, because the CDK destroys
+      // the dialogs immediately whereas we want it to wait for the animations to finish.
+      closeOnDestroy: false,
+      // Disable closing on detachments so that we can sync up the animation.
+      // The Material dialog ref handles this manually.
+      closeOnOverlayDetachments: false,
+      container: {
+        type: this._dialogContainerType,
+        providers: () => [
+          // Provide our config as the CDK config as well since it has the same interface as the
+          // CDK one. However, it contains the actual values passed in by the user for things like
+          // `disableClose` which we disable for the CDK dialog since we handle it ourselves.
+          {provide: this.dialogConfigClass, useValue: config},
+          {provide: DialogConfig, useValue: config},
+        ],
+      },
+      templateContext: () => ({dialogRef}),
+      providers: (ref, cdkConfig, dialogContainer) => {
+        dialogRef = new this._dialogRefConstructor(ref, config, dialogContainer);
+        dialogRef.updatePosition(config?.position);
+
+        if (config?.fullscreenStrategy === "fullscreen") {
+          dialogRef.addPanelClass("fullscreen-dialog");
+        }
+
+        return [
+          {provide: this._dialogContainerType, useValue: dialogContainer},
+          {provide: this._dialogDataToken, useValue: cdkConfig.data},
+          {provide: this._dialogRefConstructor, useValue: dialogRef},
+        ];
+      },
+    });
+
+    // This can't be assigned in the `providers` callback, because
+    // the instance hasn't been assigned to the CDK ref yet.
+    (dialogRef! as {componentRef: ComponentRef<T>}).componentRef = cdkRef.componentRef!;
+    dialogRef!.componentInstance = cdkRef.componentInstance!;
+
+    this.openDialogs.push(dialogRef!);
+    this.afterOpened.next(dialogRef!);
+
+    dialogRef!.afterClosed().subscribe(() => {
+      const index = this.openDialogs.indexOf(dialogRef);
+
+      if (index > -1) {
+        this.openDialogs.splice(index, 1);
+
+        if (!this.openDialogs.length) {
+          this._getAfterAllClosed().next();
+        }
+      }
+    });
+
+    return dialogRef!;
+  }
+
+  /**
+   * Closes all the currently open dialogs.
+   */
+  closeAll(): void {
+    this._closeDialogs(this.openDialogs);
+  }
+
+  /**
+   * Finds an open dialog by its id.
+   * @param id ID to use when looking up the dialog.
+   */
+  getDialogById(id: string): CuteDialogRef<any> | undefined {
+    return this.openDialogs.find(dialog => dialog.id === id);
+  }
+
+  ngOnDestroy() {
+    // Only close the dialogs at this level on destroy
+    // since the parent service may still be active.
+    this._closeDialogs(this._openDialogsAtThisLevel);
+    this._afterAllClosedAtThisLevel.complete();
+    this._afterOpenedAtThisLevel.complete();
+  }
+
+  private _closeDialogs(dialogs: CuteDialogRef<any>[]) {
+    let i = dialogs.length;
+
+    while (i--) {
+      dialogs[i].close();
+    }
+  }
+}

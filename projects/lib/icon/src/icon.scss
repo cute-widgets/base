@@ -1,0 +1,74 @@
+$size: 24px !default;
+
+.cute-icon {
+  display: inline;
+  fill: currentColor;
+  background-repeat: no-repeat;
+  // centered
+  line-height: 1;
+  text-align: center;
+  // In some cases the icon elements may extend beyond the container. Clip these cases
+  // in order to avoid weird overflows and click areas. See #11826.
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+
+  font-size: inherit;
+
+  &:has(> svg) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &[data-cute-icon-type='svg'] {
+    width: $size;
+    height: $size;
+  }
+
+  &.cute-icon-inline {
+    font-size: inherit;
+    height: inherit;
+    line-height: inherit;
+    width: inherit;
+  }
+
+  &.cute-ligature-font[fontIcon]::before {
+    content: attr(fontIcon);
+  }
+
+  /* Rounded square icon */
+  &.feature-icon {
+
+    &[data-cute-icon-type=font] {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.feature-icon-middle {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 0.75rem;
+      font-size: calc(1.275rem + .3vw) !important; // fs-4
+    }
+    &.feature-icon-sm {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.45rem;
+      font-size: 1rem !important; // fs-6
+    }
+    &.feature-icon-lg {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 0.75rem;
+      font-size: calc(1.325rem + .9vw) !important; // fs-2
+    }
+  }
+
+}
+
+// Icons that will be mirrored in RTL.
+[dir='rtl'] .cute-icon-rtl-mirror {
+  transform: scale(-1, 1);
+}

@@ -1,0 +1,33 @@
+@use '@angular/cdk';
+
+.cute-ripple-element {
+  --cute-ripple-duration: 500ms;
+  --cute-ripple-bg-color: rgba(255, 255, 255, 0.18);
+
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  /*
+   * We use a 3d transform here in order to avoid an issue in Safari where
+   * the ripples aren't clipped when inside the shadow DOM (see #24028).
+   */
+  transform: scale3d(0, 0, 0);
+  animation: cute-ripple-element-animation
+             var(--cute-ripple-duration)
+             cubic-bezier(0.65, 0.05, 0.36, 1); /*ease-out;*/
+  //transition: opacity, transform var(--cute-ripple-duration) cubic-bezier(0, 0, 0.2, 1);
+  background-color: var(--cute-ripple-bg-color);
+  will-change: transform, opacity;
+
+  // In high contrast mode the ripple is opaque, causing it to obstruct the content.
+  @include cdk.high-contrast(active, off) {
+    display: none;
+  }
+}
+
+@keyframes cute-ripple-element-animation {
+  to {
+    transform: scale(8);
+    opacity: 0;
+  }
+}

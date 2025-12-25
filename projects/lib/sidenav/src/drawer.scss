@@ -1,0 +1,271 @@
+@use '@angular/cdk';
+@use '../../core/style/variables';
+@use '../../core/style/layout-common';
+
+$drawer-content-z-index: 1;
+$drawer-side-drawer-z-index: 2;
+$drawer-backdrop-z-index: 3;
+$drawer-over-drawer-z-index: 4;
+
+$container-divider-color: var(--bs-border-color); // rgba(0, 0, 0, 0.12);
+$container-divider-width: var(--bs-border-width);
+$container-divider-border-radius: var(--bs-border-radius-lg);
+$scrim-color: rgba(0, 0, 0, 0.6);
+
+$elevation-16: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+
+// Mixin that creates a new stacking context.
+// see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context
+@mixin drawer-stacking-context($z-index: 1) {
+  position: relative;
+
+  // Use a z-index to create a new stacking context. (We can't use transform because it breaks fixed
+  // positioning inside of the transformed element).
+  z-index: $z-index;
+}
+
+.cute-drawer-container {
+  // We need a stacking context here so that the backdrop and drawers are clipped to the
+  // CuteDrawerContainer. This creates a new z-index stack so we use low numbered z-indices.
+  // We create another stacking context in the '.cute-drawer-content' and in each drawer so that
+  // the application content does not get messed up with our own CSS.
+  @include drawer-stacking-context();
+
+  /* Content colors */
+  color: var(--bs-body-color); // rgba(0,0,0,0.87);
+  background-color: var(--bs-body-bg); // #fafafa;
+
+  box-sizing: border-box;
+
+  // Need this to take up space in the layout.
+  display: block;
+
+  // Hide the drawers when they're closed.
+  overflow: hidden;
+
+  // TODO(hansl): Update this with a more robust solution.
+  &[fullscreen] {
+    @include layout-common.fill();
+
+    &.cute-drawer-container-has-open {
+      overflow: hidden;
+    }
+  }
+
+  // When the consumer explicitly enabled the backdrop,
+  // we have to pull the side drawers above it.
+  &.cute-drawer-container-explicit-backdrop .cute-drawer-side {
+    z-index: $drawer-backdrop-z-index;
+  }
+
+  // Note that the `NoopAnimationsModule` is being handled inside of the component code.
+  &.ng-animate-disabled, .ng-animate-disabled & {
+    .cute-drawer-backdrop, .cute-drawer-content {
+      transition: none;
+    }
+  }
+}
+
+.cute-drawer-backdrop {
+  @include layout-common.fill();
+
+  display: block;
+
+  // Because of the new stacking context, the z-index stack is new and we can use our own
+  // numbers.
+  z-index: $drawer-backdrop-z-index;
+
+  // We use 'visibility: hidden | visible' because 'display: none' will not animate any
+  // transitions, while visibility will interpolate transitions properly.
+  // see https://developer.mozilla.org/en-US/docs/Web/CSS/visibility, the Interpolation
+  // section.
+  visibility: hidden;
+
+  &.cute-drawer-shown {
+    visibility: visible;
+    background-color: $scrim-color;
+  }
+
+  .cute-drawer-transition & {
+    transition: {
+      duration: variables.$swift-ease-out-duration;;
+      timing-function: variables.$swift-ease-out-timing-function;
+      property: background-color, visibility;
+    }
+  }
+
+  @include cdk.high-contrast(active, off) {
+    opacity: 0.5;
+  }
+}
+
+.cute-drawer-content {
+  @include drawer-stacking-context($drawer-content-z-index);
+
+  display: block;
+  height: 100%;
+  overflow: auto;
+
+  &.cute-drawer-content-hidden {
+    opacity: 0;
+  }
+
+  .cute-drawer-transition & {
+    transition: {
+      duration: variables.$swift-ease-out-duration;
+      timing-function: variables.$swift-ease-out-timing-function;
+      property: transform, margin-left, margin-right;
+    }
+  }
+}
+
+.cute-drawer {
+  $high-contrast-border: solid 1px currentColor;
+
+  // The elevation of z-16 is noted in the design specifications.
+  // See https://material.io/design/components/navigation-drawer.html
+
+  //@include elevation.elevation(16);
+  box-shadow: $elevation-16;
+  @include drawer-stacking-context($drawer-over-drawer-z-index);
+
+  color: var(--bs-secondary-color);          // var(--bs-body-color);
+  background-color: var(--bs-secondary-bg);  // rgba(var(--bs-body-color-rgb), 0.03)
+  border-top-right-radius: $container-divider-border-radius;
+  border-bottom-right-radius: $container-divider-border-radius;
+  border-right: solid var(--bs-border-width) $container-divider-color;
+
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  outline: 0;
+  box-sizing: border-box;
+  overflow-y: auto; // TODO(kara): revisit scrolling behavior for drawers
+  transform: translate3d(-100%, 0, 0);
+
+
+  &, [dir='rtl'] &.cute-drawer-end {
+    @include cdk.high-contrast(active, off) {
+      border-right: $high-contrast-border;
+    }
+  }
+
+  [dir='rtl'] &, &.cute-drawer-end {
+    @include cdk.high-contrast(active, off) {
+      border-left: $high-contrast-border;
+      border-right: none;
+    }
+  }
+
+  &.cute-drawer-side {
+    z-index: $drawer-side-drawer-z-index;
+  }
+
+  &.cute-drawer-end {
+    right: 0;
+    transform: translate3d(100%, 0, 0);
+
+    border-top-left-radius: $container-divider-border-radius;
+    border-bottom-left-radius: $container-divider-border-radius;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+  }
+
+  [dir='rtl'] & {
+
+    border-top-left-radius: $container-divider-border-radius;
+    border-bottom-left-radius: $container-divider-border-radius;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    transform: translate3d(100%, 0, 0);
+
+    &.cute-drawer-end {
+      border-top-right-radius: $container-divider-border-radius;
+      border-bottom-right-radius: $container-divider-border-radius;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      left: 0;
+      right: auto;
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  .cute-drawer-transition & {
+    transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  &:not(.cute-drawer-opened):not(.cute-drawer-animating) {
+    // Stops the sidenav from poking out (e.g. with the box shadow) while it's off-screen.
+    // We can't use `display` because it interrupts the transition and `transition-behavior`
+    // isn't available in all browsers.
+    visibility: hidden;
+    box-shadow: none;
+
+    // The `visibility` above should prevent focus from entering the sidenav, but if a child
+    // element has `visibility`, it'll override the inherited value. This guarantees that the
+    // content won't be focusable.
+    .cute-drawer-inner-container {
+      display: none;
+    }
+  }
+
+  // Needs additional specificity to override the RTL styles.
+  &.cute-drawer-opened.cute-drawer-opened {
+    transform: none;
+  }
+}
+
+.cute-drawer-side {
+  box-shadow: none;
+
+  border-right-color: $container-divider-color;
+  border-right-width: $container-divider-width;
+  border-right-style: solid;
+  //border-top-right-radius: $container-divider-border-radius;
+  //border-bottom-right-radius: $container-divider-border-radius;
+
+  &.cute-drawer-end {
+    border-left-color: $container-divider-color;
+    border-left-width: $container-divider-width;
+    border-left-style: solid;
+    border-right: none;
+    //border-top-left-radius: $container-divider-border-radius;
+    //border-bottom-left-radius: $container-divider-border-radius;
+  }
+
+  [dir='rtl'] & {
+    border-left-color: $container-divider-color;
+    border-left-width: $container-divider-width;
+    border-left-style: solid;
+    border-right: none; // Clears the default LTR border.
+    //border-top-left-radius: $container-divider-border-radius;
+    //border-bottom-left-radius: $container-divider-border-radius;
+
+    &.cute-drawer-end {
+      border-right-color: $container-divider-color;
+      border-right-width: $container-divider-width;
+      border-right-style: solid;
+      border-left: none;
+      //border-top-right-radius: $container-divider-border-radius;
+      //border-bottom-right-radius: $container-divider-border-radius;
+    }
+  }
+}
+
+
+// Note that this div isn't strictly necessary on all browsers, however we need it in
+// order to avoid a layout issue in Chrome. The issue is that in RTL mode the browser doesn't
+// account for the sidenav's scrollbar while positioning, which ends up pushing it partially
+// out of the screen. We work around the issue by having the scrollbar be on this inner container.
+.cute-drawer-inner-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.cute-sidenav-fixed {
+  position: fixed;
+}

@@ -1,0 +1,64 @@
+@let githubURL = "https://github.com/cute-widgets/base";
+
+  <header>
+    <cute-navbar position="fixed-top"
+                 breakpoint="lg"
+                 color="secondary-emphasis"
+                 class="border-bottom border-secondary-subtle"
+                 (cuteClickOutside)="navbarContent.close()">
+      <img src="/assets/cute-widgets.png" style="height: 2.2rem" alt="CuteWidgets Logo"/>
+      <a cuteButton="pill-button" class="fw-semibold gap-1" cute-navbar-brand routerLink="/home"> <!--style="color: #A932C4">-->
+        CuteWidgets
+      </a>
+      <button cute-navbar-toggler [cuteNavbarTogglerFor]="navbarContent" cuteButton="outline-button" aria-label="Toggle navigation">
+        <cute-icon>list</cute-icon>
+      </button>
+      <cute-navbar-content #navbarContent="cuteNavbarContent" >
+        <ul cute-navbar-nav class="me-auto mb-2 mb-lg-0">
+          <li cute-nav-item>
+            <a cute-nav-link routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+          </li>
+          <li cute-nav-item>
+            <a cute-nav-link routerLink="/components/overview" routerLinkActive="active">Components</a>
+          </li>
+          <li cute-nav-item>
+            <a cute-nav-link routerLink="/pro-components" routerLinkActive="active">PRO Components</a>
+          </li>
+        </ul>
+
+        <cute-button-toggle-group color="primary-emphasis" aria-label="Color scheme" multiple="false" magnitude="small" [value]="themeService.getPreferredTheme()">
+          <cute-button-toggle value="light" (click)="themeService.setTheme('light')">
+            <cute-icon>brightness-high-fill</cute-icon>
+            Light
+          </cute-button-toggle>
+          <cute-button-toggle value="dark"  (click)="themeService.setTheme('dark')">
+            <cute-icon>moon-stars-fill</cute-icon>
+            Dark
+          </cute-button-toggle>
+          <cute-button-toggle value="auto"  (click)="themeService.setTheme('auto')">
+            <cute-icon>circle-half</cute-icon>
+            Auto
+          </cute-button-toggle>
+        </cute-button-toggle-group>
+
+        <a cuteButton color="primary-emphasis" class="ms-2" [href]="githubURL">
+          <cute-icon>github</cute-icon>
+          GitHub
+        </a>
+
+        <!--      <form class="d-flex" role="search">-->
+        <!--        <input cuteInput class="me-2" type="search" placeholder="Search docs" aria-label="Search">-->
+        <!--        <button cuteButton="outline-button" color="success" type="submit">Search</button>-->
+        <!--      </form>-->
+      </cute-navbar-content>
+    </cute-navbar>
+
+  </header>
+
+  <main>
+    <div class="app-main">
+      <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>
+    </div>
+  </main>
+
+  <app-footer/>

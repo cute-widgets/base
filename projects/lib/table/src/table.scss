@@ -1,0 +1,98 @@
+@use './table-flex-styles';
+
+.cute-table-sticky {
+  // Note that the table can either set this class or an inline style to make something sticky.
+  // We set the style as `!important` so that we get an identical specificity in both cases
+  // and to avoid cases where user styles have a higher specificity.
+  position: sticky !important;
+}
+
+.cute-table {
+  table-layout: auto;
+  white-space:  normal;
+  border-spacing: 0;
+  border-collapse: separate;
+  min-width: 100%;
+  background-color: var(--bs-table-bg);
+
+  & > tfoot {
+    font-weight: bold;
+  }
+
+  &.cute-table-vertical-head thead th {
+    position: relative;
+    writing-mode: vertical-lr;
+    white-space: wrap;
+    transform: rotate(180deg);
+  }
+
+  // We apply 'border-collapse: separate' to cute-table declaration.
+  // It needs to apply the .table-group-divider to each cell in the found group.
+  & .table-group-divider tr:first-child {
+    & td, & th {
+      border-top: calc(var(--bs-border-width) * 2) solid var(--bs-table-border-color);
+    }
+  }
+
+  // See for next settings:
+  // https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element
+
+  &.table-bordered {
+    /* displayBorders=="all" */
+
+    /* Clear bootstrap's default settings for table excluding nested tables */
+    & > :not(caption) > * > * {
+      border-width: 0;
+    }
+
+    & th {
+      /* Apply both top and bottom borders to the <th> */
+      border-top:     var(--bs-border-width) solid var(--bs-table-border-color);
+      border-bottom:  var(--bs-border-width) solid var(--bs-table-border-color);
+      border-right:   var(--bs-border-width) solid var(--bs-table-border-color);
+    }
+
+    & td {
+      /* For cells, apply the border to one of each side only (right but not left, bottom but not top) */
+      border-bottom:  var(--bs-border-width) solid var(--bs-table-border-color);
+      border-right:   var(--bs-border-width) solid var(--bs-table-border-color);
+    }
+
+    & th:first-child,
+    & td:first-child {
+      /* Apply a left border on the first <td> or <th> in a row */
+      border-left: var(--bs-border-width) solid var(--bs-table-border-color);
+    }
+
+    & tfoot tr:first-child td {
+      /* Apply a top border on <td> in a footer's first row */
+      //border-top: var(--bs-border-width) solid var(--bs-table-border-color);
+    }
+
+  }
+
+  &.cute-table-fixed-layout {
+    table-layout: fixed;
+  }
+
+  .cute-table-sticky-border-elem-right {
+    border-left:var(--bs-border-width) solid var(--bs-table-border-color) !important;
+  }
+
+  .cute-table-sticky-border-elem-left {
+    border-right: var(--bs-border-width) solid var(--bs-table-border-color) !important;
+  }
+
+}
+
+.cute-row, .cute-header-row, .cute-footer-row {
+  -webkit-font-smoothing: antialiased;
+}
+
+.cute-cell, .cute-header-cell, .cute-footer-cell {
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  outline: none;
+  //text-align: start;
+}

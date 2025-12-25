@@ -1,0 +1,28 @@
+<div cuteSnackBarBody>
+  <div cuteSnackBarLabel>
+    {{data.message}}
+  </div>
+</div>
+
+<div class="cute-simple-snack-bar__buttons">
+  @if (hasAction) {
+    <div cuteSnackBarActions>
+      <button cuteSnackBarAction
+              cuteButton="flat-button"
+              [color]="color ? color : 'secondary'"
+              magnitude="small"
+              (click)="action()">
+        {{data.action}}
+      </button>
+    </div>
+  }
+  @if (config.dismissible) {
+    <button cuteSnackBarAction
+            cuteButton="close-button"
+            magnitude="smaller"
+            aria-label="Close"
+            (click)="snackBarRef.dismiss()">
+    </button>
+<!--    i18n-aria-label="@@SnackBar.Close"-->
+  }
+</div>

@@ -1,0 +1,98 @@
+<h5 class="mb-3">Menu</h5>
+
+<cute-vstack gap="3">
+
+  <cute-hstack gap="2">
+    <button cuteButton="raised-button" color="secondary" #trigger="cuteMenuTrigger"  [cuteMenuTriggerFor]="menu">Menu</button>
+    <button cuteButton (click)="trigger.openMenu()">Open menu</button>
+  </cute-hstack>
+
+  <button cuteButton="pill-button" color="warning-emphasis" class="example-menu-button" [cuteMenuTriggerFor]="animals">Animal index</button>
+
+  <button cuteButton="outline-button" color="primary" class="example-menu-button" [cuteMenuTriggerFor]="appMenu">
+    Lazy rendering
+    <cute-icon iconPositionEnd> list </cute-icon>
+  </button>
+
+<!--  <button cute-button [cuteMenuTriggerFor]="appMenu1" class="example-menu-button" [cuteMenuTriggerData]="{name: 'Sally'}">-->
+<!--    Sally-->
+<!--  </button>-->
+
+<!--  <button cute-button [cuteMenuTriggerFor]="appMenu1" class="example-menu-button" [cuteMenuTriggerData]="{name: 'Bob'}">-->
+<!--    Bob-->
+<!--  </button>-->
+
+  <cute-menu #menu="cuteMenu">
+    <button #mi1 cute-menu-item (click)="onMenuItemClick($event, mi1)">
+      <cute-icon fontIcon="person-fill" color="warning"></cute-icon>
+      Item 1
+    </button>
+    <button #mi2 cute-menu-item (click)="onMenuItemClick($event, mi2)">
+      Item 2
+      <i class="bi bi-people-fill"></i>
+    </button>
+  </cute-menu>
+
+  <cute-menu #animals="cuteMenu">
+    <button cute-menu-item [cuteMenuTriggerFor]="vertebrates">Vertebrates</button>
+    <button cute-menu-item [cuteMenuTriggerFor]="invertebrates">Invertebrates</button>
+  </cute-menu>
+
+  <cute-menu #vertebrates="cuteMenu">
+    <button cute-menu-item [cuteMenuTriggerFor]="fish">Fishes</button>
+    <button cute-menu-item [cuteMenuTriggerFor]="amphibians">Amphibians</button>
+    <button cute-menu-item [cuteMenuTriggerFor]="reptiles">Reptiles</button>
+    <button cute-menu-item>Birds</button>
+    <button cute-menu-item>Mammals</button>
+  </cute-menu>
+
+  <cute-menu #invertebrates="cuteMenu">
+    <button cute-menu-item>Insects</button>
+    <button cute-menu-item>Molluscs</button>
+    <button cute-menu-item>Crustaceans</button>
+    <button cute-menu-item>Corals</button>
+    <button cute-menu-item>Arachnids</button>
+    <button cute-menu-item>Velvet worms</button>
+    <button cute-menu-item>Horseshoe crabs</button>
+  </cute-menu>
+
+  <cute-menu #fish="cuteMenu">
+    <button cute-menu-item>Baikal oilfish</button>
+    <button cute-menu-item>Bala shark</button>
+    <button cute-menu-item>Ballan wrasse</button>
+    <button cute-menu-item>Bamboo shark</button>
+    <button cute-menu-item>Banded killifish</button>
+  </cute-menu>
+
+  <cute-menu #amphibians="cuteMenu">
+    <button cute-menu-item>Sonoran desert toad</button>
+    <button cute-menu-item>Western toad</button>
+    <button cute-menu-item>Arroyo toad</button>
+    <button cute-menu-item>Yosemite toad</button>
+  </cute-menu>
+
+  <cute-menu #reptiles="cuteMenu">
+    <button cute-menu-item>Banded Day Gecko</button>
+    <button cute-menu-item>Banded Gila Monster</button>
+    <cute-divider></cute-divider>
+    <button cute-menu-item>Black Tree Monitor</button>
+    <button cute-menu-item>Blue Spiny Lizard</button>
+    <button cute-menu-item disabled>Velociraptor</button>
+  </cute-menu>
+
+  <cute-menu #appMenu="cuteMenu">
+    <ng-template cuteMenuContent>
+      <button cute-menu-item>Settings</button>
+      <button cute-menu-item>Help</button>
+    </ng-template>
+  </cute-menu>
+
+  <cute-menu #appMenu1="cuteMenu">
+    <ng-template cuteMenuContent let-name="name">
+      <button cute-menu-item>Settings</button>
+      <button cute-menu-item>Log off {{name}}</button>
+    </ng-template>
+  </cute-menu>
+
+</cute-vstack>
+

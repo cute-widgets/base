@@ -1,0 +1,25 @@
+<div class="example-button-container">
+  <button cuteButton="raised-button" (click)="formControl.disable()">Disable form control</button>
+  <button cuteButton="raised-button" (click)="formControl.enable()">Enable form control</button>
+</div>
+<cute-form-field class="mt-2 videos-form-field">
+  <cute-label>Video keywords:</cute-label>
+    <cute-chip-grid #chipGrid aria-label="Enter keywords" [formControl]="formControl" >
+      @for (keyword of keywords; track keyword) {
+        <cute-chip-row (removed)="removeKeyword(keyword)">
+          {{keyword}}
+<!--          <button cuteButton="close-button" cuteChipRemove magnitude="smaller" color="secondary"></button>-->
+          <button cuteChipRemove [attr.aria-label]="'remove ' + keyword">
+            <cute-icon fontIcon="x-circle-fill" color="secondary"></cute-icon>
+          </button>
+        </cute-chip-row>
+      }
+      <input placeholder="New keyword..."
+             [cuteChipInputFor]="chipGrid"
+             (cuteChipInputTokenEnd)="add($event)"/>
+    </cute-chip-grid>
+</cute-form-field>
+
+<p>
+  The following keywords are entered: <strong> {{formControl.value}} </strong>
+</p>

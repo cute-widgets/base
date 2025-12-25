@@ -1,0 +1,51 @@
+<h5 class="mb-4">Card</h5>
+
+
+<cute-hstack gap="3">
+  <cute-vstack gap="3">
+    <cute-hstack gap="4">
+      <cute-checkbox #cbxImage (change)="!cbxImage.checked ? cbxBgImage.checked=false : null">With image</cute-checkbox>
+      <cute-checkbox #cbxBgImage [disabled]="!cbxImage.checked">As background</cute-checkbox>
+      <cute-checkbox #cbxNavs>With nav list</cute-checkbox>
+      <cute-checkbox #cbxHead>With header</cute-checkbox>
+      <cute-checkbox #cbxFoot>With footer</cute-checkbox>
+    </cute-hstack>
+
+    <div style="width: 18rem;">
+      <cute-card [backgroundImage]="cbxBgImage.checked ? 'assets/images/unsplash-photo-2.jpg' : undefined" [attr.data-bs-theme]='cbxBgImage.checked ? "dark" : undefined'>
+        @if (cbxHead.checked) {
+          <cute-card-header >
+            Header
+          </cute-card-header>
+        }
+
+        @if (cbxImage.checked && !cbxBgImage.checked) {
+          <img cute-card-image style="height: 200px;" src="assets/images/unsplash-photo-2.jpg" alt="Flowers"  >
+        }
+        <cute-card-body>
+          <h5 cuteCardTitle>Card title</h5>
+          <h6 cuteCardSubtitle color="secondary">Card subtitle</h6>
+          <p>
+            Some quick example text to build on the card title and make up the bulk of the card's content.
+          </p>
+          <a cuteButton="flat-button" color="primary">Go somewhere</a>
+        </cute-card-body>
+        @if (cbxNavs.checked) {
+          <cute-nav-list flushBorders="partial">
+            <cute-list-item>An item</cute-list-item>
+            <cute-list-item>A second item</cute-list-item>
+            <cute-list-item>A third item</cute-list-item>
+          </cute-nav-list>
+        }
+        @if (cbxFoot.checked) {
+          <cute-card-footer>
+            Footer
+          </cute-card-footer>
+        }
+      </cute-card>
+    </div>
+
+  </cute-vstack>
+</cute-hstack>
+
+

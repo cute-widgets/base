@@ -1,0 +1,16 @@
+<button class="accordion-button" type="button"
+        [class.accordion-button-indicator-before]="_getTogglePosition()=='before'"
+        [class.accordion-button-hide-indicator]="!_showToggle()"
+        [class.text-body-tertiary]="disabled"
+        [class.collapsed]="!_isExpanded()"
+        [attr.aria-expanded]="_isExpanded()"
+        [attr.aria-controls]="panel._contentId"
+        [disabled]="disabled || null"
+        [tabIndex]="disabled ? -1 : tabIndex"
+>
+        <span class="cute-expansion-panel-header-content">
+            <ng-content select="cute-panel-title"></ng-content>
+            <ng-content select="cute-panel-description"></ng-content>
+            <ng-content></ng-content>
+        </span>
+</button>

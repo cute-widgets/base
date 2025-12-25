@@ -1,0 +1,21 @@
+<h5 class="mb-3">Tooltip</h5>
+
+<cute-hstack gap="3" class="mb-3">
+  <cute-form-field class="example-user-input" style="width:400px">
+    <cute-label>Tooltip position</cute-label>
+    <cute-select [formControl]="position">
+      @for (positionOption of positionOptions; track positionOption) {
+        <cute-option [value]="positionOption">{{positionOption}}</cute-option>
+      }
+    </cute-select>
+
+    <button cuteSuffix cuteButton="outline-button" color="secondary"
+            cuteTooltip="Info about the action"
+            [cuteTooltipPosition]="position.value!"
+            aria-label="Button that displays a tooltip in various positions">
+      Action
+    </button>
+
+  </cute-form-field>
+</cute-hstack>
+

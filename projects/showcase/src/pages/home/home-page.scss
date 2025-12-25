@@ -1,0 +1,49 @@
+.cute-widgets-logo {
+  position: absolute;
+  top: 0;
+  left:0;
+  bottom: 0;
+  right: 0;
+  opacity: 0.25;
+  background-color: rgba(169, 50, 196, 0.5);
+  background-image: url('/assets/cute-widgets-4.png');
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+//.feature-icon {
+//  width: 4rem;
+//  height: 4rem;
+//  border-radius: .75rem;
+//}
+//
+//.feature-icon-small {
+//  width: 3rem;
+//  height: 3rem;
+//}
+//
+//.icon-square {
+//  width: 3rem;
+//  height: 3rem;
+//  border-radius: .75rem;
+//}
+
+.text-shadow-1 { text-shadow: 0 .125rem .25rem rgba(0, 0, 0, .25); }
+.text-shadow-2 { text-shadow: 0 .25rem .5rem rgba(0, 0, 0, .25); }
+.text-shadow-3 { text-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .25); }
+
+.card-cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.block-divider {
+  width: 100%;
+  height: 1.5rem;
+  background-color: #0000001a;
+  border: solid rgba(0,0,0,.15);
+  border-width: 1px 0;
+  box-shadow: inset 0 .5em 1.5em #0000001a,inset 0 .125em .5em #00000026;
+}
+

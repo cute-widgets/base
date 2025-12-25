@@ -1,0 +1,13 @@
+<h5 class="mb-3">CheckBoxes</h5>
+<cute-checkbox #cbx1 [disabled]="disabledOption" value="OK" (change)="opt3.checked=false">Completed</cute-checkbox>
+<cute-checkbox value="1" checked inline>Option 1</cute-checkbox>
+<cute-checkbox value="2" inline>Option 2</cute-checkbox>
+<cute-checkbox #opt3 [disabled]="!cbx1.checked" disabledInteractive cuteTooltip="Option microhelp" value="3" inline>Option 3</cute-checkbox>
+
+<h5 class="my-3">Toggle Switches (Slide toggles)</h5>
+<cute-vstack gap="2" style="width: 200px">
+  <cute-slide-toggle [disabled]="disabledOption" value="1">Option 1</cute-slide-toggle>
+  <cute-slide-toggle value="2" checked>Option 2</cute-slide-toggle>
+  <cute-slide-toggle value="3" checked disabled disabledInteractive cuteTooltip="Toggle microhelp">Option 3</cute-slide-toggle>
+</cute-vstack>
+

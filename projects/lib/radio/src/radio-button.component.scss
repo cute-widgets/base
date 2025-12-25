@@ -1,0 +1,49 @@
+.cute-radio-button {
+
+  .form-check-input {
+    cursor: pointer;
+
+    &.icon-small {
+      font-size: 0.875em;
+      transform: translate(-2px, 2px);
+    }
+    &.icon-large {
+      font-size: 1.375em;
+      margin-right: 1.125em;
+      transform: translate(0.45em, -0.125em);
+    }
+  }
+
+  .form-check-label {
+    cursor: pointer;
+    &:disabled {
+      cursor: default;
+    }
+    &:empty {
+      display: none;
+    }
+  }
+
+  &.cute-radio-disabled {
+    cursor: default;
+    pointer-events: none;
+
+    &.cute-radio-disabled-interactive {
+      pointer-events: auto;
+
+      .form-check-label {
+        cursor: default;
+        opacity: 0.5;
+      }
+      .form-check-input {
+        cursor: default;
+        filter: grayscale(1);
+      }
+    }
+  }
+
+}
+
+.cute-radio-group {
+  display: block;
+}

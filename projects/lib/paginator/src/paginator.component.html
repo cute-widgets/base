@@ -1,0 +1,185 @@
+@if (!hidePageSize) {
+  <div class="page-size">
+
+    <cute-label class="page-size-label"
+                [magnitude]="magnitude"
+                [attr.id]="_pageSizeLabelId">
+      {{_intl.itemsPerPageLabel}}
+    </cute-label>
+
+    @if (_displayedPageSizeOptions.length > 1) {
+
+      <cute-form-field
+              class="page-size-select"
+              [class.me-auto]="true"
+              subscriptSizing="dynamic"
+              [color]="color">
+
+        <cute-select
+          [value]="pageSize"
+          [disabled]="disabled"
+          [color]="color"
+          [magnitude]="magnitude"
+          [aria-labelledby]="_pageSizeLabelId"
+          [panelClass]="selectConfig.panelClass || 'shadow-lg'"
+          [disableOptionCentering]="selectConfig.disableOptionCentering"
+          (selectionChange)="_changePageSize($event.value)"
+          hideSingleSelectionIndicator>
+          @for (pageSizeOption of _displayedPageSizeOptions; track pageSizeOption) {
+            <cute-option [value]="pageSizeOption">
+              {{pageSizeOption}}
+            </cute-option>
+          }
+        </cute-select>
+      </cute-form-field>
+    } @else {
+      <div class="page-size-value">{{pageSize}}</div>
+    }
+  </div>
+}
+
+<nav [attr.aria-label]="ariaLabel">
+
+  <ul class="pagination"
+      [class]="_getMagnitudeCssClass()+(alignment=='between' ? '' : ' justify-content-'+alignment)"
+      [class.gap-1]="hideBorders"
+      [style.--bs-focus-ring-color]='color ? "rgba(var(--bs-"+color+"-rgb), var(--bs-focus-ring-opacity))" : ""'
+      [style.--bs-pagination-color]='color ? "var(--bs-"+color+")" : ""'
+      [style.--bs-pagination-active-bg]='color ? "var(--bs-"+color+")" : ""'
+      [style.--bs-pagination-active-border-color]='color ? "rgb(var(--bs-"+color+"-rgb))" : ""'
+      [style.--bs-pagination-border-width]="hideBorders ? 0 : undefined"
+  >
+    @if (showFirstLastButtons) {
+      <li class="page-item page-first">
+        <a class="page-link"
+           [tabindex]="_previousButtonDisabled() ? -1 : 0"
+           [class.disabled]="_previousButtonDisabled()"
+           [class]="color && !_previousButtonDisabled() ? 'link-'+color : ''"
+           [class.focus-ring]="color != null"
+           [style.float]="'left'"
+           [attr.aria-label]="_intl.firstPageLabelHint || _intl.firstPageLabel"
+           [cuteTooltip]="_intl.firstPageLabelHint || _intl.firstPageLabel"
+           [cuteTooltipDisabled]="_previousButtonDisabled()"
+           [cuteTooltipPosition]="'above'"
+           (click)="firstPage()"
+           (keydown.space)="firstPage();$event.preventDefault();"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               fill="currentColor" class="bi bi-chevron-double-left"
+               viewBox="0 0 16 16"
+               focusable="false" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+          </svg>
+        </a>
+      </li>
+    }
+
+    <li class="page-item" [class.me-auto]="alignment=='between'">
+      <a class="page-link page-prev rounded-start-1"
+         [tabindex]="_previousButtonDisabled() ? -1 : 0"
+         [class]="color && !_previousButtonDisabled() ? 'link-'+color : ''"
+         [class.disabled]="_previousButtonDisabled()"
+         [class.focus-ring]="color != null"
+         [class.rounded-start-1]="hideBorders"
+         [attr.aria-label]="_intl.previousPageLabelHint || _intl.previousPageLabel"
+         [cuteTooltip]="_intl.previousPageLabelHint || _intl.previousPageLabel"
+         [cuteTooltipDisabled]="_previousButtonDisabled()"
+         [cuteTooltipPosition]="'above'"
+         (mousedown)="onMouseDown($event)"
+         (click)="previousPage()"
+         (keydown.space)="previousPage();$event.preventDefault();"
+      >
+        @if (showPrevNextLabels) {
+          {{_intl.previousPageLabel}}
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               fill="currentColor" class="bi bi-chevron-left"
+               viewBox="0 0 16 16"
+               focusable="false" aria-hidden="true">
+            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+          </svg>
+        }
+      </a>
+    </li>
+
+    @if (middleSectionStyle.endsWith('pages')) {
+      @for (pageNo of getPageNumbers(); track pageNo) {
+        <li class="page-item">
+          <a [attr.tabindex]="isNaN(pageNo)?-1:0"
+             class="page-link page-number"
+             [class.active]="isActivePage(pageNo) && !hideActive"
+             [class.shadow]="isActivePage(pageNo) && !hideActive"
+             [class.rounded-1]="hideBorders"
+             [class]="color && !isActivePage(pageNo) ? 'link-'+color : ''"
+             [class.focus-ring]="color != null"
+             [attr.aria-current]="isActivePage(pageNo) ? 'page' : ''"
+             (mousedown)="onMouseDown($event)"
+             (click)="gotoPage(pageNo);"
+             (keydown.space)="gotoPage(pageNo);$event.preventDefault();"
+          >
+            {{pageNo + 1}}
+          </a>
+        </li>
+      }
+
+    } @else if (middleSectionStyle=='range') {
+      <li class="cute-paginator-range-label" aria-live="polite">
+        {{_intl.getRangeLabel(pageIndex, pageSize, length)}}
+      </li>
+    }
+
+    <li class="page-item" [class.ms-auto]="alignment=='between'">
+      <a class="page-link page-next rounded-end-1"
+         [tabindex]="_nextButtonDisabled() ? -1 : 0"
+         [class]="color && !_nextButtonDisabled() ? 'link-'+color : ''"
+         [class.disabled]="_nextButtonDisabled()"
+         [class.focus-ring]="color != null"
+         [class.rounded-end-1]="hideBorders"
+         [attr.aria-label]="_intl.nextPageLabelHint || _intl.nextPageLabel"
+         [cuteTooltip]="_intl.nextPageLabelHint || _intl.nextPageLabel"
+         [cuteTooltipDisabled]="_nextButtonDisabled()"
+         [cuteTooltipPosition]="'above'"
+         (mousedown)="onMouseDown($event)"
+         (click)="nextPage()"
+         (keydown.space)="nextPage();$event.preventDefault();"
+      >
+        @if (showPrevNextLabels) {
+          {{_intl.nextPageLabel}}
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               fill="currentColor" class="bi bi-chevron-right"
+               viewBox="0 0 16 16"
+               focusable="false" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        }
+      </a>
+    </li>
+
+    @if (showFirstLastButtons) {
+      <li class="page-item">
+        <a class="page-link page-last"
+           [tabindex]="_nextButtonDisabled() ? -1 : 0"
+           [class.disabled]="_nextButtonDisabled()"
+           [class]="color && !_nextButtonDisabled() ? 'link-'+color : ''"
+           [class.focus-ring]="color != null"
+           [attr.aria-label]="_intl.lastPageLabelHint || _intl.lastPageLabel"
+           [cuteTooltip]="_intl.lastPageLabelHint || _intl.lastPageLabel"
+           [cuteTooltipDisabled]="_nextButtonDisabled()"
+           [cuteTooltipPosition]="'above'"
+           (click)="lastPage()"
+           (keydown.space)="lastPage();$event.preventDefault();"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               fill="currentColor" class="bi bi-chevron-double-right"
+               viewBox="0 0 16 16"
+               focusable="false" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+            <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

@@ -1,0 +1,15 @@
+.cute-progress-spinner {
+  display: inline-block;
+
+  &.cute-spinner-border-lg {
+    --bs-spinner-width: 3rem;
+    --bs-spinner-height: 3rem;
+    --bs-spinner-border-width: 0.5rem;
+  }
+
+  &.cute-spinner-grow-lg {
+    --bs-spinner-width: 3rem;
+    --bs-spinner-height: 3rem;
+  }
+
+}

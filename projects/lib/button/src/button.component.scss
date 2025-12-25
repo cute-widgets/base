@@ -1,0 +1,374 @@
+@use '../../core/style/ripple';
+
+.cute-button, .cute-anchor {
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: visible;
+
+  box-shadow: none;
+
+  &:has(> :not(.cute-ripple):nth-child(2)) {
+    // Gap between icon(s) and label, if any
+    gap: 0.5em;
+  }
+
+  &.dropdown-toggle {
+    gap: 0.375em;
+  }
+  &.dropdown-toggle-split {
+    gap: 0;
+  }
+
+  $shadow-color: #000;   //var(--bs-body-color-rgb);
+
+  // Icon
+  & .cute-icon-wrapper {
+    display: contents;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  // label
+  & .cute-button-label {
+
+    // The next lines kill text-overflow-ellipses
+
+    //display: inline-flex;
+    //align-items: center;
+    //gap: 0.25rem;
+
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    // adjust height of .badge elements (if any)
+    & .badge {
+      line-height: var(--bs-btn-line-height);
+      top: 0;
+    }
+
+    &:empty {
+      display: none;
+    }
+
+  }
+
+  &.cute-button-disabled-interactive {
+    cursor: pointer;
+
+    &:disabled, &.disabled {
+      pointer-events: auto;
+      cursor: default;
+      box-shadow: none;
+
+      --bs-btn-active-bg: var(--bs-btn-disabled-bg);
+      --bs-btn-active-border-color: var(--bs-btn-disabled-border-color);
+      --bs-btn-active-color: var(--bs-btn-disabled-color);
+
+      &.cute-icon-button {
+        --bs-btn-active-bg: transparent;
+        --bs-btn-active-border-color: transparent;
+        --bs-btn-hover-bg: transparent;
+      }
+    }
+  }
+
+
+  &.cute-base-button {
+
+    font-weight: 500;
+
+    --cute-base-button-color-rgb: var(--bs-body-color-rgb);
+
+    --bs-btn-active-bg:           rgba(var(--cute-base-button-color-rgb), 0.08);
+    --bs-btn-active-border-color: rgba(var(--cute-base-button-color-rgb), 0.12);
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-hover-bg:            rgba(var(--cute-base-button-color-rgb), 0.06);
+
+  }
+
+  &.cute-flat-button {
+    &.cute-unthemed {
+      --bs-btn-bg: var(--bs-tertiary-bg);
+      --bs-btn-hover-bg: var(--bs-secondary-bg);
+      --bs-btn-active-bg: var(--bs-secondary-bg);
+      border-color: transparent;
+    }
+  }
+
+  // raised-button
+  &.raised {
+    box-shadow: 0 3px 1px -2px rgba($shadow-color, .2),
+                0 2px 2px 0 rgba($shadow-color, .14),
+                0 1px 5px 0 rgba($shadow-color, .12);
+
+    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover, &:focus  /*, &.cdk-focused*/ {
+      box-shadow: 0 2px 4px -1px rgba($shadow-color, 0.2),
+                  0 4px 5px 0 rgba($shadow-color, 0.14),
+                  0 1px 10px 0 rgba($shadow-color, 0.12);
+    }
+    &:active {
+      box-shadow: 0 5px 5px -3px rgba($shadow-color, 0.2),
+                  0 8px 10px 1px rgba($shadow-color, 0.14),
+                  0 3px 14px 2px rgba($shadow-color, 0.12);
+    }
+    &:disabled, &.disabled {
+        box-shadow: 0 0 0 0 rgba($shadow-color, 0.2),
+                    0 0 0 0 rgba($shadow-color, 0.14),
+                    0 0 0 0 rgba($shadow-color, 0.12);
+    }
+  }
+
+  // Change Light button's background color for disabled button
+  &.btn-light:disabled, &.btn-light.disabled {
+    background-color: rgba($shadow-color, 0.1);
+  }
+
+  // icon
+  & > [role='img'], i[class] {
+    align-self: center;
+    //vertical-align: middle;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  // FAB
+  &.cute-fab-button {
+
+    --icon-size: 40px;
+    &[magnitude='largest']    { --icon-size: 64px; }
+    &[magnitude='larger']     { --icon-size: 56px; }
+    &[magnitude='large']      { --icon-size: 48px; }
+    &[magnitude='middle']     { --icon-size: 40px; }
+    &[magnitude='small']      { --icon-size: 32px; }
+    &[magnitude='smaller']    { --icon-size: 24px; }
+    &[magnitude='smallest']   { --icon-size: 16px; }
+
+    width:  var(--icon-size);
+    height: var(--icon-size);
+    min-width: var(--icon-size);
+    line-height: 1;
+    //font-size: var(--icon-size);
+
+    // Ensure the icons are centered.
+    ////justify-content: center;
+    //vertical-align: middle;
+    padding: 0;
+    padding-top: revert;
+
+    // Gap between icon(s) and label, if any
+    gap: 0;
+
+    // Border radius is inherited by ripple to know its shape. Set to 50% so the ripple is round.
+    border-radius: 50%;
+
+    // Prevent the button from shrinking since it's always supposed to be a circle.
+    flex-shrink: 0;
+
+    svg {
+      vertical-align: baseline;
+    }
+
+    -webkit-tap-highlight-color: rgba($shadow-color,0);
+
+    box-shadow: 0 3px 5px -1px rgba($shadow-color, 0.2),
+                0 6px 10px 0px rgba($shadow-color, 0.14),
+                0 1px 18px 0px rgba($shadow-color, 0.12);
+
+    &:active {
+      box-shadow: 0 7px 8px -4px rgba($shadow-color, 0.2),
+                  0 12px 17px 2px rgba($shadow-color, 0.14),
+                  0 5px 22px 4px rgba($shadow-color, 0.12);
+
+      &.btn-light {
+        border-color: rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    &:hover, &.cdk-focused {
+      box-shadow: 0 5px 5px -3px rgba($shadow-color, 0.2),
+                  0 8px 10px 1px rgba($shadow-color, 0.14),
+                  0 3px 14px 2px rgba($shadow-color, 0.12);
+    }
+
+    &:disabled, &.disabled {
+      //opacity: 1;
+      border:  0;
+      box-shadow: none;
+      // icon
+      & > [role='img'], i[class] {
+        color: rgba(0, 0, 0, 0.38) !important;
+      }
+    }
+
+  } // end of FAB
+
+
+  &.cute-icon-button {
+
+    //position: relative;
+    overflow: hidden;
+
+    // Border radius is inherited by ripple to know its shape. Set to 50% so the ripple is round.
+    border-radius: 50%;
+    border: 0;
+    padding: 0;
+    // Gap between icon(s) and label, if any
+    gap: 0 !important;
+
+    --icon-size: 40px;
+    &[magnitude='largest']    { --icon-size: 64px; }
+    &[magnitude='larger']     { --icon-size: 56px; }
+    &[magnitude='large']      { --icon-size: 48px; }
+    &[magnitude='middle']     { --icon-size: 40px; }
+    &[magnitude='small']      { --icon-size: 32px; }
+    &[magnitude='smaller']    { --icon-size: 24px; }
+    &[magnitude='smallest']   { --icon-size: 16px; }
+
+    width: var(--icon-size);
+    height: var(--icon-size);
+    min-width: var(--icon-size);
+    line-height: 1;
+    //font-size: var(--icon-size);
+
+    // Ensure the icons are centered.
+    //justify-content: center;
+
+    svg {
+      vertical-align: baseline;
+    }
+
+    --cute-icon-button-color-rgb: var(--bs-body-color-rgb);
+    --bs-btn-active-bg:           rgba(var(--cute-icon-button-color-rgb), 0.12);
+    --bs-btn-active-border-color: rgba(var(--cute-icon-button-color-rgb), 0.12);
+    --bs-btn-hover-bg:            rgba(var(--cute-icon-button-color-rgb), 0.06);
+
+    &.cdk-focused {
+      --bs-btn-hover-bg:          rgba(var(--cute-icon-button-color-rgb), 0.04);
+    }
+  } // End of icon-button
+
+}
+
+// smallest
+.cute-btn-xxs, .cute-btn-group-xxs > .btn {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .5rem;
+}
+
+// smaller
+.cute-btn-xs, .cute-btn-group-xs > .btn {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .75rem;
+}
+
+// larger
+.cute-btn-xl, .cute-btn-group-xl > .btn {
+  --bs-btn-padding-y: .5rem;
+  --bs-btn-padding-x: 1.0rem;
+  --bs-btn-font-size: 1.5rem;
+}
+
+// largest
+.cute-btn-xxl, .cute-btn-group-xxl > .btn {
+  --bs-btn-padding-y: .5rem;
+  --bs-btn-padding-x: 1.0rem;
+  --bs-btn-font-size: 2.5rem;
+}
+
+[dir="rtl"] {
+
+  .btn-group > .btn:not(:first-child):not(.dropdown-toggle),
+  .btn-group > .btn.dropdown-toggle-split:last-child,
+  .btn-group > .btn-group:not(:first-child) > .btn {
+    border-radius: 0;
+  }
+
+  .btn-group > .btn:nth-child(n+3),
+  .btn-group > :not(.btn-check) + .btn,
+  .btn-group > .btn-group:not(:last-child) > .btn {
+    border-radius: 0 var(--bs-btn-border-radius) var(--bs-btn-border-radius) 0;
+  }
+
+  .btn-group > .btn:first-child:not(.dropdown-toggle),
+  .btn-group > .btn.dropdown-toggle-split:first-child,
+  .btn-group > .btn-group:first-child > .btn {
+    border-radius: 0 var(--bs-btn-border-radius) var(--bs-btn-border-radius) 0;
+
+    //border-top-left-radius: var(--bs-btn-border-radius);
+    //border-bottom-left-radius: var(--bs-btn-border-radius);
+    //border-top-right-radius: 0;
+    //border-bottom-right-radius: 0;
+  }
+
+  .btn-group > .btn:last-child:not(.dropdown-toggle),
+  .btn-group > .btn.dropdown-toggle-split:last-child,
+  .btn-group > .btn-group:last-child > .btn {
+    border-radius: var(--bs-btn-border-radius) 0 0 var(--bs-btn-border-radius);
+  }
+}
+
+// sidebars.css
+
+.cute-button-expandable {
+  padding: .25rem .5rem;
+  font-weight: 600;
+  color: var(--bs-emphasis-color);
+  background-color: transparent;
+
+  &:hover, &:focus {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+    background-color: var(--bs-tertiary-bg);
+  }
+
+  &::before {
+    width: 1.25em;
+    line-height: 0;
+    // margin-inline-start: 0.25em;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+    transform: scale(0.85);
+
+    [data-bs-theme="dark"] & {
+      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    }
+
+    [dir="rtl"] & {
+      transform: rotate(180deg) scale(0.85);
+      margin-left: 0.25em;
+      text-align: end;
+    }
+  }
+
+  &[aria-expanded="true"] {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+  }
+  &[aria-expanded="true"]::before {
+    transform: rotate(90deg) scale(0.85);
+  }
+
+}
+
+/*
+.btn-toggle-nav a {
+  padding: .1875rem .5rem;
+  margin-top: .125rem;
+  margin-left: 1.25rem;
+
+  &:hover, &:focus {
+    background-color: var(--bs-tertiary-bg);
+  }
+}
+*/

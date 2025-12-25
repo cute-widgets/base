@@ -1,0 +1,38 @@
+<div class="form-check"
+     [class.form-check-reverse]="labelPosition == 'before'"
+     [class.form-check-inline]="inline"
+     [class.form-switch]="role == 'switch'"
+     (click)="_preventBubblingFromLabel($event)"
+    >
+  <input #input type="checkbox"
+         class="form-check-input"
+         [class.icon-small]="iconSize=='small'"
+         [class.icon-large]="iconSize=='large'"
+         [attr.aria-label]="ariaLabel || null"
+         [attr.aria-labelledby]="ariaLabelledby"
+         [attr.aria-describedby]="ariaDescribedby"
+         [attr.aria-checked]="indeterminate ? 'mixed' : null"
+         [attr.aria-controls]="ariaControls"
+         [attr.aria-disabled]="disabled && disabledInteractive ? true : null"
+         [attr.aria-expanded]="ariaExpanded"
+         [attr.aria-owns]="ariaOwns"
+         [attr.role]="role"
+         [attr.name] = "name"
+         [attr.value]="value"
+         [id]="inputId"
+         [checked]="checked"
+         [disabled]="disabled"
+         [required]="required"
+         [tabIndex]="disabled && !disabledInteractive ? -1 : tabIndex"
+         [indeterminate]="indeterminate"
+         [autocomplete]="false"
+         (blur)="_onInputBlur($event)"
+         (click)="_onInputClick($event)"
+         (change)="_onInputChange($event)"
+  />
+  <label #label
+         class="form-check-label"
+         [for]="inputId">
+    <ng-content></ng-content>
+  </label>
+</div>

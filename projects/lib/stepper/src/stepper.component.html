@@ -1,0 +1,103 @@
+<!--
+  We need to project the content somewhere to avoid hydration errors. Some observations:
+  1. This is only necessary on the server.
+  2. We get a hydration error if there aren't any nodes after the `ng-content`.
+  3. We get a hydration error if `ng-content` is wrapped in another element.
+-->
+@if (_isServer) {
+  <ng-content/>
+}
+
+@switch (orientation) {
+  @case ('horizontal') {
+    <div class="cute-horizontal-stepper-wrapper">
+      <div class="cute-horizontal-stepper-header-container">
+        @for (step of steps; track step) {
+          <ng-container
+            [ngTemplateOutlet]="stepTemplate"
+            [ngTemplateOutletContext]="{step: step}">
+          </ng-container>
+          @if (!$last) {
+            <div class="cute-stepper-horizontal-line"></div>
+          }
+        }
+      </div>
+
+      <div class="cute-horizontal-content-container">
+        @for (step of steps; track step) {
+          <div
+            #animatedContainer
+            class="cute-horizontal-stepper-content"
+            role="tabpanel"
+            [id]="_getStepContentId($index)"
+            [attr.aria-labelledby]="_getStepLabelId($index)"
+            [class]="'cute-horizontal-stepper-content-' + _getAnimationDirection($index)"
+            [attr.inert]="selectedIndex === $index ? null : ''">
+            <ng-container [ngTemplateOutlet]="step.content"></ng-container>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @case ('vertical') {
+    @for (step of steps; track step) {
+      <div class="cute-step">
+        <ng-container
+          [ngTemplateOutlet]="stepTemplate"
+          [ngTemplateOutletContext]="{step}"/>
+        <div
+          #animatedContainer
+          class="cute-vertical-content-container"
+          [class.cute-stepper-vertical-line]="!$last"
+          [class.cute-vertical-content-container-active]="selectedIndex === $index"
+          [attr.inert]="selectedIndex === $index ? null : ''">
+          <div class="cute-vertical-stepper-content"
+               role="tabpanel"
+               [id]="_getStepContentId($index)"
+               [attr.aria-labelledby]="_getStepLabelId($index)">
+            <div class="cute-vertical-content">
+              <ng-container [ngTemplateOutlet]="step.content"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+}
+
+<!-- Common step templating -->
+<!--
+  We use Bootstrap's 'btn-{color}' CSS class for the specified theme color.
+  See: [class]="color ? 'btn-'+color : ''"
+-->
+<ng-template let-step="step" #stepTemplate>
+  @let i = step.index();
+  @let isNavigable = step.isNavigable();
+  <cute-step-header
+    [class.cute-horizontal-stepper-header]="orientation === 'horizontal'"
+    [class.cute-vertical-stepper-header]="orientation === 'vertical'"
+    [class]="color ? 'btn-'+color : ''"
+    (click)="step.select()"
+    (keydown)="_onKeydown($event)"
+    [tabIndex]="_getFocusIndex() === i ? 0 : -1"
+    [id]="_getStepLabelId(i)"
+    [attr.aria-posinset]="i + 1"
+    [attr.aria-setsize]="steps.length"
+    [attr.aria-controls]="_getStepContentId(i)"
+    [attr.aria-selected]="step.isSelected()"
+    [attr.aria-label]="step.ariaLabel || null"
+    [attr.aria-labelledby]="(!step.ariaLabel && step.ariaLabelledby) ? step.ariaLabelledby : null"
+    [attr.aria-disabled]="isNavigable ? null : 'true'"
+    [index]="i"
+    [state]="step.indicatorType()"
+    [label]="step.stepLabel || step.label"
+    [selected]="step.isSelected()"
+    [active]="isNavigable"
+    [optional]="step.optional"
+    [errorMessage]="step.errorMessage"
+    [iconOverrides]="_iconOverrides"
+    [disableRipple]="disableRipple || !isNavigable"
+    [color]="step.color || color">
+  </cute-step-header>
+</ng-template>

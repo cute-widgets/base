@@ -1,0 +1,174 @@
+@use 'sass:math';
+@use '@angular/cdk';
+@use '../../core/style/variables';
+@use '../../core/style/vendor-prefixes';
+
+$date-range-input-separator-spacing: 4px;
+$date-range-input-part-max-width: calc(50% - #{$date-range-input-separator-spacing});
+
+@mixin _placeholder-transition($property) {
+  transition: #{$property} variables.$swift-ease-out-duration
+  math.div(variables.$swift-ease-out-duration, 3)
+  variables.$swift-ease-out-timing-function;
+}
+
+// Host of the date range input.
+.cute-date-range-input {
+  --cute-range-input-disabled-state-text-color: var(--bs-secondary);
+
+  display: flex;  //block;
+  width: 100%;
+}
+
+// Inner container that wraps around all the content.
+.cute-date-range-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+// Text shown between the two inputs.
+.cute-date-range-input-separator {
+  @include _placeholder-transition(opacity);
+  margin: 0 $date-range-input-separator-spacing;
+
+  /*
+  @include token-utils.use-tokens($_tokens...) {
+    @include token-utils.create-token-slot(color, range-input-separator-color);
+
+    .cute-form-field-disabled & {
+      @include token-utils.create-token-slot(color, range-input-disabled-state-separator-color);
+    }
+  }
+  */
+
+  ._cute-animation-noopable & {
+    transition: none;
+  }
+}
+
+.cute-date-range-input-focused,
+.cute-date-range-input:focus-within {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.cute-date-range-input-separator-hidden {
+  // Disable text selection, because the user can click
+  // through the main label when the input is disabled.
+  @include vendor-prefixes.user-select(none);
+
+  // Use opacity to hide the text, because `color: transparent` will be shown in high contrast mode.
+  opacity: 0;
+  transition: none;
+}
+
+// Wrapper around the inner inputs. Used to facilitate the auto-resizing input.
+.cute-date-range-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-width: $date-range-input-part-max-width;
+}
+
+.cute-date-range-input-end-wrapper {
+  // Allow the end input to fill the rest of the available space.
+  flex-grow: 1;
+}
+
+// Underlying input inside the range input.
+.cute-date-range-input-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  // Reset the input so it's just a transparent rectangle.
+  font: inherit;
+  background: transparent;
+  color: currentColor;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  text-align: inherit;
+  -webkit-appearance: none;
+  width: 100%;
+
+  // Does nothing on Chrome, but necessary for the text
+  // to align in some cases on Safari and Firefox.
+  height: 100%;
+
+  // Undo the red box-shadow glow added by Firefox on invalid inputs.
+  // See https://developer.mozilla.org/en-US/docs/Web/CSS/:-moz-ui-invalid
+  &:-moz-ui-invalid {
+    box-shadow: none;
+  }
+
+  @include vendor-prefixes.input-placeholder {
+    @include _placeholder-transition(color);
+  }
+
+  &[disabled] {
+      color: var(--cute-range-input-disabled-state-text-color);
+  }
+
+
+  .cute-form-field-hide-placeholder &,
+  .cute-date-range-input-hide-placeholders & {
+    @include vendor-prefixes.input-placeholder {
+      // Disable text selection, because the user can click
+      // through the main label when the input is disabled.
+      @include vendor-prefixes.user-select(none);
+
+      // Needs to be !important, because the placeholder will end up inheriting the
+      // input color in IE, if the consumer overrides it with a higher specificity.
+      color: transparent !important;
+      -webkit-text-fill-color: transparent;
+      transition: none;
+
+      @include cdk.high-contrast(active, off) {
+        // In high contrast mode the browser will render the
+        // placeholder despite the `color: transparent` above.
+        opacity: 0;
+      }
+    }
+  }
+
+  ._cute-animation-noopable & {
+    @include vendor-prefixes.input-placeholder {
+      transition: none;
+    }
+  }
+}
+
+// We want the start input to be flush against the separator, no matter how much text it has, but
+// the problem is that inputs have a fixed width. We work around the issue by implementing an
+// auto-resizing input that stretches based on its text, up to a point. It works by having
+// a relatively-positioned wrapper (`.cute-date-range-input-wrapper` below) and an absolutely-
+// positioned `input`, as well as a `span` inside the wrapper which mirrors the input's value and
+// placeholder. As the user is typing, the value gets mirrored in the span which causes the wrapper
+// to stretch and the input with it.
+.cute-date-range-input-mirror {
+  // Disable user selection so users don't accidentally copy the text via ctrl + A.
+  @include vendor-prefixes.user-select(none);
+
+  // Hide the element so it doesn't get read out by screen
+  // readers and it doesn't show up behind the input.
+  visibility: hidden;
+
+  // Text inside inputs never wraps so the one in the span shouldn't either.
+  white-space: nowrap;
+  display: inline-block;
+
+  // Prevent the container from collapsing. Make it more
+  // than 1px so the input caret doesn't get clipped.
+  min-width: 2px;
+}
+
+.cute-form-field-type-cute-date-range-input .cute-form-field-infix {
+  // Bump the default width slightly since it's somewhat cramped with two inputs and a separator.
+  width: 200px;
+}

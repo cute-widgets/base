@@ -1,0 +1,76 @@
+<h5 class="mb-3">Expansion Panel</h5>
+
+<cute-expansion-panel style="width: 50%">
+  <cute-expansion-panel-header>
+    <cute-panel-title>
+      Expansion header
+    </cute-panel-title>
+    <cute-panel-description>
+      Some descriptive text
+    </cute-panel-description>
+  </cute-expansion-panel-header>
+
+  <h3>Expansion content</h3>
+
+</cute-expansion-panel>
+
+
+<h5 class="my-3">Accordion</h5>
+
+<cute-vstack gap="3">
+
+  <cute-hstack gap="3">
+    <cute-checkbox #cbxMulti (change)="acc1.closeAll()">Multi</cute-checkbox>
+    <cute-checkbox #cbxFlush>Flush borders</cute-checkbox>
+    <cute-checkbox #cbxToggleBefore>Toggle before</cute-checkbox>
+  </cute-hstack>
+
+  <cute-accordion #acc1="cuteAccordion" style="width: 50%"
+                  [multi]="cbxMulti.checked"
+                  [displayMode]="cbxFlush.checked ? 'flush' : 'default'"
+                  [togglePosition]="cbxToggleBefore.checked ? 'before' : 'after'"
+  >
+    <cute-expansion-panel #pan1 (afterCollapse)="log('Expansion panel Collapsed')" (afterExpand)="log('Expansion panel Expanded')">
+      <cute-expansion-panel-header>
+        <cute-panel-title>
+          Expansion header #1 (lazy load)
+        </cute-panel-title>
+        <cute-panel-description>
+          Some descriptive text
+        </cute-panel-description>
+      </cute-expansion-panel-header>
+      <ng-template cuteExpansionPanelContent>
+        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </ng-template>
+    </cute-expansion-panel>
+    <cute-expansion-panel>
+      <cute-expansion-panel-header>
+        <cute-panel-title>
+          Expansion header #2
+        </cute-panel-title>
+        <cute-panel-description>
+          Some descriptive text
+        </cute-panel-description>
+      </cute-expansion-panel-header>
+      <strong>This is the second item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+    </cute-expansion-panel>
+    <cute-expansion-panel>
+      <cute-expansion-panel-header>
+        <cute-panel-title>
+          Expansion header #3
+        </cute-panel-title>
+      </cute-expansion-panel-header>
+      <strong>This is the third item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+    </cute-expansion-panel>
+    <cute-expansion-panel disabled>
+      <cute-expansion-panel-header>
+        <cute-panel-title>
+          Disabled Expansion header
+        </cute-panel-title>
+      </cute-expansion-panel-header>
+      <strong>This is the third item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+    </cute-expansion-panel>
+
+  </cute-accordion>
+</cute-vstack>
+

@@ -1,0 +1,28 @@
+<h5 class="mb-4">Autocomplete</h5>
+<cute-vstack gap="3">
+  <cute-checkbox [(ngModel)]="requiredSelection" (change)="requiredSelectionChanged()"> Selection required </cute-checkbox>
+
+  <form class="example-form">
+    <cute-form-field class="example-full-width">
+      <cute-label>Number</cute-label>
+      <input #input
+             type="text"
+             placeholder="Pick one"
+             aria-label="Number"
+             cuteInput
+             [formControl]="myControl"
+             [cuteAutocomplete]="auto"
+             (input)="filterInput()"
+             (focus)="filterInput()">
+      <cute-autocomplete [requireSelection]="requiredSelection" #auto="cuteAutocomplete">
+        @for (option of filteredOptions | async; track option) {
+          <cute-option [value]="option">{{option}}</cute-option>
+        }
+      </cute-autocomplete>
+    </cute-form-field>
+  </form>
+
+  Control value: {{myControl.value || 'empty'}}
+
+</cute-vstack>
+

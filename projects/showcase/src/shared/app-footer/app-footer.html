@@ -1,0 +1,30 @@
+<!--@let githubURL = "https://github.com/cute-widgets/base";-->
+
+<footer>
+  <cute-navbar position="sticky-bottom" breakpoint="lg" class="border-top" color="secondary-emphasis">
+    <img src="/assets/cute-widgets.png" style="height: 2.5rem" alt="CuteWidgets Logo"/>
+    <a cute-navbar-brand href="#" class="fw-semibold">CuteWidgets</a>
+    <button cute-navbar-toggler [cuteNavbarTogglerFor]="footerNavbar" cuteButton="outline-button" aria-label="Toggle navigation">
+      <cute-icon>list</cute-icon>
+    </button>
+    <cute-navbar-content #footerNavbar="cuteNavbarContent" >
+      <ul cute-navbar-nav class="me-auto mb-2 mb-lg-0">
+        <li cute-nav-item>
+          <a cute-nav-link active="true" routerLink="/home">Home</a>
+        </li>
+        <li cute-nav-item>
+          <a cute-nav-link routerLink="/components/overview">Components</a>
+        </li>
+        <li cute-nav-item>
+          <a cute-nav-link routerLink="/pro-components">PRO Components</a>
+        </li>
+      </ul>
+
+      <small>
+        © 2025 CuteWidgets Team. All rights reserved.
+      </small>
+    </cute-navbar-content>
+  </cute-navbar>
+
+</footer>
+

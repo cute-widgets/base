@@ -1,0 +1,25 @@
+<form>
+  <cute-form-field class="example-chip-list">
+    <cute-label>Favorite Fruits</cute-label>
+    <cute-chip-grid #chipGrid aria-label="Fruit selection">
+      @for (fruit of fruits; track fruit) {
+        <cute-chip-row (removed)="remove(fruit)">
+          {{fruit}}
+          <button cuteChipRemove [attr.aria-label]="'remove ' + fruit">
+            <cute-icon fontIcon="x-circle-fill" color="secondary"></cute-icon>
+          </button>
+        </cute-chip-row>
+      }
+      <input placeholder="New Fruit..." #fruitInput [formControl]="fruitCtrl"
+             [cuteChipInputFor]="chipGrid" [cuteAutocomplete]="auto"
+             [cuteChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             (cuteChipInputTokenEnd)="add($event)"/>
+      <cute-autocomplete #auto="cuteAutocomplete" (optionSelected)="selected($event)">
+        @for (fruit of filteredFruits | async; track fruit) {
+          <cute-option [value]="fruit">{{fruit}}</cute-option>
+        }
+      </cute-autocomplete>
+    </cute-chip-grid>
+  </cute-form-field>
+</form>
+

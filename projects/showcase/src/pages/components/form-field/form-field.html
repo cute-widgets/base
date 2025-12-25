@@ -1,0 +1,166 @@
+<h5 class="mb-3">
+  Form field
+</h5>
+
+<cute-vstack gap="3">
+
+    <cute-card class="p-3 w-50">
+      <cute-form-field class="example-form-field mb-2">
+        <cute-label>Enter your email</cute-label>
+        <input cuteInput
+               [formControl]="email"
+               (blur)="updateErrorMessage()"
+               placeholder="name@example.com"
+               autocomplete="email">
+        @if (email.invalid) {
+          <cute-error>{{errorMessage()}}</cute-error>
+        }
+      </cute-form-field>
+
+      <cute-form-field class="example-form-field">
+        <cute-label>Select</cute-label>
+        <cute-select>
+          <cute-option value="one">First option</cute-option>
+          <cute-option value="two">Second option</cute-option>
+        </cute-select>
+      </cute-form-field>
+
+      <cute-form-field class="example-form-field" subscriptSizing="dynamic">
+        <cute-label>Example textarea</cute-label>
+        <textarea cuteInput></textarea>
+      </cute-form-field>
+    </cute-card>
+
+
+    <div>
+      <h6>Error messages</h6>
+
+      <cute-form-field class="example-form-field">
+
+        <cute-label>Password</cute-label>
+
+        <!--      <cute-icon cutePrefix>currency-dollar</cute-icon>-->
+        <input cuteInput
+               type="password"
+               #pwd="ngModel" [(ngModel)]="clearMeValue"
+               required
+               minlength="8" maxlength="20"
+               autocomplete="off">
+        <!--      <span cuteTextSuffix>.00</span>-->
+        <!--      <cute-icon cuteSuffix fontSet="bi" fontIcon="bi-apple" color="warning"></cute-icon>-->
+
+        <cute-hint>Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</cute-hint>
+        @if (!pwd.valid && (pwd.dirty||pwd.touched)) {
+          <cute-error>{{getErrorText(pwd)}}</cute-error>
+        }
+
+        <!--
+        <button cuteSuffix cuteButton="icon-button" aria-label="Clear" (click)="clearMeValue=''" *ngIf="clearMeValue">
+          <cute-icon>close</cute-icon>
+        </button>
+        -->
+      </cute-form-field>
+    </div>
+
+    <cute-vstack gap="2">
+      <h6>Disabled</h6>
+
+      <cute-hstack gap="3">
+        <cute-checkbox #cbxDisabled (change)="cbxDisabledInt.checked=false">Disabled</cute-checkbox>
+        <!--      <cute-checkbox #cbxReadonly>Readonly</cute-checkbox>-->
+        <cute-checkbox #cbxDisabledInt [disabled]="!cbxDisabled.checked">Disabled Interactive</cute-checkbox>
+      </cute-hstack>
+
+      <cute-form-field class="example-form-field" subscriptSizing="dynamic">
+        <input cuteInput type="text" value="Input"
+               [disabled]="cbxDisabled.checked"
+               [disabledInteractive]="cbxDisabledInt.checked"
+               cuteTooltip="Enter a text value"
+               cuteTooltipShowDelay="500"
+               cuteTooltipPositionAtOrigin
+        >
+      </cute-form-field>
+      <cute-form-field class="example-form-field" subscriptSizing="dynamic">
+        <input cuteInput value="Readonly input"
+               [disabled]="cbxDisabled.checked"
+               [disabledInteractive]="cbxDisabledInt.checked"
+               cuteTooltip="Readonly input control"
+               cuteTooltipShowDelay="500"
+               cuteTooltipPositionAtOrigin
+               readonly>
+      </cute-form-field>
+    </cute-vstack>
+
+
+    <div>
+      <h6>Prefix & Suffix</h6>
+      <cute-vstack gap="2">
+        <cute-form-field class="example-form-field">
+          <cute-label>Amount:</cute-label>
+          <cute-icon cutePrefix>currency-dollar</cute-icon>
+          <!--        <cute-select>-->
+          <!--          <cute-option value="1">Option 1</cute-option>-->
+          <!--          <cute-option value="2">Option 2</cute-option>-->
+          <!--          <cute-option value="3">Option 3</cute-option>-->
+          <!--        </cute-select>-->
+          <input cuteInput type="number" class="example-right-align">
+          <span cuteTextSuffix>.00</span>
+        </cute-form-field>
+
+        <cute-form-field class="example-form-field">
+          <cute-label>Enter your password</cute-label>
+          <input cuteInput [type]="hide() ? 'password' : 'text'" />
+          <button
+            cuteButton="outline-button"
+            cuteSuffix
+            color="secondary-emphasis"
+            gradientFill
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()"
+          >
+            <cute-icon [fontIcon]="hide() ? 'eye-fill' : 'eye-slash-fill'"></cute-icon>
+          </button>
+        </cute-form-field>
+      </cute-vstack>
+    </div>
+
+    <div>
+      <h6>Sizes</h6>
+      <label id="example-radio-group-label-0">Select size:</label>
+
+      <cute-radio-group class="my-2" aria-labelledby="example-radio-group-label-0" #rgpSize="cuteRadioGroup">
+        <cute-radio-button value="small" inline>Small</cute-radio-button>
+        <cute-radio-button value="middle" inline checked>Middle</cute-radio-button>
+        <cute-radio-button value="large" inline>Large</cute-radio-button>
+      </cute-radio-group>
+      <cute-form-field hintLabel="Max 10 characters" [magnitude]="rgpSize.value" style="width: 400px;">
+
+        <cute-label>Enter some input</cute-label>
+        <input cuteInput #input2 maxlength="10" placeholder="Ex. Nougat">
+        <cute-hint align="end">{{input2.value.length}}/10</cute-hint>
+
+      </cute-form-field>
+    </div>
+
+    <div>
+      <h6>Float labels</h6>
+      <label id="example-radio-group-label">Float label type:</label>
+
+      <cute-radio-group class="my-2" aria-labelledby="example-radio-group-label" [(ngModel)]="floatLabel">
+        <cute-radio-button value="never" inline>Never</cute-radio-button>
+        <cute-radio-button value="auto" inline>Auto</cute-radio-button>
+        <cute-radio-button value="always" inline>Always</cute-radio-button>
+      </cute-radio-group>
+
+      <cute-form-field [floatLabel]=floatLabel class="example-form-field" color="primary">
+        <cute-label>Floating label</cute-label>
+        <input cuteInput #clearValue [(ngModel)]="clearMeValue" placeholder="Enter a value... (min 3 chars)" minlength="3" autocomplete="off">
+        @if (!clearValue.validity.valid) {
+          <cute-error>{{clearValue.validationMessage}}</cute-error>
+        }
+      </cute-form-field>
+    </div>
+
+</cute-vstack>
+

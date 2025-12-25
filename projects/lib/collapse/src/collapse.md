@@ -1,0 +1,46 @@
+The **CuteWidgets**' `cute-collapse` component is used to show and hide some content on page. Buttons or 
+anchors are used as triggers that are mapped to specific elements you toggle. Collapsing
+an element will animate the `height` from its current value to `0`. Given how CSS handles
+animations, you shouldn't use `padding` on a `collapse` component. 
+
+### Placement
+The `cute-collapse` component supports horizontal collapsing/expanding. Set the `horizontal` input
+property to _true_ to transition the `width` instead of `height` and set a `width` on 
+the immediate child element.
+
+### Interaction
+To collapse/expand some content programmatically the `CuteCollapse` has the according 
+methods. You may call `open()` to expand content, `close()` to collapse it, or `toggle()` to change
+the mode to the opposite. The component's current state can be received via its `collapsed` property.
+
+### Outputs
+The following `CuteCollapse`s events can be used to fine-tune the user interface based on its state:
+
+| Event             | Description                               |
+|:------------------|:------------------------------------------|
+| _beforeExpand_    | Event emitting before expand element      |
+| _beforeCollapse_  | Event emitting before collapse element    |
+| _afterExpand_     | Event emitting after expand element       |
+| _afterCollapse_   | Event emitting after collapse element     |
+
+### Example:
+
+```html
+<p>
+  <button cute-button [cuteCollapseTriggerFor]="collapseCard" color="info">Show collapsed</button>
+</p>
+<div style="min-height: 50px">
+  <cute-collapse #collapseCard horizontal="false">
+    <cute-card style="width: 300px;">
+      <cute-card-header>
+        Card Header
+      </cute-card-header>
+      <cute-card-body>
+        <h5 cuteCardTitle>Card Title</h5>
+        Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+      </cute-card-body>
+    </cute-card>
+  </cute-collapse>
+</div>
+
+```

@@ -1,0 +1,94 @@
+/**
+ * @license Apache-2.0
+ *
+ * Copyright (c) 2025 CuteWidgets Team. All Rights Reserved.
+ *
+ * You may not use this file except in compliance with the License
+ * that can be found at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This code is a modification of the `@angular/material` original
+ * code licensed under MIT-style License (https://angular.dev/license).
+ */
+import {InjectionToken, Injector, ViewContainerRef} from '@angular/core';
+import {Direction} from '@angular/cdk/bidi';
+import {ScrollStrategy} from '@angular/cdk/overlay';
+
+/** Options for where to set focus to automatically on dialog open */
+export type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
+
+/** Injection token that can be used to access the data that was passed in to a bottom sheet. */
+export const CUTE_BOTTOM_SHEET_DATA = new InjectionToken<any>('CuteBottomSheetData');
+
+/**
+ * Configuration used when opening a bottom sheet.
+ */
+export class CuteBottomSheetConfig<D = any> {
+  /** The view container to place the overlay for the bottom sheet into. */
+  viewContainerRef?: ViewContainerRef;
+
+  /**
+   * Injector used for the instantiation of the component to be attached. If provided,
+   * takes precedence over the injector indirectly provided by `ViewContainerRef`.
+   */
+  injector?: Injector;
+
+  /** Extra CSS classes to be added to the bottom sheet container. */
+  panelClass?: string | string[];
+
+  /** Text layout direction for the bottom sheet. */
+  direction?: Direction;
+
+  /** Data being injected into the child component. */
+  data?: D | null = null;
+
+  /** Whether the bottom sheet has a backdrop. */
+  hasBackdrop?: boolean = true;
+
+  /** Custom class for the backdrop. */
+  backdropClass?: string;
+
+  /** Whether the user can use escape or clicking outside to close the bottom sheet. */
+  disableClose?: boolean = false;
+
+  /** Aria label to assign to the bottom sheet element. */
+  ariaLabel?: string | null = null;
+
+  /**
+   * Whether this is a modal dialog. Used to set the `aria-modal` attribute. Off by default,
+   * because it can interfere with other overlay-based components (e.g. `cute-select`) and because
+   * it is redundant since the dialog marks all outside content as `aria-hidden` anyway.
+   */
+  ariaModal?: boolean = false;
+
+  /**
+   * Whether the bottom sheet should close when the user goes backwards/forwards in history.
+   * Note that this usually doesn't include clicking on links (unless the user is using
+   * the `HashLocationStrategy`).
+   */
+  closeOnNavigation?: boolean = true;
+
+  /**
+   * Where the bottom sheet should focus on open.
+   * @breaking-change 14.0.0 Remove boolean option from autoFocus. Use string or
+   * AutoFocusTarget instead.
+   */
+  autoFocus?: AutoFocusTarget | string | boolean = 'first-tabbable';
+
+  /**
+   * Whether the bottom sheet should restore focus to the
+   * previously-focused element, after it's closed.
+   */
+  restoreFocus?: boolean = true;
+
+  /** Scroll strategy to be used for the bottom sheet. */
+  scrollStrategy?: ScrollStrategy;
+
+  /** Height for the bottom sheet. */
+  height?: string = '';
+
+  /** Minimum height for the bottom sheet. If a number is provided, assumes pixel units. */
+  minHeight?: number | string;
+
+  /** Maximum height for the bottom sheet. If a number is provided, assumes pixel units. */
+  maxHeight?: number | string;
+}

@@ -1,0 +1,418 @@
+@use 'sass:math';
+@use '@angular/cdk';
+@use '../../core/style/button-common';
+
+$calendar-body-label-padding-start: 5% !default;
+// We don't want the label to jump around when we switch between month and year views, so we use
+// the same amount of padding regardless of the number of columns. We align the header label with
+// the one third mark of the first cell, this was chosen somewhat arbitrarily to make it look
+// roughly like the mock. Half way is too far since the cell text is center aligned.
+$calendar-body-label-side-padding: math.div(33%, 7) !default;
+$calendar-body-cell-min-size: 32px !default;
+$calendar-body-cell-content-margin: 5% !default;
+$calendar-body-cell-radius: 999px !default;
+$calendar-body-preview-cell-border: dashed 1px;
+
+$calendar-body-min-size: 7 * $calendar-body-cell-min-size !default;
+$calendar-body-cell-content-size: 100% - $calendar-body-cell-content-margin * 2 !default;
+
+$calendar-range-end-body-cell-size:
+  $calendar-body-cell-content-size + $calendar-body-cell-content-margin !default;
+
+// Styles for a highlighted calendar cell (e.g. hovered or focused).
+@mixin _highlighted-cell($token-name) {
+  & > .cute-calendar-body-cell-content {
+    @include _unselected-cell {
+      background-color: $token-name;
+    }
+  }
+}
+
+// Utility mixin to target cells that aren't selected. Used to make selector easier to follow.
+@mixin _unselected-cell {
+  &:not(.cute-calendar-body-selected):not(.cute-calendar-body-comparison-identical) {
+    @content;
+  }
+}
+
+.cute-calendar-body {
+  --cute-calendar-date-today-outline-color: var(--bs-primary);
+  --cute-calendar-date-selected-state-background-color: var(--bs-primary-bg-subtle);
+  --cute-calendar-date-selected-state-text-color: var(--bs-body-color);
+  --cute-calendar-date-selected-state-border-color: var(--bs-primary-border-subtle);
+  --cute-calendar-date-selected-disabled-state-background-color: var(--bs-secondary-bg-subtle);
+  --cute-calendar-date-today-selected-state-outline-color: var(--bs-danger);
+  --cute-calendar-date-focus-state-background-color: var(--bs-secondary-bg);
+  --cute-calendar-date-preview-state-outline-color: var(--bs-primary-border-subtle);
+  --cute-calendar-date-disabled-state-text-color: var(--bs-secondary);
+  --cute-calendar-date-in-range-state-background-color: var(--bs-primary-bg-subtle);
+  --cute-calendar-date-in-comparison-range-state-background-color: rgba(var(--bs-primary-rgb), 0.09);
+  --cute-calendar-date-in-overlap-range-state-background-color: rgba(var(--bs-primary-rgb), 0.15);
+
+  min-width: $calendar-body-min-size;
+}
+
+.cute-calendar-body-today {
+  @include _unselected-cell {
+    border-color: var(--cute-calendar-date-today-outline-color);
+  }
+}
+
+.cute-calendar-body-label {
+  height: 0;
+  line-height: 0;
+  text-align: start;
+  padding-left: $calendar-body-label-side-padding;
+  padding-right: $calendar-body-label-side-padding;
+
+  /*
+  @include token-utils.use-tokens($_tokens...) {
+    @include token-utils.create-token-slot(font-size, calendar-body-label-text-size);
+    @include token-utils.create-token-slot(font-weight, calendar-body-label-text-weight);
+    @include token-utils.create-token-slot(color, calendar-body-label-text-color);
+  }
+  */
+}
+
+// Label that is not rendered and removed from the accessibility tree.
+.cute-calendar-body-hidden-label {
+  display: none;
+}
+
+.cute-calendar-body-cell-container {
+  position: relative;
+  height: 0;
+  line-height: 0;
+}
+
+.cute-calendar-body-cell {
+  --cute-calendar-body-cell-hover-color: rgba(var(--bs-secondary-rgb), .10);
+
+  @include button-common.reset();
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  text-align: center;
+  outline: none;
+  font-family: inherit;
+  margin: 0;
+}
+
+// We use ::before to apply a background to the body cell, because we need to apply a border
+// radius to the start/end which means that part of the element will be cut off, making hovering
+// through all the cells look glitchy. We can't do it on the cell itself, because it's the one
+// that has the event listener and it can't be on the cell content, because it always has a
+// border radius. Note that this and the selectors below can be much simpler if we were to use
+// two separate elements for the main and comparison ranges, like we're doing for the preview
+// range. We don't follow the simpler approach, because the range colors usually have some
+// kind of opacity, which means that they'll start mixing when they're layered on top of each
+// other, making the calendar look messy.
+.cute-calendar-body-cell::before,
+.cute-calendar-body-cell::after,
+.cute-calendar-body-cell-preview {
+  content: '';
+  position: absolute;
+  top: $calendar-body-cell-content-margin;
+  left: 0;
+  z-index: 0;
+  box-sizing: border-box;
+  display: block;
+
+  // We want the range background to be slightly shorter than the cell so
+  // that there's a gap when the range goes across multiple rows.
+  height: $calendar-body-cell-content-size;
+  width: 100%;
+}
+
+.cute-calendar-body-range-start:not(.cute-calendar-body-in-comparison-range)::before,
+.cute-calendar-body-range-start::after,
+.cute-calendar-body-comparison-start:not(.cute-calendar-body-comparison-bridge-start)::before,
+.cute-calendar-body-comparison-start::after,
+.cute-calendar-body-preview-start .cute-calendar-body-cell-preview {
+  // Since the range background isn't a perfect circle, we need to size
+  // and offset the start so that it aligns with the main circle.
+  left: $calendar-body-cell-content-margin;
+  width: $calendar-range-end-body-cell-size;
+  border-top-left-radius: $calendar-body-cell-radius;
+  border-bottom-left-radius: $calendar-body-cell-radius;
+
+  [dir='rtl'] & {
+    left: 0;
+    border-radius: 0;
+    border-top-right-radius: $calendar-body-cell-radius;
+    border-bottom-right-radius: $calendar-body-cell-radius;
+  }
+}
+
+@mixin _range-right-radius {
+  // Since the range background isn't a perfect circle, we need to
+  // resize the end so that it aligns with the main circle.
+  width: $calendar-range-end-body-cell-size;
+  border-top-right-radius: $calendar-body-cell-radius;
+  border-bottom-right-radius: $calendar-body-cell-radius;
+}
+
+.cute-calendar-body-range-end:not(.cute-calendar-body-in-comparison-range)::before,
+.cute-calendar-body-range-end::after,
+.cute-calendar-body-comparison-end:not(.cute-calendar-body-comparison-bridge-end)::before,
+.cute-calendar-body-comparison-end::after,
+.cute-calendar-body-preview-end .cute-calendar-body-cell-preview {
+  @include _range-right-radius;
+
+  [dir='rtl'] & {
+    left: $calendar-body-cell-content-margin;
+    border-radius: 0;
+    border-top-left-radius: $calendar-body-cell-radius;
+    border-bottom-left-radius: $calendar-body-cell-radius;
+  }
+}
+
+// Styles necessary to make RTL work.
+[dir='rtl'] {
+  .cute-calendar-body-comparison-bridge-start.cute-calendar-body-range-end::after,
+  .cute-calendar-body-comparison-bridge-end.cute-calendar-body-range-start::after {
+    @include _range-right-radius;
+  }
+}
+
+// Prevents the extra overlap range indication from showing up when it's not supposed to.
+.cute-calendar-body-comparison-start.cute-calendar-body-range-end::after,
+.cute-calendar-body-comparison-end.cute-calendar-body-range-start::after {
+  // Note that the RTL selector here is redundant, but we need to keep it in order to
+  // raise the specificity since it can be overridden by some of the styles from above.
+  &, [dir='rtl'] & {
+    width: $calendar-body-cell-content-size;
+  }
+}
+
+.cute-calendar-body-in-preview {
+
+  color: var(--cute-calendar-date-preview-state-outline-color);
+
+  .cute-calendar-body-cell-preview {
+    border-top: $calendar-body-preview-cell-border;
+    border-bottom: $calendar-body-preview-cell-border;
+  }
+}
+
+.cute-calendar-body-preview-start .cute-calendar-body-cell-preview {
+  border-left: $calendar-body-preview-cell-border;
+
+  [dir='rtl'] & {
+    border-left: 0;
+    border-right: $calendar-body-preview-cell-border;
+  }
+}
+
+.cute-calendar-body-preview-end .cute-calendar-body-cell-preview {
+  border-right: $calendar-body-preview-cell-border;
+
+  [dir='rtl'] & {
+    border-right: 0;
+    border-left: $calendar-body-preview-cell-border;
+  }
+}
+
+.cute-calendar-body-disabled {
+  cursor: default !important; // Override Bootstrap's `_reboot.scss`
+
+  & > .cute-calendar-body-cell-content {
+    @include _unselected-cell {
+      color: var(--cute-calendar-date-disabled-state-text-color);
+      border-color: transparent;
+    }
+  }
+
+  & > .cute-calendar-body-today {
+    @include _unselected-cell {
+      border-color: var(--cute-calendar-date-today-disabled-state-outline-color);
+    }
+  }
+
+  // Fade out the disabled cells so that they can be distinguished from the enabled ones. Note that
+  // ideally we'd use `color: GreyText` here which is what the browser uses for disabled buttons,
+  // but we can't because Firefox doesn't recognize it.
+  @include cdk.high-contrast(active, off) {
+    opacity: 0.5;
+  }
+}
+
+.cute-calendar-body-cell-content {
+  top: $calendar-body-cell-content-margin;
+  left: $calendar-body-cell-content-margin;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  width: $calendar-body-cell-content-size;
+  height: $calendar-body-cell-content-size;
+
+  // Prevents text being off-center on Android.
+  line-height: 1;
+
+  border-width: var(--bs-border-width);
+  border-style: solid;
+
+  // Choosing a value clearly larger than the height ensures we get the correct capsule shape.
+  border-radius: $calendar-body-cell-radius;
+  border-color: transparent; // var(--bs-body-bg);
+  color: var(--bs-body-color);
+
+  &:hover {
+    border-color: var(--cute-calendar-body-cell-hover-color);
+  }
+
+  // Increase specificity because focus indicator styles are part of the `cute-core` mixin and can
+  // potentially overwrite the absolute position of the container.
+  &.cute-focus-indicator {
+    position: absolute;
+  }
+
+  @include cdk.high-contrast(active, off) {
+    border: none;
+  }
+}
+
+.cute-calendar-body-active {
+  .cdk-keyboard-focused &, .cdk-program-focused & {
+    @include _highlighted-cell( var(--cute-calendar-date-focus-state-background-color) );
+  }
+}
+
+@media (hover: hover) {
+  .cute-calendar-body-cell:not(.cute-calendar-body-disabled):hover {
+    @include _highlighted-cell( var(--cute-calendar-body-cell-hover-color) );
+  }
+}
+
+.cute-calendar-body-selected {
+  background-color: var(--cute-calendar-date-selected-state-background-color);
+  border-color: var(--cute-calendar-date-selected-state-border-color);
+  color: var(--cute-calendar-date-selected-state-text-color);
+
+  .cute-calendar-body-disabled > & {
+    background-color: var(--cute-calendar-date-selected-disabled-state-background-color);
+  }
+
+  &.cute-calendar-body-today {
+    $shadow: var(--cute-calendar-date-today-selected-state-outline-color);
+    box-shadow: inset 0 0 0 1px var(#{$shadow});
+  }
+}
+
+//@include token-utils.use-tokens($_tokens...) {
+  $range-var-name: var(--cute-calendar-date-in-range-state-background-color);
+  $comparison-var-name: var(--cute-calendar-date-in-comparison-range-state-background-color);
+  $comparison-color: $comparison-var-name;
+  $range-color:  $range-var-name;
+
+  .cute-calendar-body-in-range::before {
+    background: var(--cute-calendar-date-in-range-state-background-color);
+  }
+
+  .cute-calendar-body-comparison-identical,
+  .cute-calendar-body-in-comparison-range::before {
+    background: var(--cute-calendar-date-in-comparison-range-state-background-color);
+  }
+
+  .cute-calendar-body-comparison-identical,
+  .cute-calendar-body-in-comparison-range::before {
+    background: var(--cute-calendar-date-in-comparison-range-state-background-color);
+  }
+
+  .cute-calendar-body-comparison-bridge-start::before,
+  [dir='rtl'] .cute-calendar-body-comparison-bridge-end::before {
+    background: linear-gradient(to right, $range-color, $comparison-color);
+  }
+
+  .cute-calendar-body-comparison-bridge-end::before,
+  [dir='rtl'] .cute-calendar-body-comparison-bridge-start::before {
+    background: linear-gradient(to left, $range-color, $comparison-color);
+  }
+
+  .cute-calendar-body-in-range > .cute-calendar-body-comparison-identical,
+  .cute-calendar-body-in-comparison-range.cute-calendar-body-in-range::after {
+    background: var(--cute-calendar-date-in-overlap-range-state-background-color);
+  }
+
+  .cute-calendar-body-comparison-identical.cute-calendar-body-selected,
+  .cute-calendar-body-in-comparison-range > .cute-calendar-body-selected {
+    background: var(--cute-calendar-date-in-overlap-range-selected-state-background-color);
+  }
+//}
+
+@include cdk.high-contrast(active, off) {
+  $main-range-border: solid 1px;
+  $comparison-range-border: dashed 1px;
+
+  .cute-datepicker-popup:not(:empty),
+  .cute-calendar-body-cell:not(.cute-calendar-body-in-range) .cute-calendar-body-selected {
+    outline: solid 1px;
+  }
+
+  .cute-calendar-body-today {
+    outline: dotted 1px;
+  }
+
+  // These backgrounds need to be removed, because they'll block the date ranges.
+  .cute-calendar-body-cell::before,
+  .cute-calendar-body-cell::after,
+  .cute-calendar-body-selected {
+    background: none;
+  }
+
+  .cute-calendar-body-in-range::before,
+  .cute-calendar-body-comparison-bridge-start::before,
+  .cute-calendar-body-comparison-bridge-end::before {
+    border-top: $main-range-border;
+    border-bottom: $main-range-border;
+  }
+
+  .cute-calendar-body-range-start::before {
+    border-left: $main-range-border;
+
+    [dir='rtl'] & {
+      border-left: 0;
+      border-right: $main-range-border;
+    }
+  }
+
+  .cute-calendar-body-range-end::before {
+    border-right: $main-range-border;
+
+    [dir='rtl'] & {
+      border-right: 0;
+      border-left: $main-range-border;
+    }
+  }
+
+  .cute-calendar-body-in-comparison-range::before {
+    border-top: $comparison-range-border;
+    border-bottom: $comparison-range-border;
+  }
+
+  .cute-calendar-body-comparison-start::before {
+    border-left: $comparison-range-border;
+
+    [dir='rtl'] & {
+      border-left: 0;
+      border-right: $comparison-range-border;
+    }
+  }
+
+  .cute-calendar-body-comparison-end::before {
+    border-right: $comparison-range-border;
+
+    [dir='rtl'] & {
+      border-right: 0;
+      border-left: $comparison-range-border;
+    }
+  }
+}
+

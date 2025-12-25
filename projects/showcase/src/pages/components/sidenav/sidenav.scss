@@ -1,0 +1,46 @@
+.example-container {
+  height: 400px;
+  width: 600px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.example-drawer-background {
+  background-color: darkgray;
+}
+
+#example-drawer-content {
+  //padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.example-sidebar-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-user-input {
+  margin-right: 8px;
+}
+
+.example-sidebar {
+  padding: 20px;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-form-field {
+  width: 400px;
+}
+
+.example-full-width {
+  width: 100%;
+}

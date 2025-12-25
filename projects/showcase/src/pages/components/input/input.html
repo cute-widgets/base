@@ -1,0 +1,30 @@
+<h5 class="mb-4">Input</h5>
+
+<cute-vstack gap="2">
+
+  <cute-form-field class="example-form-field" hideValidStyle>
+    <cute-label>Clearable input</cute-label>
+    <input cuteInput type="text" [(ngModel)]="value">
+    <button cuteSuffix cuteButton="outline-button" color="secondary" (click)="value ? value='' : undefined">
+      @if (value) {
+        <cute-icon aria-label="Clear">x-lg</cute-icon>
+      } @else {
+        <cute-icon aria-label="Search" rotation="90">search</cute-icon>
+      }
+    </button>
+  </cute-form-field>
+
+
+  <h6>File input</h6>
+  <cute-vstack gap="1">
+    <input #inpFile cuteInput type="file" class="example-file-input">
+    <span class="ms-3">File: <b>{{inpFile.value}}</b></span>
+  </cute-vstack>
+
+  <h6>Color input</h6>
+  <cute-hstack gap="3">
+    <input #inpColor cuteInput type="color" value="#563d7c" title="Choose your color">
+    <span>Color: <b>{{inpColor.value}}</b></span>
+  </cute-hstack>
+
+</cute-vstack>

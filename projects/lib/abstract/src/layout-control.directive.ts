@@ -1,0 +1,77 @@
+/**
+ * @license Apache-2.0
+ *
+ * Copyright (c) 2025 CuteWidgets Team. All Rights Reserved.
+ *
+ * You may not use this file except in compliance with the License
+ * that can be found at http://www.apache.org/licenses/LICENSE-2.0
+ */
+import {
+  booleanAttribute,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  inject,
+  Input,
+  Output,
+  SimpleChanges
+} from "@angular/core";
+import {CuteBaseControl} from "./base-control.directive";
+import {bsBreakpoints, LayoutBreakpoint, toBgCssClass} from "@cute-widgets/base/core";
+import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import {Subscription} from 'rxjs';
+
+@Directive({
+    host: {
+        '[class.clearfix]': 'clearfix',
+        '[attr.tabindex]': '-1',
+        '[attr.aria-label]': 'ariaLabel || null',
+        '[attr.aria-labelledby]': 'ariaLabelledby || null',
+        '[attr.aria-describedby]': 'ariaDescribedby || null',
+        '[attr.role]': 'role || null',
+        '[attr.id]': 'id || null',
+    }
+})
+export abstract class CuteLayoutControl extends CuteBaseControl {
+  protected breakpointObserver = inject(BreakpointObserver);
+  private _subscription: Subscription | undefined;
+
+  /** Returns CSS-class list */
+  @HostBinding("class")
+  protected get classList(): string {
+    // We interpret `color` value as a background color of the container
+    return this.color ? toBgCssClass(this.color) : "";
+  }
+
+  /** Clears floated content within a container */
+  @Input({transform: booleanAttribute}) clearfix: boolean = false;
+
+  /** Symbolic name of the screen minimum width which determines how the responsive layout behaves across device or viewport sizes. */
+  @Input() breakpoint: LayoutBreakpoint | undefined;
+
+  /** Event that is raised when the width of viewport is changed and crosses the size of `breakpoint`'s value. */
+  @Output() breakpointState = new EventEmitter<BreakpointState>();
+
+  override ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
+
+    const change = changes["breakpoint"];
+    if (change) {
+
+      this._subscription?.unsubscribe();
+
+      if (change.currentValue) { // && (change.currentValue !== change.previousValue)) {
+        const bpName = bsBreakpoints.getLabel(change.currentValue);
+        this._subscription = this.breakpointObserver
+          .observe((bsBreakpoints as any)[bpName+"AndDown"])
+          .subscribe(state => this.breakpointState.emit(state));
+      }
+    }
+  }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+
+    this._subscription?.unsubscribe();
+  }
+}

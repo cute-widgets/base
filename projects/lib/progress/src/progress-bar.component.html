@@ -1,0 +1,58 @@
+@let stacked = isStackMember();
+
+@if (stacked) {
+    <div class="progress"
+         role="progressbar"
+         [style.width.%]="!vertical ? getPercent() : undefined"
+         [style.height.%]="vertical ? getPercent() : undefined"
+         [style.height]="(!vertical && thickness) || undefined"
+         [attr.aria-label]="(messages ? getLabel() : ariaLabel) || null"
+         [attr.aria-valuenow]="value"
+         [attr.aria-valuemin]="minimum ?? 0"
+         [attr.aria-valuemax]="maximum ?? 100"
+    >
+        <div class="progress-bar"
+             [style.height.%]="vertical ? 100 : undefined"
+             [class]='color ? "text-bg-"+color : ""'
+             [class.progress-bar-striped]="striped || stripedAnimated || mode=='indeterminate'"
+             [class.progress-bar-animated]="stripedAnimated || mode=='indeterminate'">
+            @if (showLabel) {
+                @let labelColor = getLabelColor();
+                <span class="text-truncate"
+                      [class.vertical-text]="vertical"
+                      [class.horizontal-text]="!vertical"
+                      [class]="labelColor ? 'text-'+labelColor : null">
+                    {{getLabel()}}
+                </span>
+            }
+        </div>
+    </div>
+} @else {
+    <!-- Standalone progress bar -->
+    <div class="progress"
+         role="progressbar"
+         [style.height]="(!vertical && thickness) || null"
+         [attr.aria-label]="(messages ? getLabel() : ariaLabel) || null"
+         [attr.aria-valuenow]="value"
+         [attr.aria-valuemin]="minimum ?? 0"
+         [attr.aria-valuemax]="maximum ?? 100"
+    >
+        <div class="progress-bar"
+             [style.width.%]="!vertical ? getPercent() : undefined"
+             [style.height.%]="vertical ? getPercent() : undefined"
+             [class]='color ? "text-bg-"+color : ""'
+             [class.progress-bar-striped]="striped || stripedAnimated || mode=='indeterminate'"
+             [class.progress-bar-animated]="stripedAnimated || mode=='indeterminate'">
+            @if (showLabel) {
+                @let labelColor = getLabelColor();
+                <span class="text-truncate"
+                      [class.vertical-text]="vertical"
+                      [class.horizontal-text]="!vertical"
+                      [class]="labelColor ? 'text-'+labelColor : null">
+                    {{getLabel()}}
+                </span>
+            }
+        </div>
+    </div>
+}
+

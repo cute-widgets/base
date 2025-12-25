@@ -1,0 +1,17 @@
+// The label and actions expect to be in a flex container.
+.cute-simple-snack-bar {
+
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+
+  .cute-simple-snack-bar__buttons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: var(--bs-toast-padding-x);
+  }
+
+}
+

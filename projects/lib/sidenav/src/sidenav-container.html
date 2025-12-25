@@ -1,0 +1,14 @@
+@if (hasBackdrop) {
+    <div class="cute-drawer-backdrop" (click)="_onBackdropClicked()"
+         [class.cute-drawer-shown]="_isShowingBackdrop()"></div>
+}
+
+<ng-content select="cute-sidenav"></ng-content>
+
+<ng-content select="cute-sidenav-content"></ng-content>
+
+@if (!_content) {
+    <cute-sidenav-content>
+        <ng-content></ng-content>
+    </cute-sidenav-content>
+}

@@ -1,0 +1,196 @@
+@use '@angular/cdk';
+@use '../../core/style/layout-common';
+
+.cute-chip, .cute-chip-option, cute-chip-row {
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  &.cute-static-chip {
+    --bs-btn-bg: rgba(var(--bs-body-color-rgb), .06);
+    cursor: auto;
+  }
+
+  //&.cute-chip-disabled {
+  //  pointer-events: none;
+  //}
+
+  &:hover {
+    //--bs-btn-hover-color: var(--bs-body-color);
+    --bs-btn-hover-bg: rgba(var(--bs-body-color-rgb), .1);
+  }
+
+  &:active {
+    --bs-btn-active-bg: rgba(var(--bs-body-color-rgb), .14);
+  }
+
+}
+
+.cute-chip__cell {
+
+  & [cuteChipAction], .cute-chip-action {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+
+    &.cute-chip__action--presentational {
+      cursor: auto;
+    }
+
+    &:not(button) {
+      gap: 0.5rem;
+    }
+
+    & .cute-chip__graphic {
+      align-items: center;
+      display: inline-flex;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: none;
+      position: relative;
+      //flex: 1 0 auto;
+
+      & .cute-chip__checkmark {
+
+        padding-left: 2px;
+        padding-right: 4px;
+
+        & .cute-chip__checkmark-svg {
+          width: 1.2rem;
+
+          [dir="rtl"] & {
+            transform: rotateY(180deg);
+          }
+        }
+      }
+    }
+
+    &.disabled {
+      cursor: auto;
+    }
+
+    &.cute-chip__icon--trailing  {
+      padding-left: 4px;
+      padding-right: 0;
+      border: none;
+      background: none;
+      overflow: visible;
+
+      [dir=rtl] & {
+        padding-left: 0;
+        padding-right: 4px;
+      }
+    }
+  }
+}
+
+.cute-standard-chip {
+  -webkit-tap-highlight-color: transparent;
+
+  @include cdk.high-contrast(active, off) {
+    outline: solid 1px;
+
+    .cute-chip__checkmark-path {
+      // SVG colors won't be changed in high contrast mode and since the checkmark is white
+      // by default, it'll blend in with the background in black-on-white mode. Override the
+      // color to ensure that it's visible. We need !important, because the theme styles are
+      // very specific.
+      stroke: CanvasText !important;
+    }
+  }
+
+  & .cute-chip__icon--primary {
+
+    //--avatar-color: var(--bs-body-color);
+    //--avatar-bg-rgb: var(--bs-body-bg-rgb);
+
+    --size: 18px;
+    height: var(--size);
+    width: var(--size);
+    font-size: var(--size);
+    border-radius: calc(var(--size) * 1.3);
+    min-height: fit-content;
+    background: none;
+  }
+
+  // Ensures that the trailing icon is pushed to the end if the chip has a set width.
+  & .cute-chip__cell--primary {
+    //flex-basis: 100%;
+    display: flex;
+  }
+
+  & .cute-chip__cell--trailing {
+    display: inline-flex;
+    background-color: transparent;
+
+    padding-left: 0.5rem;
+    padding-right: 0;
+
+    [dir="rtl"] & {
+      padding-left: 0;
+      padding-right: 0.5rem;
+    }
+  }
+
+  &._cute-animation-noopable {
+    &,
+    .cute-chip__graphic,
+    .cute-chip__checkmark,
+    .cute-chip__checkmark-path {
+      transition-duration: 1ms;
+      animation-duration: 1ms;
+    }
+  }
+}
+
+.cute-chip-focus-overlay {
+  @include layout-common.fill;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+  transition: opacity 150ms linear;
+
+  ._cute-animation-noopable & {
+    transition: none;
+  }
+
+  .cute-basic-chip & {
+    display: none;
+  }
+
+}
+
+.cute-chip-action-label {
+  text-align: left;
+  white-space: nowrap;
+
+  [dir='rtl'] & {
+    text-align: right;
+  }
+}
+
+.cute-chip-primary-focus-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.cute-chip-edit-input {
+  cursor: text;
+  display: inline-block;
+  color: inherit;
+  outline: 0;
+}
+
+// Single-selection chips show their selected state using a background color which won't be visible
+// in high contrast mode. This isn't necessary in multi-selection since there's a checkmark.
+.cute-chip-selected:not(.cute-chip-multiple) {
+  @include cdk.high-contrast(active, off) {
+    outline-width: 3px;
+  }
+}

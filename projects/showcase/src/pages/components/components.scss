@@ -1,0 +1,16 @@
+:host {
+
+  cute-sidenav {
+    width: 240px;
+  }
+
+  cute-sidenav-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .router-outlet-wrapper {
+    min-height: calc(100vh - var(--cute-navbar-height));
+  }
+
+}

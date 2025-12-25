@@ -1,0 +1,79 @@
+@use '@angular/cdk';
+
+// Even though we don't use the MDC styles, we need to keep the classes in the
+// DOM for the Gmat versions to work. We need to bump up the specificity here
+// so that it's higher than MDC's styles.
+.cdk-overlay-pane {
+  & .cute-autocomplete-panel {
+    //@include elevation.elevation(8);
+    width: 100%; // Ensures that the panel matches the overlay width.
+    max-height: 256px; // Prevents lists with a lot of option from growing too high.
+    visibility: hidden;
+    transform-origin: center top;
+    overflow: auto;
+    padding: 0.5rem 0;
+    font-size: var(--bs-body-font-size);
+    color: var(--bs-body-color);
+    text-align: start;
+    list-style: none;
+    box-sizing: border-box;
+
+    // Necessary so the `offsetParent` of the nested `mat-option` is the
+    // panel which is required for scroll calculations (see #30974).
+    position: relative;
+
+    border: var(--bs-border-width) solid var(--bs-border-color-translucent);
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-body-bg);
+
+    @include cdk.high-contrast(active, off) {
+      outline: solid 1px;
+    }
+
+    /*
+    :not(.cute-autocomplete-panel-above) & {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    .cute-autocomplete-panel-above & {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      transform-origin: center bottom;
+    }
+    */
+
+    // These classes are used to toggle the panel visibility depending on whether it has any options.
+    &.cute-autocomplete-visible {
+      visibility: visible;
+    }
+
+    &.cute-autocomplete-hidden {
+      visibility: hidden;
+    }
+  }
+}
+
+@keyframes _cute-autocomplete-enter {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Note: the autocomplete intentionally only implements an enter animation.
+// The exit animation can look glitchy, because usually selecting an option
+// causes the list to change and jump around while it's animating.
+.cute-autocomplete-panel-animations-enabled {
+  animation: _cute-autocomplete-enter 120ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// Prevent the overlay host node from affecting its surrounding layout.
+cute-autocomplete {
+  display: none;
+}

@@ -1,0 +1,78 @@
+.cute-list-item {
+  display: flex;
+  position: relative;
+  //overflow: hidden;
+  justify-content: flex-start;
+  align-items: stretch;
+  pointer-events: auto;
+  cursor: default;
+  width: 100%;
+  gap: 0.5em;
+
+  &:focus {
+    outline: 0;
+  }
+
+  .cute-list-item-content {
+    width: 100%;
+
+    .cute-list-item-single-line, cute-list-item--with-one-line {
+
+    }
+
+    .cute-list-item--with-two-lines {
+      height: var(--cute-list-item-with-two-lines, 64px)
+    }
+
+    .cute-list-item--with-three-lines {
+
+    }
+
+    .cute-list-item-title, cute-list-item__primary-text {
+      font-weight: 600;
+    }
+    .cute-list-item-line, .cute-list-item__secondary-text {
+
+      .cute-list-item:not(:hover) {
+        color: var(--bs-secondary-color);
+      }
+
+      font-size: 0.875em;
+      font-weight: 400;
+      line-height: 1.25rem;
+      //letter-spacing: 0.016rem;
+    }
+
+    .cute-list-item-content-unscoped {
+    }
+
+    .cute-list-item.cute-list-item--with-three-lines {
+      .cute-list-item-line.cute-list-item__secondary-text {
+        white-space: nowrap;
+        line-height: normal;
+      }
+
+      // Unscoped content can wrap if the list item has acquired three lines. MDC implements
+      // this functionality for secondary text but there is no proper text ellipsis when
+      // text overflows the third line. These styles ensure the overflow is handled properly.
+      // TODO: Move this to the MDC list once it drops IE11 support.
+      .cute-list-item-unscoped-content.cute-list-item__secondary-text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+    }
+
+  }
+
+  .cute-list-item-icon {
+    margin-top: 0.25em;
+  }
+  .cute-list-item-avatar {
+  }
+
+  &.cute-list-item-interactive {
+    cursor: pointer;
+  }
+
+}

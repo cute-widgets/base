@@ -1,0 +1,8 @@
+<div
+  #tooltip
+  class="cute-tooltip cute-tooltip--shown"
+  [ngClass]="tooltipClass"
+  (animationend)="_handleAnimationEnd($event)"
+  [class.cute-tooltip--multiline]="_isMultiline">
+  <div class="cute-tooltip__surface cute-tooltip__surface-animation">{{message}}</div>
+</div>

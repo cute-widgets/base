@@ -1,0 +1,23 @@
+<div
+  class="cute-date-range-input-container"
+  cdkMonitorSubtreeFocus
+  (cdkFocusChange)="_updateFocus($event)">
+  <div class="cute-date-range-input-wrapper">
+    <ng-content select="input[cuteStartDate]"></ng-content>
+    <span class="cute-date-range-input-mirror" aria-hidden="true">
+      {{_getInputMirrorValue('start')}}
+    </span>
+  </div>
+
+  <span class="cute-date-range-input-separator"
+        [class.cute-date-range-input-separator-hidden]="_shouldHideSeparator()">
+    {{separator}}
+  </span>
+
+  <div class="cute-date-range-input-wrapper cute-date-range-input-end-wrapper">
+    <ng-content select="input[cuteEndDate]"></ng-content>
+    <span class="cute-date-range-input-mirror" aria-hidden="true">
+      {{_getInputMirrorValue('end')}}
+    </span>
+  </div>
+</div>

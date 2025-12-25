@@ -1,0 +1,104 @@
+.cute-paginator {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+
+  .page-size {
+    display: flex;
+    font-size: var(--bs-pagination-font-size);
+    color: var(--bs-pagination-color);
+    background-color: var(--bs-pagination-bg);
+    align-items: center;
+
+    .page-size-label {
+      margin-right: .25rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: center;
+      text-overflow: ellipsis;
+    }
+
+    .page-size-select {
+      width: 6rem;
+      padding: 0 .25rem;
+    }
+  }
+
+
+  // Navigation list
+  .pagination {
+    align-items: center;
+    margin: 0;
+
+    .page-item {
+      cursor: pointer;
+
+      // :not(:has(.page-number))
+      &:has(.page-prev,.page-next) {
+        display: grid;  // to display text with ellipses when it overflows
+      }
+
+      .page-link {
+        user-select: none;
+
+        &:not(:has(> svg)) {
+          //overflow: hidden;
+          white-space: nowrap;
+          text-align: center;
+          text-overflow: ellipsis;
+        }
+      }
+
+      &:has(.page-link.disabled, .disabled > .page-link) {
+        /* item link is disabled */
+        cursor: auto;
+      }
+
+      [dir='rtl'] & {
+        &:last-child .page-link {
+          border-radius: var(--bs-pagination-border-radius) 0 0 var(--bs-pagination-border-radius);
+          & > svg {
+            transform: rotate(180deg);
+          }
+        }
+        &:first-child .page-link {
+          border-radius: 0 var(--bs-pagination-border-radius) var(--bs-pagination-border-radius) 0;
+          & > svg {
+            transform: rotate(180deg);
+          }
+        }
+        & .page-next, .page-prev {
+          & > svg { transform: rotate(180deg) };
+        }
+      }
+
+    }
+
+    --bs-pagination-color: var(--bs-secondary-color);
+
+    .cute-paginator-range-label {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: center;
+      text-overflow: ellipsis;
+      text-decoration: none;
+      min-width: 7rem;
+      padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+      font-size: var(--bs-pagination-font-size);
+      //color: var(--bs-pagination-color);
+      background-color: var(--bs-pagination-bg);
+    }
+
+  }
+
+  .pagination-sm svg {
+    width: 0.875rem;
+  }
+
+  .pagination-lg svg {
+    width: 1.25rem;
+  }
+
+}

@@ -1,0 +1,101 @@
+<cute-hstack class="align-items-start" gap="3">
+  <cute-vstack class="w-50 gap-3">
+    <cute-select #position [(value)]="tabEdge">
+      <cute-option value="top">Top</cute-option>
+      <cute-option value="bottom">Bottom</cute-option>
+      <cute-option value="left">Left</cute-option>
+      <cute-option value="right">Right</cute-option>
+      <cute-option value="start">Start</cute-option>
+      <cute-option value="end">End</cute-option>
+    </cute-select>
+
+    <cute-checkbox [(ngModel)]="preserveContent">Preserve content</cute-checkbox>
+    <cute-checkbox [(ngModel)]="stretchTabs">Stretch Tabs</cute-checkbox>
+    <button #b1 cute-button (click)="openTab()">Open new Tab</button>
+
+    <!-- Basic use of the tab group -->
+    <cute-tab-group #dynTab
+                    [headerPosition]="position.value"
+                    [preserveContent]="preserveContent"
+                    [cute-stretch-tabs]="stretchTabs"
+                    [dragEnabled]="false"
+                    style="height: 250px"
+                    (selectedIndexChange)="log('(Tabs) indexChange:', $event)"
+                    (selectedTabChange)="log('(Tabs) tabChange:', $event)"
+                    (selectedTabChanging)="log('(Tabs) tabChanging:', $event)"
+                    (focusChange)="log('(Tabs) focusChange:', $event)">
+      <cute-tab label="First">
+        <ng-template cuteTabContent>
+          <cute-vstack>
+            <h5>Content 1</h5>
+            <cute-form-field class="mx-3" floatLabel="auto">
+              <cute-label>Filter condition (test preservation)</cute-label>
+              <input cuteInput placeholder="Enter a value..." #input>
+            </cute-form-field>
+          </cute-vstack>
+        </ng-template>
+      </cute-tab>
+      <cute-tab label="Second">
+        <p>
+          This is some placeholder content the <b>Profile</b> tab's associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.
+          You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.
+          <cute-divider></cute-divider>
+          Some more text...
+        </p>
+      </cute-tab>
+      <cute-tab label="Third">
+        <b>Content 3</b> his is some placeholder content the <b>Contact</b> tab's associated content.<br/>
+        Clicking another tab will toggle the visibility of this one for the next. <br/>
+        The tab JavaScript swaps classes to control the content visibility and styling.<br/>
+        You can use it with tabs, pills, and any other .nav-powered navigation.
+      </cute-tab>
+      <cute-tab label="Forth" disabled> Content 4 </cute-tab>
+      <cute-tab label="Fifth"> Content 5 </cute-tab>
+    </cute-tab-group>
+  </cute-vstack>
+
+  <cute-tab-group #grp1 class="w-50" underlineTabs cute-stretch-tabs="true">
+    <!-- Вкладка с контекстом для заголовка и содержимого -->
+    <cute-tab [contentTemplate]="ctxContent"
+              [contentContext]="{ message: 'Hello from context!' }">
+      <ng-template cute-tab-label>
+        <span>'⭐'</span>
+        <strong>{{ 'Star Tab' }}</strong>
+      </ng-template>
+    </cute-tab>
+
+    <cute-tab label="Second Tab">
+      <h1>Hello!</h1>
+      <button cute-button (click)="changeCursor(grp1)">Change cursor</button>
+    </cute-tab>
+
+    <!-- Вкладка с доступом к индексу и состоянию -->
+    <cute-tab>
+      <ng-template cute-tab-content let-index="index" let-active="active">
+        <h4>Tab Index: {{ index }}</h4>
+        <p>Active state: {{ active ? 'Active' : 'Inactive' }}</p>
+      </ng-template>
+    </cute-tab>
+  </cute-tab-group>
+
+</cute-hstack>
+
+
+<!-- Шаблон заголовка с контекстом -->
+<ng-template #ctxHeader let-icon="icon" let-text="text">
+  <span class="me-2">{{ icon }}</span>
+  <strong>{{ text }}</strong>
+</ng-template>
+
+<!-- Шаблон контента с контекстом -->
+<ng-template #ctxContent let-message="message">
+  <div class="alert alert-info">
+    {{ message }}
+  </div>
+  <p>Current time: {{ now | date:'mediumTime' }}</p>
+</ng-template>
+
+<!-- Шаблон заголовка с доступом к индексу -->
+<ng-template #indexHeader let-index="index">
+  Tab #{{ index + 1 }}
+</ng-template>

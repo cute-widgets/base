@@ -1,0 +1,18 @@
+<ng-template let-formFieldId="id">
+  <div
+    class="cute-autocomplete-panel cute-menu-surface bg-body-tertiary shadow"
+    role="listbox"
+    [id]="id"
+    [class]="_classList"
+    [class.cute-autocomplete-visible]="showPanel"
+    [class.cute-autocomplete-hidden]="!showPanel"
+    [class.cute-autocomplete-panel-animations-enabled]="!_animationsDisabled"
+    [class.cute-primary]="_color === 'primary'"
+    [class.cute-danger]="_color === 'danger'"
+    [class.cute-warning]="_color === 'warning'"
+    [attr.aria-label]="ariaLabel || null"
+    [attr.aria-labelledby]="_getPanelAriaLabelledby(formFieldId)"
+    #panel>
+    <ng-content></ng-content>
+  </div>
+</ng-template>

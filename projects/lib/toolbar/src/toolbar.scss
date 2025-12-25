@@ -1,0 +1,68 @@
+@use '@angular/cdk';
+
+$row-padding: 16px !default;
+$XSmall: 575.98px !default;
+
+$standard_height: 64px !default;
+$mobile_height: 56px !default;
+
+.cute-toolbar {
+
+  display: flex;
+  position: relative;
+  overflow: hidden;
+
+  &, h1, h2, h3, h4, h5, h6 {
+    font-size: 1.375rem;
+    font-weight: var(--bs-body-font-weight);
+    font-family: var(--bs-body-font-family), serif;
+    line-height: 1.75rem;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  @include cdk.high-contrast(active, off) {
+    outline: solid 1px;
+  }
+
+}
+
+.cute-toolbar-row, .cute-toolbar-single-row {
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+
+  padding: 0 $row-padding;
+  width: 100%;
+
+  // Flexbox Vertical Alignment
+  flex-direction: row;
+  align-items: center;
+
+  // Disable text wrapping inside of the toolbar. Developers are still able to overwrite it.
+  white-space: nowrap;
+
+  height: var(--cute-toolbar-standard-height, $standard_height);
+
+  // XSmall
+  @media (max-width: $XSmall) {
+    height: var(--cute-toolbar-mobile-height, $mobile_height);
+  }
+
+}
+
+.cute-toolbar-multiple-rows {
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  flex-direction: column;
+  width: 100%;
+
+  min-height: var(--cute-toolbar-standard-height, $standard_height);
+
+  // XSmall
+  @media (max-width: $XSmall) {
+    min-height: var(--cute-toolbar-mobile-height, $mobile_height);
+  }
+
+}

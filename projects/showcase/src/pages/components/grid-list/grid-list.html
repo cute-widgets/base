@@ -1,0 +1,23 @@
+<h5 class="mb-3">Grid List</h5>
+<cute-vstack gap="2">
+  <h6>Basic grid-list</h6>
+  <cute-grid-list cols="2" rowHeight="2:1">
+    <cute-grid-tile>1</cute-grid-tile>
+    <cute-grid-tile>2</cute-grid-tile>
+    <cute-grid-tile>3</cute-grid-tile>
+    <cute-grid-tile>4</cute-grid-tile>
+  </cute-grid-list>
+
+  <h6>Dynamic grid-list</h6>
+  <cute-grid-list cols="4" rowHeight="100px">
+    @for (tile of tiles; track tile) {
+      <cute-grid-tile
+        [colspan]="tile.cols"
+        [rowspan]="tile.rows"
+        [style.background]="tile.color">
+        {{tile.text}}
+      </cute-grid-tile>
+    }
+  </cute-grid-list>
+</cute-vstack>
+

@@ -1,0 +1,158 @@
+/**
+ * @license Apache-2.0
+ *
+ * Copyright (c) 2025 CuteWidgets Team. All Rights Reserved.
+ *
+ * You may not use this file except in compliance with the License
+ * that can be found at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This code is a modification of the `@angular/material` original
+ * code licensed under MIT-style License (https://angular.dev/license).
+ */
+import {CdkDialogContainer} from '@angular/cdk/dialog';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  ViewEncapsulation,
+  inject,
+} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {CdkPortalOutlet} from '@angular/cdk/portal';
+import {_animationsDisabled} from '@cute-widgets/base/core';
+
+const ENTER_ANIMATION = '_cute-bottom-sheet-enter';
+const EXIT_ANIMATION = '_cute-bottom-sheet-exit';
+
+/**
+ * Internal component that wraps user-provided bottom sheet content.
+ * @docs-private
+ */
+@Component({
+  selector: 'cute-bottom-sheet-container',
+  templateUrl: 'bottom-sheet.container.html',
+  styleUrl: 'bottom-sheet.container.scss',
+  // In Ivy embedded views will be change detected from their declaration place, rather than where
+  // they were stamped out. This means that we can't have the bottom sheet container be OnPush,
+  // because it might cause the sheets that were opened from a template not to be out of date.
+  // tslint:disable-next-line:validate-decorators
+  changeDetection: ChangeDetectionStrategy.Default,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'class': 'cute-bottom-sheet-container shadow-lg',
+    '[class.cute-bottom-sheet-container-animations-enabled]': '!_animationsDisabled',
+    '[class.cute-bottom-sheet-container-enter]': '_animationState === "visible"',
+    '[class.cute-bottom-sheet-container-exit]': '_animationState === "hidden"',
+    'tabindex': '-1',
+    '[attr.role]': '_config.role',
+    '[attr.aria-modal]': '_config.ariaModal',
+    '[attr.aria-label]': '_config.ariaLabel',
+    '(animationstart)': '_handleAnimationEvent(true, $event.animationName)',
+    '(animationend)': '_handleAnimationEvent(false, $event.animationName)',
+    '(animationcancel)': '_handleAnimationEvent(false, $event.animationName)',
+  },
+  imports: [CdkPortalOutlet],
+})
+export class CuteBottomSheetContainer extends CdkDialogContainer implements OnDestroy {
+  private _breakpointSubscription: Subscription;
+  protected _animationsDisabled = _animationsDisabled();
+
+  /** The state of the bottom sheet animations. */
+  _animationState: 'void' | 'visible' | 'hidden' = 'void';
+
+  /** Emits whenever the state of the animation changes. */
+  _animationStateChanged = new EventEmitter<{
+    toState: 'visible' | 'hidden';
+    phase: 'start' | 'done';
+  }>();
+
+  /** Whether the component has been destroyed. */
+  private _destroyed: boolean = false;
+
+  constructor(...args: unknown[]);
+
+  constructor() {
+    super();
+
+    const breakpointObserver = inject(BreakpointObserver);
+
+    this._breakpointSubscription = breakpointObserver
+      .observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .subscribe(() => {
+        const classList = (this._elementRef.nativeElement as HTMLElement).classList;
+
+        classList.toggle(
+          'cute-bottom-sheet-container-medium',
+          breakpointObserver.isMatched(Breakpoints.Medium),
+        );
+        classList.toggle(
+          'cute-bottom-sheet-container-large',
+          breakpointObserver.isMatched(Breakpoints.Large),
+        );
+        classList.toggle(
+          'cute-bottom-sheet-container-xlarge',
+          breakpointObserver.isMatched(Breakpoints.XLarge),
+        );
+      });
+  }
+
+  /** Begin animation of bottom sheet entrance into view. */
+  enter(): void {
+    if (!this._destroyed) {
+      this._animationState = 'visible';
+      this._changeDetectorRef.markForCheck();
+      this._changeDetectorRef.detectChanges();
+      if (this._animationsDisabled) {
+        this._simulateAnimation(ENTER_ANIMATION);
+      }
+    }
+  }
+
+  /** Begin animation of the bottom sheet exiting from view. */
+  exit(): void {
+    if (!this._destroyed) {
+      this._elementRef.nativeElement.setAttribute('cute-exit', '');
+      this._animationState = 'hidden';
+      this._changeDetectorRef.markForCheck();
+      if (this._animationsDisabled) {
+        this._simulateAnimation(EXIT_ANIMATION);
+      }
+    }
+  }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this._breakpointSubscription.unsubscribe();
+    this._destroyed = true;
+  }
+
+  private _simulateAnimation(name: typeof ENTER_ANIMATION | typeof EXIT_ANIMATION) {
+    this._ngZone.run(() => {
+      this._handleAnimationEvent(true, name);
+      setTimeout(() => this._handleAnimationEvent(false, name));
+    });
+  }
+
+  protected override _trapFocus(): void {
+    // The bottom sheet starts off-screen and animates in, and at the same time we trap focus
+    // within it. With some styles this appears to cause the page to jump around. See:
+    // https://github.com/angular/components/issues/30774. Preventing the browser from
+    // scrolling resolves the issue and isn't really necessary since the bottom sheet
+    // normally isn't scrollable.
+    super._trapFocus({preventScroll: true});
+  }
+
+  protected _handleAnimationEvent(isStart: boolean, animationName: string) {
+    const isEnter = animationName === ENTER_ANIMATION;
+    const isExit = animationName === EXIT_ANIMATION;
+
+    if (isEnter || isExit) {
+      this._animationStateChanged.emit({
+        toState: isEnter ? 'visible' : 'hidden',
+        phase: isStart ? 'start' : 'done',
+      });
+    }
+  }
+}

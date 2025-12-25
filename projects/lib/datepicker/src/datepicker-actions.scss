@@ -1,0 +1,17 @@
+.cute-datepicker-actions {
+  $spacing: 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: $spacing;
+  gap: 4px;
+
+  .cute-button-base + .cute-button-base {
+    margin-left: $spacing;
+
+    [dir='rtl'] & {
+      margin-left: 0;
+      margin-right: $spacing;
+    }
+  }
+}

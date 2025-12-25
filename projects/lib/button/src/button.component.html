@@ -1,0 +1,29 @@
+<!--
+  For capturing HTML-elements such as <i class..> or <img src=""...> and others
+  we need apply [cuteButtonIcon] attribute to them.
+-->
+<span class="cute-icon-wrapper">
+  <ng-content select=".material-icons:not([iconPositionEnd]),
+                      .bi:not([iconPositionEnd]),
+                      cute-icon:not([iconPositionEnd]),
+                      cute-avatar:not([iconPositionEnd]),
+                      [cuteButtonIcon]:not([iconPositionEnd])">
+  </ng-content>
+</span>
+
+<span class="cute-button-label">
+  <ng-content>
+      @if(visuallyHiddenLabel) {
+        <span class="visually-hidden"> {{visuallyHiddenLabel}} </span>
+      }
+  </ng-content>
+</span>
+
+<span class="cute-icon-wrapper">
+  <ng-content select=".material-icons[iconPositionEnd],
+                      .bi:[iconPositionEnd],
+                      cute-icon[iconPositionEnd],
+                      cute-avatar:[iconPositionEnd],
+                      [cuteButtonIcon][iconPositionEnd]">
+  </ng-content>
+</span>

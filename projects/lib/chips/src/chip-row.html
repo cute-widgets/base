@@ -1,0 +1,42 @@
+@if (!_isEditing) {
+  <span class="cute-chip-focus-overlay"></span>
+}
+
+<span class="cute-chip__cell cute-chip__cell--primary">
+  <span class="cute-chip-action" role="gridcell"
+        cuteChipAction
+        [tabIndex]="tabIndex"
+        [disabled]="disabled"
+        [attr.aria-label]="ariaLabel"
+        [attr.aria-describedby]="_ariaDescriptionId">
+    @if (leadingIcon) {
+      <span class="cute-chip-graphic">
+        <ng-content select="cute-avatar, cute-chip-avatar, [cuteChipAvatar]"></ng-content>
+      </span>
+    }
+
+    <span class="cute-chip__text-label cute-chip-action-label">
+      @if (_isEditing) {
+        @if (contentEditInput) {
+          <ng-content select="[cuteChipEditInput]"></ng-content>
+        } @else {
+          <span cuteChipEditInput></span>
+        }
+      } @else {
+        <ng-content></ng-content>
+      }
+
+      <span class="cute-chip-primary-focus-indicator cute-focus-indicator" aria-hidden="true"></span>
+    </span>
+  </span>
+</span>
+
+@if (_hasTrailingIcon()) {
+  <span
+    class="cute-chip__cell cute-chip__cell--trailing"
+    role="gridcell">
+    <ng-content select="cute-chip-trailing-icon,[cuteChipRemove],[cuteChipTrailingIcon]"></ng-content>
+  </span>
+}
+
+<span class="visually-hidden" [id]="_ariaDescriptionId">{{ariaDescription}}</span>

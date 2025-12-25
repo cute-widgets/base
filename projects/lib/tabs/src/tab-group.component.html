@@ -1,0 +1,107 @@
+<div class="tab-header-wrapper" #headerContainer>
+  <div class="tab-header-scroll" #headerScroll
+       cdkDropList
+       [cdkDropListOrientation]="isHorizontal ? 'horizontal' : 'vertical'"
+       (cdkDropListDropped)="onDrop($event)">
+    <nav [cuteNav]="isHorizontal ? (underlineTabs ? 'underline' : 'tabs') : 'pills'"
+         [selectedIndex]="selectedIndex"
+         [alignment]="alignTabs"
+         [stretchItems]="stretchTabs"
+         [preserveTabContent]="preserveContent"
+         [color]="color"
+         [class.flex-column]="!isHorizontal"
+         (selectedIndexChange)="selectTab($event)"
+         (selectedLinkChanging)="onNavLinkChanging($event)"
+         (selectedLinkChange)="onNavLinkChange($event)"
+         (focusChange)="onNavFocusChange($event)">
+      @for (tab of tabs; track tab.id; let i = $index) {
+        <li cute-nav-item
+            cdkDrag
+            [cdkDragDisabled]="!dragEnabled || tabCount <= 1"
+            [cdkDragData]="tab">
+          <a href="#" cute-nav-link
+             [cuteObserveVisibility]="1"
+             [cuteObserveVisibilityRoot]="headerScroll"
+             (cuteObserveVisibility)="tab._visibilityChanged($event)"
+             [active]="tab.active"
+             [disabled]="tab.disabled"
+             [id]="tab.ariaLabelledby || undefined"
+             [attr.aria-disabled]="tab.disabled"
+             [attr.aria-controls]="tab.id"
+             [attr.tabindex]="tab.active && !tab.disabled ? 0 : -1"
+             role="tab"
+             #tabLink>
+
+            @if (tab._templateLabel) {
+              <ng-container
+                *ngTemplateOutlet="tab._templateLabel; context: getLabelContext(tab, i)">
+              </ng-container>
+            } @else {
+              <!--            <ng-container>-->
+                <!--              @if (dragEnabled && tabCount > 1) {-->
+                <!--                <span cdkDragHandle>☰</span>-->
+                <!--              }-->
+              {{ tab.textLabel || 'Tab '+i }}
+              <!--            </ng-container>-->
+            }
+
+            @if (tab.closable && tab.isDynamic) {
+              <button cuteButton="close-button"
+                      magnitude="smallest"
+                      tabIndex="-1"
+                      (click)="removeTab(i); $event.preventDefault();"
+                      aria-label="Close tab">
+              </button>
+            }
+
+          </a>
+        </li>
+      }
+    </nav>
+
+  </div>
+
+  @if (showScrollButtons) {
+    <button cuteButton class="scroll-button left"
+            tabindex="-1"
+            magnitude="smallest"
+            visuallyHiddenLabel="Prev"
+            aria-hidden="true"
+            (click)="scrollHeader(-1)"
+            [disabled]="!canScrollLeft">
+      <!--
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+      </svg>
+      -->
+    </button>
+    <button cuteButton  class="scroll-button right"
+            tabindex="-1"
+            magnitude="smallest"
+            visuallyHiddenLabel="Next"
+            aria-hidden="true"
+            (click)="scrollHeader(1)"
+            [disabled]="!canScrollRight">
+      <!--
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+      </svg>
+      -->
+    </button>
+    <!--
+    <div class="scroll-indicator"
+         [class.active]="showScrollButtons"
+         [class.left-visible]="canScrollLeft"
+         [class.right-visible]="canScrollRight">
+    </div>
+    -->
+  }
+
+</div>
+
+<div class="tab-content-wrapper">
+<!--  <div class="tab-content">-->
+    <ng-content></ng-content>
+    <ng-container #dynamicTabs></ng-container>
+<!--  </div>-->
+</div>

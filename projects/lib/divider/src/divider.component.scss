@@ -1,0 +1,124 @@
+.cute-divider-horizontal {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: var(--bs-border-width) solid;
+  border-top-color: currentColor;
+  opacity: 0.25;
+  cursor: default;
+
+  &-double {
+    min-height: calc(var(--bs-border-width) * 3);
+    border-bottom: var(--bs-border-width) solid;
+  }
+
+  &-dotted {
+    border-top: calc(var(--bs-border-width) * 1.5) dotted;
+  }
+
+  &-dashed {
+    border-top: calc(var(--bs-border-width) * 1.5) dashed;
+  }
+
+  &-shelf {
+    min-height: 24px;
+    border: none;
+    border-bottom: var(--bs-border-width) solid;
+    box-shadow: 0 10px 10px -9px;
+    opacity: 0.45;
+  }
+
+  &-blurry {
+    min-height: var(--bs-border-width);
+    background-color: transparent;
+    background-image: linear-gradient(90deg, transparent, currentColor, currentColor, transparent);
+    border: none;
+    opacity: 0.12;
+  }
+
+  &-gradient {
+    min-height: calc(var(--bs-border-width)*2);
+    background-color: transparent;
+    background-image: linear-gradient(45deg, transparent, currentColor);
+    border: none;
+  }
+
+  &-washed {
+    border: none;
+    border-bottom: var(--bs-border-width) solid;
+    box-shadow: 0 0 4px 3px;
+    opacity: 0.15;
+  }
+
+}
+
+.cute-divider-vertical {
+  display: inline-block;
+  align-self: stretch;
+  width: var(--bs-border-width);
+  height: 100%;
+  min-height: 1em;
+  color: inherit;
+  background-color: currentColor;
+  opacity: .25;
+  cursor: default;
+
+  &-double {
+    width: calc(var(--bs-border-width) * 3);
+    border: none;
+    background-color: transparent;
+    border-left: var(--bs-border-width) solid currentColor;
+    border-right: var(--bs-border-width) solid currentColor;
+  }
+
+  &-dotted {
+    background-color: transparent;
+    border-right: calc(var(--bs-border-width) * 1.5) dotted;
+  }
+
+  &-dashed {
+    background-color: transparent;
+    border-right: calc(var(--bs-border-width) * 1.5) dashed;
+  }
+
+  &-shelf {
+    width: 1px;
+    border: none;
+    border-right: var(--bs-border-width) solid;
+    box-shadow: 2px 0 4px 0;
+    background-color: transparent;
+    opacity: 0.5;
+  }
+
+  &-blurry {
+    width: var(--bs-border-width);
+    background-color: transparent;
+    background-image: linear-gradient(180deg, transparent, currentColor, currentColor, transparent);
+    border: none;
+    opacity: 0.12;
+  }
+
+  &-gradient {
+    width: calc(var(--bs-border-width)*2);
+    background-color: transparent;
+    background-image: linear-gradient(180deg, currentColor, transparent);
+    border: none;
+  }
+
+  &-washed {
+    border: none;
+    border-right: var(--bs-border-width) solid;
+    box-shadow: 0 0 4px 3px;
+    opacity: 0.15;
+  }
+
+}
+
+.cute-divider-inset {
+  $inset-margin: 80px;
+
+  margin-inline-start: $inset-margin;
+  width: auto;
+}

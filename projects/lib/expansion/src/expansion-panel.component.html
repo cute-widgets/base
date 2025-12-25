@@ -1,0 +1,21 @@
+<div class="cute-expansion-panel-content-wrapper"
+     [class.accordion-item]="!accordion"
+     [class.accordion-header]="accordion"
+     #bodyWrapper>
+
+  <ng-content select="cute-expansion-panel-header"></ng-content>
+  <div class="cute-expansion-panel-content accordion-collapse"
+       [class]="expanded ? 'expanded' : 'collapsed'"
+       [attr.aria-expanded]="expanded"
+       [attr.aria-labelledby]="_headerId"
+       role="region"
+       [attr.id]="_contentId"
+       #body>
+    <div class="cute-expansion-panel-body accordion-body">
+      <ng-content></ng-content>
+      <ng-template [cdkPortalOutlet]="_portal"></ng-template>
+    </div>
+    <ng-content select="cute-action-row"></ng-content>
+  </div>
+
+</div>

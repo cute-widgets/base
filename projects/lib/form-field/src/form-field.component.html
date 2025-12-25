@@ -1,0 +1,88 @@
+<ng-template #labelTemplate>
+  @if (_hasFloatingLabel()) {
+    <label class="form-label cute-form-control-placeholder"
+           [id]="_labelId"
+           [attr.for]="(_control && !_control.disableAutomaticLabeling) ? _control.id : null"
+           tabindex="-1">
+      <ng-content select="cute-label"></ng-content>
+      <!--
+        We set the required marker as a separate element, in order to make it easier to target if
+        apps want to override it and to be able to set `aria-hidden` so that screen readers don't
+        pick it up.
+      -->
+      @if (!hideRequiredMarker && _control?.required) {
+        <span aria-hidden="true"
+              class="cute-form-field-required-marker cute-floating-label--required">
+        </span>
+      }
+    </label>
+  }
+</ng-template>
+
+<div class="cute-text-field" #textField (click)="_control?.onContainerClick($event)">
+
+  <!-- label -->
+  @if (!_isFloatLabel) {
+    <ng-container [ngTemplateOutlet]="labelTemplate"></ng-container>
+  }
+
+  <!-- brief instruction -->
+  <!--  <ng-content select="cute-intro"></ng-content>-->
+
+  <!-- input -->
+  <div class="flex-nowrap cute-text-field__input"
+       [class]="!_isFloatLabel?'input-group '+(magnitudeSuffix?' input-group'+magnitudeSuffix :''):''"
+       [class.form-floating]="_isFloatLabel">
+
+    @if (_hasIconPrefix) {
+      <ng-content select="[cutePrefix], [cuteIconPrefix]"></ng-content>
+    }
+    @if (_hasTextPrefix) {
+      <ng-content select="[cuteTextPrefix]"></ng-content>
+    }
+
+<!--    <div #infixField class="cute-form-field-control input-group-text">-->
+      <ng-content></ng-content>
+      @if (_isFloatLabel) {
+        <ng-container [ngTemplateOutlet]="labelTemplate"></ng-container>
+      }
+<!--    </div>-->
+
+    @if (_hasTextSuffix) {
+      <ng-content select="[cuteTextSuffix]"></ng-content>
+    }
+    @if (_hasIconSuffix) {
+      <ng-content select="[cuteSuffix], [cuteIconSuffix]"></ng-content>
+    }
+  </div>
+
+</div>
+
+<!--<ng-content select="cute-error, [cuteError]"></ng-content>-->
+
+<!-- messages -->
+
+<div [class.cute-form-field-bottom-align]="subscriptSizing=='fixed'">
+
+  @let subscriptMessageType = _getSubscriptMessageType();
+
+  @switch (subscriptMessageType) {
+    @case ('error') {
+      <div class="cute-form-field-error-wrapper">
+        <ng-content select="cute-error, [cuteError]"></ng-content>
+      </div>
+    }
+
+    @case ('hint') {
+      <div class="cute-form-field-hint-wrapper">
+        @if (hintLabel) {
+          <cute-hint [id]="_hintLabelId">{{hintLabel}}</cute-hint>
+        }
+        <ng-content select="cute-hint:not([align='end'])"></ng-content>
+        <div class="cute-form-field-hint-spacer"></div>
+        <ng-content select="cute-hint[align='end']"></ng-content>
+      </div>
+    }
+  }
+</div>
+

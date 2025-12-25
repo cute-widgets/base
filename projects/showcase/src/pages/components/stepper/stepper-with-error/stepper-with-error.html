@@ -1,0 +1,45 @@
+<cute-stepper #stepper>
+  <cute-step [stepControl]="firstFormGroup" errorMessage="Name is required." [state]="'apple'">
+    <form [formGroup]="firstFormGroup">
+      <ng-template cuteStepLabel>
+        <span cuteStepLabelTitle>Fill out your name</span>
+        <span cuteStepLabelDescription>Some more description</span>
+      </ng-template>
+      <cute-form-field>
+        <cute-label>Name</cute-label>
+        <input cuteInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+      </cute-form-field>
+      <div>
+        <p>Go to a different step to see the error state</p>
+        <button cute-button color="primary" cuteStepperNext>Next</button>
+      </div>
+    </form>
+  </cute-step>
+  <cute-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
+    <form [formGroup]="secondFormGroup">
+      <ng-template cuteStepLabel>
+        <span cuteStepLabelTitle>Fill out your address</span>
+        <span cuteStepLabelDescription>Some more description</span>
+      </ng-template>
+
+      <cute-form-field>
+        <cute-label>Address</cute-label>
+        <input cuteInput placeholder="Ex. 1 Main St, New York, NY" formControlName="secondCtrl"
+               required>
+      </cute-form-field>
+      <div>
+        <p>Go to a different step to see the error state</p>
+        <button cute-button color="secondary" cuteStepperPrevious>Back</button>
+        <button cute-button color="primary" class="mx-2" cuteStepperNext>Next</button>
+      </div>
+    </form>
+  </cute-step>
+  <cute-step>
+    <ng-template cuteStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button cute-button color="secondary" cuteStepperPrevious>Back</button>
+      <button cute-button color="warning" class="mx-2" (click)="stepper.reset()">Reset</button>
+    </div>
+  </cute-step>
+</cute-stepper>

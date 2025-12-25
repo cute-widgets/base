@@ -1,0 +1,23 @@
+<h5 class="mb-3">Sort header</h5>
+<cute-hstack class="mb-3">
+  <table cuteSort (cuteSortChange)="sortData($event)">
+    <tr>
+      <th cute-sort-header="name">Dessert (100g)</th>
+      <th cute-sort-header="calories">Calories</th>
+      <th cute-sort-header="fat">Fat (g)</th>
+      <th cute-sort-header="carbs">Carbs (g)</th>
+      <th cute-sort-header="protein">Protein (g)</th>
+    </tr>
+
+    @for (dessert of sortedData; track dessert) {
+      <tr>
+        <td>{{dessert.name}}</td>
+        <td>{{dessert.calories}}</td>
+        <td>{{dessert.fat}}</td>
+        <td>{{dessert.carbs}}</td>
+        <td>{{dessert.protein}}</td>
+      </tr>
+    }
+  </table>
+</cute-hstack>
+

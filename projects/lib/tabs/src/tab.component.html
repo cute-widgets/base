@@ -1,0 +1,10 @@
+@if (active || isPreserveContent()) {
+
+  <ng-content></ng-content>
+
+  @if (explicitContent) {
+    <ng-container [ngTemplateOutlet]="explicitContent"
+                  [ngTemplateOutletContext]="getContentContext()">
+    </ng-container>
+  }
+}

@@ -1,0 +1,9 @@
+<span
+  class="cute-optgroup-label"
+  role="presentation"
+  [class.disabled]="disabled"
+  [id]="_labelId">
+  <span class="cute-list-item__primary-text">{{ label }} <ng-content></ng-content></span>
+</span>
+
+<ng-content select="cute-option, ng-container"></ng-content>

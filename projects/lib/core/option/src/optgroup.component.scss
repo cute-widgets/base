@@ -1,0 +1,31 @@
+.cute-optgroup {
+  & .cute-optgroup-label {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    //min-height: 48px;
+    //padding: 0 16px;
+    outline: none;
+
+    &.disabled {
+      opacity: 0.38;
+    }
+
+    & .cute-list-item__primary-text {
+      // MDC assigns the typography to this element, rather than the element itself, which will break
+      // existing overrides. Set all of the typography-related properties to `inherit` so that any
+      // styles set on the host can propagate down.
+      font-size: inherit;
+      font-weight: inherit;
+      letter-spacing: inherit;
+      line-height: inherit;
+      font-family: inherit;
+      text-decoration: inherit;
+      text-transform: inherit;
+      white-space: normal;
+      color: inherit;
+    }
+  }
+}

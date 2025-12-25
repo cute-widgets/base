@@ -1,0 +1,39 @@
+<button cuteButton="raised-button" (click)="isLinear = !isLinear" id="toggle-linear">
+  {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+</button>
+<cute-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <cute-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template cuteStepLabel>Fill out your name</ng-template>
+      <cute-form-field>
+        <cute-label>Name</cute-label>
+        <input cuteInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+      </cute-form-field>
+      <div>
+        <button cuteButton cuteStepperNext>Next</button>
+      </div>
+    </form>
+  </cute-step>
+  <cute-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template cuteStepLabel>Fill out your address</ng-template>
+      <cute-form-field>
+        <cute-label>Address</cute-label>
+        <input cuteInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+               required>
+      </cute-form-field>
+      <div>
+        <button cute-button cuteStepperPrevious>Back</button>
+        <button cute-button cuteStepperNext>Next</button>
+      </div>
+    </form>
+  </cute-step>
+  <cute-step>
+    <ng-template cuteStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button cute-button cuteStepperPrevious>Back</button>
+      <button cute-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </cute-step>
+</cute-stepper>

@@ -1,0 +1,26 @@
+<h5 class="mb-4">Button toggles</h5>
+
+<!--<cute-vstack gap="3">-->
+
+  <h6>Multiple selection</h6>
+  <cute-button-toggle-group #grp1="cuteButtonToggleGroup" color="primary" name="fontStyle" aria-label="Font Style" multiple="true">
+    <cute-button-toggle color="secondary" value="bold">Bold</cute-button-toggle>
+    <cute-button-toggle value="italic">Italic</cute-button-toggle>
+    <cute-button-toggle value="underline">Underline</cute-button-toggle>
+    <cute-button-toggle value="disabled" disabled>Disabled</cute-button-toggle>
+  </cute-button-toggle-group>
+
+  <p>Values: {{grp1.value}}</p>
+
+  <h6 class="mt-3">Single selection</h6>
+  <cute-button-toggle-group #grp2="cuteButtonToggleGroup" color="primary" name="fontStyle" aria-label="Font Style" multiple="false">
+    <cute-button-toggle color="secondary" value="bold">Bold</cute-button-toggle>
+    <cute-button-toggle value="italic">Italic</cute-button-toggle>
+    <cute-button-toggle value="underline">Underline</cute-button-toggle>
+    <cute-button-toggle value="disabled" disabled>Disabled</cute-button-toggle>
+  </cute-button-toggle-group>
+
+  <p>Value: {{grp2.value}}</p>
+
+<!--</cute-vstack>-->
+

@@ -1,0 +1,56 @@
+.cute-select {
+  display: inline-block;
+  width: 100%;
+}
+
+.cute-dropdown-overlay-content {
+  display: block;
+  width: 100%;
+  max-height: 272px;
+  overflow-y: auto;
+  padding: var(--cute-select-padding-y, 0.5rem) 0;
+  font-size: var(--bs-body-font-size);
+  color: var(--bs-body-color);
+  text-align: start;
+  list-style: none;
+  background-color: var(--bs-body-bg);
+  border: var(--bs-border-width) solid var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius);
+
+  & .cute-dropdown-content {
+    overflow: auto;
+    height: 100%;
+
+    & .cute-option:hover:not(.disabled) {
+      background-color: var(--bs-secondary-bg);
+    }
+  }
+
+}
+
+.cute-select-trigger__input,
+.cute-select-trigger__custom {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+
+  &:disabled {
+    cursor: auto;
+    opacity: 0.65;
+  }
+
+}
+
+// custom trigger element name
+cute-select-trigger {
+  display: inline-block;
+  user-select: none;
+}
+
+
+[dir="rtl"] {
+  .form-select {
+    padding: 0.375rem 0.75rem 0.375rem 2.25rem;
+    background-position: left 0.75rem center;
+  }
+}

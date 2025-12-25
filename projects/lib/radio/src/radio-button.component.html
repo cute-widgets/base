@@ -1,0 +1,31 @@
+<div class="form-check"
+     [class.form-check-reverse]="labelPosition == 'before'"
+     [class.form-check-inline]="inline"
+>
+  <!-- This handler prevents our job in CuteListOption  -->
+  <!-- (click)="_preventBubblingFromLabel($event)"-->
+  <input #input type="radio"
+         class="form-check-input"
+         [class.icon-small]="iconSize=='small'"
+         [class.icon-large]="iconSize=='large'"
+         aria-invalid="false"
+         [attr.aria-label]="ariaLabel"
+         [attr.aria-labelledby]="ariaLabelledby"
+         [attr.aria-describedby]="ariaDescribedby"
+         [attr.aria-disabled]="disabled && disabledInteractive ? 'true' : null"
+         [attr.name] = "name"
+         [attr.value]="value"
+         [id]="inputId"
+         [checked]="checked"
+         [disabled]="disabled && !disabledInteractive"
+         [required]="required"
+         [tabIndex]="disabled ? -1 : tabIndex"
+         [autocomplete]="false"
+         (change)="_onInputInteraction($event)"
+  />
+  <label #label
+         class="form-check-label"
+         [for]="inputId">
+    <ng-content></ng-content>
+  </label>
+</div>

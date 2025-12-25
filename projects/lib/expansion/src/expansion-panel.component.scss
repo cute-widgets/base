@@ -1,0 +1,84 @@
+@use '@angular/cdk';
+
+$duration: 0.2s;
+
+.cute-expansion-panel {
+  display: block;
+  box-sizing: content-box;
+  margin: 0;
+  //overflow: hidden;  // CWT: breaks focus box
+
+  // Required so that the `box-shadow` works after the
+  // focus indicator relatively positions the header.
+  position: relative;
+
+  .cute-expansion-panel-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+
+    .cute-expansion-panel-body {
+      min-height: 0;
+      overflow: hidden;
+      transition: display calc($duration / 2);
+      transition-timing-function: ease-in-out;
+      transition-behavior: allow-discrete;
+      display: none;
+    }
+
+    &.expanded {
+      grid-template-rows: 1fr;
+      .cute-expansion-panel-body {
+        display: block;
+      }
+    }
+
+    &.collapsed {
+      grid-template-rows: 0fr;
+      .cute-expansion-panel-body {
+        display: none;
+      }
+    }
+  }
+
+  &.cute-expansion-panel-animations-enabled .cute-expansion-panel-content {
+    transition: grid-template-rows $duration;
+  }
+
+  /* Just single expansion panel */
+  &.accordion.cute-expansion-panel-separated {
+    border: 0;
+
+    .accordion-item {
+      border: 0;
+    }
+
+    .accordion-button {
+      border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);
+      border-radius: var(--bs-accordion-border-radius);
+
+      &:not(:focus):not(.collapsed) {
+        box-shadow: none;
+      }
+    }
+
+    .accordion-collapse {
+      margin-top: 4px;
+      border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);
+      border-radius: var(--bs-accordion-border-radius);
+
+      &.collapsed {
+        margin-top: 0;
+        border: 0;
+      }
+    }
+  }
+
+  .cute-accordion & {
+
+    @include cdk.high-contrast {
+      outline: solid 1px;
+    }
+
+  }
+}
