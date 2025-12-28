@@ -1,5 +1,5 @@
 {
-  "name": "cute-widgets-base",
+  "name": "@cute-widgets/base",
   "version": "0.0.0",
   "license": "Apache-2.0",
   "description": "Angular Material components styled with Bootstrap",
