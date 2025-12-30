@@ -17,7 +17,11 @@
            readonly
            [value]="triggerValue"
            (click)="toggle()"
-           autocomplete="off">
+           (focus)="onInputFocus($event)"
+           autocomplete="off"
+    >
+      <!--    Prevents selection -->
+      <!--    (mousedown)="$event.preventDefault()"-->
   } @else {
     <div #trigger
          class="form-select cute-select-trigger__custom"
@@ -32,27 +36,28 @@
 <ng-template  cdk-connected-overlay
               cdkConnectedOverlayHasBackdrop
               cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+              [cdkConnectedOverlayDisableClose]="true"
               [cdkConnectedOverlayPanelClass]="_overlayPanelClass"
               [cdkConnectedOverlayScrollStrategy]="_scrollStrategy"
               [cdkConnectedOverlayOrigin]="_preferredOverlayOrigin || fallbackOverlayOrigin"
               [cdkConnectedOverlayOpen]="panelOpen"
               [cdkConnectedOverlayPositions]="_positions"
               [cdkConnectedOverlayWidth]="_overlayWidth!"
+              [cdkConnectedOverlayFlexibleDimensions]="true"
               (backdropClick)="close()"
-              (attach)="_onAttached()"
+              (overlayKeydown)="_handleOverlayKeydown($event)"
               (detach)="close()"> <!-- cdkConnectedOverlayLockPosition -->
   <div #panel
        role="listbox"
        tabindex="-1"
        class="cute-dropdown-overlay-content bg-body-tertiary shadow"
+       [class.cute-select-panel-animations-enabled]="!_animationsDisabled"
        [style.max-height]="panelHeight || null"
        [attr.id]="id + '-panel'"
        [attr.aria-multiselectable]="multiple"
        [attr.aria-label]="ariaLabel || null"
        [attr.aria-labelledby]="_getPanelAriaLabelledby()"
        [ngClass]="panelClass"
-       [@transformPanel]="'showing'"
-       (@transformPanel.done)="_panelDoneAnimatingStream.next($event.toState)"
        (keydown)="_handleKeydown($event)">
     <div class="cute-dropdown-content">
       <ng-content></ng-content>
