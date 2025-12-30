@@ -8,10 +8,7 @@
  */
 import {NgModule, Type} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  CUTE_SELECT_SCROLL_STRATEGY_PROVIDER,
-  CuteSelect, CuteSelectTrigger
-} from "./select.component";
+import {CuteSelect, CuteSelectTrigger} from "./select.component";
 import {CuteOptgroup, CuteOption} from "@cute-widgets/base/core/option";
 
 const TYPES: (any | Type<any>)[] = [
@@ -24,9 +21,6 @@ const TYPES: (any | Type<any>)[] = [
 @NgModule({
   imports: [CommonModule, ...TYPES],
   exports: TYPES,
-  providers: [
-    CUTE_SELECT_SCROLL_STRATEGY_PROVIDER
-  ],
   declarations: [],
 })
 export class CuteSelectModule { }

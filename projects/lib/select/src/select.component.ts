@@ -20,7 +20,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {
   A,
   DOWN_ARROW,
-  ENTER,
+  ENTER, ESCAPE,
   hasModifierKey,
   LEFT_ARROW,
   RIGHT_ARROW,
@@ -30,8 +30,7 @@ import {
 import {
   CdkConnectedOverlay,
   CdkOverlayOrigin,
-  ConnectedPosition,
-  Overlay,
+  ConnectedPosition, createRepositionScrollStrategy,
   ScrollStrategy,
 } from '@angular/cdk/overlay';
 import {ViewportRuler} from '@angular/cdk/scrolling';
@@ -54,7 +53,7 @@ import {
   ViewEncapsulation,
   booleanAttribute,
   inject,
-  numberAttribute, isDevMode, HostAttributeToken,
+  numberAttribute, isDevMode, HostAttributeToken, Injector,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -66,7 +65,6 @@ import {
 import {NgClass} from '@angular/common';
 import {defer, merge, Observable, Subject} from 'rxjs';
 import {
-  distinctUntilChanged,
   filter,
   map,
   startWith,
@@ -74,7 +72,6 @@ import {
   take,
   takeUntil,
 } from 'rxjs/operators';
-import {cuteSelectAnimations} from './select-animations';
 import {
   getCuteSelectDynamicMultipleError,
   getCuteSelectNonArrayValueError,
@@ -92,6 +89,8 @@ import {RelativeSize} from "@cute-widgets/base/core/types";
 import {CuteFormField, CuteFormFieldControl, CUTE_FORM_FIELD} from '@cute-widgets/base/form-field';
 import {_ErrorStateTracker, ErrorStateMatcher} from "@cute-widgets/base/core/error";
 import {CuteInputDropdownControl} from "@cute-widgets/base/abstract";
+import {_animationsDisabled} from '@cute-widgets/base/core';
+import {_getEventTarget} from '@angular/cdk/platform';
 
 let nextUniqueId = 0;
 
@@ -101,18 +100,11 @@ export const CUTE_SELECT_SCROLL_STRATEGY = new InjectionToken<() => ScrollStrate
   {
     providedIn: 'root',
     factory: () => {
-      const overlay = inject(Overlay);
-      return () => overlay.scrollStrategies.reposition();
+      const injector = inject(Injector);
+      return () => createRepositionScrollStrategy(injector);
     },
   },
 );
-
-/** @docs-private */
-export function CUTE_SELECT_SCROLL_STRATEGY_PROVIDER_FACTORY(
-  overlay: Overlay,
-): () => ScrollStrategy {
-  return () => overlay.scrollStrategies.reposition();
-}
 
 /** Object that can be used to configure the default options for the select module. */
 export interface CuteSelectConfig {
@@ -149,13 +141,6 @@ export interface CuteSelectConfig {
 
 /** Injection token that can be used to provide the default options the select module. */
 export const CUTE_SELECT_CONFIG = new InjectionToken<CuteSelectConfig>('CUTE_SELECT_CONFIG');
-
-/** @docs-private */
-export const CUTE_SELECT_SCROLL_STRATEGY_PROVIDER = {
-  provide: CUTE_SELECT_SCROLL_STRATEGY,
-  deps: [Overlay],
-  useFactory: CUTE_SELECT_SCROLL_STRATEGY_PROVIDER_FACTORY,
-};
 
 /**
  * Injection token that can be used to reference instances of `CuteSelectTrigger`. It serves as
@@ -201,12 +186,11 @@ export class CuteSelectChange {
     '[attr.aria-disabled]': 'disabled',
     '[attr.aria-invalid]': 'errorState',
     '[attr.aria-activedescendant]': '_getAriaActiveDescendant()',
-    'ngSkipHydration': '',
     '(keydown)': '_handleKeydown($event)',
     '(focus)': '_onFocus()',
     '(blur)': '_onBlur()',
+    //'ngSkipHydration': '',
   },
-  animations: [cuteSelectAnimations.transformPanel],
   providers: [
     { provide: CuteFormFieldControl, useExisting: CuteSelect },
     { provide: CUTE_OPTION_PARENT_COMPONENT, useExisting: CuteSelect },
@@ -223,6 +207,9 @@ export class CuteSelect extends CuteInputDropdownControl
   public ngControl = inject(NgControl, {self: true, optional: true})!;
   private _liveAnnouncer = inject(LiveAnnouncer);
   protected _defaultOptions = inject(CUTE_SELECT_CONFIG, {optional: true});
+  protected _animationsDisabled = _animationsDisabled();
+  private _initialized = new Subject<void>();
+  private _cleanupDetach: (() => void) | undefined;
 
   /** All the defined select options. */
   @ContentChildren(CuteOption, {descendants: true}) options: QueryList<CuteOption> | undefined;
@@ -539,7 +526,7 @@ export class CuteSelect extends CuteInputDropdownControl
    * By default, selecting an option with a `null` or `undefined` value will reset the select's
    * value. Enable this option if the reset behavior doesn't match your requirements and instead,
    * the nullable options should become selected. The value of this input can be controlled app-wide
-   * using the `MAT_SELECT_CONFIG` injection token.
+   * using the `CUTE_SELECT_CONFIG` injection token.
    */
   @Input({transform: booleanAttribute})
   canSelectNullableOptions: boolean = this._defaultOptions?.canSelectNullableOptions ?? false;
@@ -624,14 +611,6 @@ export class CuteSelect extends CuteInputDropdownControl
 
     this._selectionModel = new SelectionModel<CuteOption>(this.multiple);
     this.stateChanges.next();
-
-    // We need `distinctUntilChanged` here, because some browsers will
-    // fire the animation end event twice for the same animation. See:
-    // https://github.com/angular/angular/issues/24084
-    this._panelDoneAnimatingStream
-      .pipe(distinctUntilChanged(), takeUntil(this._destroy))
-      .subscribe(() => this._panelDoneAnimating(this.panelOpen));
-
     this._viewportRuler
       .change()
       .pipe(takeUntil(this._destroy))
@@ -645,6 +624,9 @@ export class CuteSelect extends CuteInputDropdownControl
 
   override ngAfterContentInit() {
     super.ngAfterContentInit();
+
+    this._initialized.next();
+    this._initialized.complete();
 
     this._initKeyManager();
 
@@ -711,6 +693,7 @@ export class CuteSelect extends CuteInputDropdownControl
   override ngOnDestroy() {
     super.ngOnDestroy();
 
+    this._cleanupDetach?.();
     this._keyManager?.destroy();
     this._destroy.next();
     this._destroy.complete();
@@ -725,6 +708,10 @@ export class CuteSelect extends CuteInputDropdownControl
 
   /** Opens the overlay panel. */
   open(): void {
+    if (!this._canOpen()) {
+      return;
+    }
+
     // It's important that we read this as late as possible, because doing so earlier will
     // return a different element since it's based on queries in the form field which may
     // not have run yet. Also, this needs to be assigned before we measure the overlay width.
@@ -732,18 +719,23 @@ export class CuteSelect extends CuteInputDropdownControl
       this._preferredOverlayOrigin = this._parentFormField.getConnectedOverlayOrigin();
     }
 
+    this._cleanupDetach?.();
     this._overlayWidth = this._getOverlayWidth(this._preferredOverlayOrigin);
-
-    if (this._canOpen()) {
-      this._applyModalPanelOwnership();
-
-      this._panelOpen = true;
-      this._keyManager?.withHorizontalOrientation(null);
-      this._highlightCorrectOption();
-      this.markForCheck();
-    }
+    this._applyModalPanelOwnership();
+    this._panelOpen = true;
+    this._overlayDir?.positionChange.pipe(take(1)).subscribe(() => {
+      this._changeDetectorRef.detectChanges();
+      this._positioningSettled();
+    });
+    this._overlayDir?.attachOverlay();
+    this._keyManager?.withHorizontalOrientation(null);
+    this._highlightCorrectOption();
+    this.markForCheck();
     // Required for the MDC form field to pick up when the overlay has been opened.
     this.stateChanges.next();
+
+    // Simulate the animation event before we moved away from `@angular/animations`.
+    Promise.resolve().then(() => this.openedChange.emit(true));
   }
 
   /**
@@ -815,15 +807,61 @@ export class CuteSelect extends CuteInputDropdownControl
   close(): void {
     if (this._panelOpen) {
       this._panelOpen = false;
+      this._exitAndDetach();
       this._keyManager?.withHorizontalOrientation(this._isRtl() ? 'rtl' : 'ltr');
       this.markForCheck();
       this._onTouched();
+      // Required for the MDC form field to pick up when the overlay has been closed.
+      this.stateChanges.next();
+
+      // Simulate the animation event before we moved away from `@angular/animations`.
+      Promise.resolve().then(() => this.openedChange.emit(false));
     }
 
     this.focus();
 
     // Required for the MDC form field to pick up when the overlay has been closed.
     this.stateChanges.next();
+  }
+
+  /** Triggers the exit animation and detaches the overlay at the end. */
+  private _exitAndDetach() {
+    if (this._animationsDisabled || !this.panel) {
+      this._detachOverlay();
+      return;
+    }
+
+    this._cleanupDetach?.();
+    this._cleanupDetach = () => {
+      cleanupEvent();
+      clearTimeout(exitFallbackTimer);
+      this._cleanupDetach = undefined;
+    };
+
+    const panel: HTMLElement = this.panel.nativeElement;
+    const cleanupEvent = this._renderer.listen(panel, 'animationend', (event: AnimationEvent) => {
+      if (event.animationName === '_cute-select-exit') {
+        this._cleanupDetach?.();
+        this._detachOverlay();
+      }
+    });
+
+    // Since closing the overlay depends on the animation, we have a fallback in case the panel
+    // doesn't animate. This can happen in some internal tests that do `* {animation: none}`.
+    const exitFallbackTimer = setTimeout(() => {
+      this._cleanupDetach?.();
+      this._detachOverlay();
+    }, 200);
+
+    panel.classList.add('cute-select-panel-exit');
+  }
+
+  /** Detaches the current overlay directive. */
+  private _detachOverlay() {
+    this._overlayDir?.detachOverlay();
+    // Some of the overlay detachment logic depends on change detection.
+    // Mark for check to ensure that things get picked up in a timely manner.
+    this.markForCheck();
   }
 
   /**
@@ -962,6 +1000,18 @@ export class CuteSelect extends CuteInputDropdownControl
     }
   }
 
+  /** Handles keyboard events coming from the overlay. */
+  protected _handleOverlayKeydown(event: KeyboardEvent): void {
+    // TODO(crisbeto): prior to #30363 this was being handled inside the overlay directive, but we
+    // need control over the animation timing so we do it manually. We should remove the `keydown`
+    // listener from `.cute-select-panel` and handle all the events here. That may cause
+    // further test breakages so it's left for a follow-up.
+    if (event.keyCode === ESCAPE && !hasModifierKey(event)) {
+      event.preventDefault();
+      this.close();
+    }
+  }
+
   _onFocus() {
     if (!this.disabled) {
       this._focused = true;
@@ -982,16 +1032,6 @@ export class CuteSelect extends CuteInputDropdownControl
       this.markForCheck();
       this.stateChanges.next();
     }
-  }
-
-  /**
-   * Callback that is invoked when the overlay panel has been attached.
-   */
-  _onAttached(): void {
-    this._overlayDir?.positionChange.pipe(take(1)).subscribe(() => {
-      this._changeDetectorRef.detectChanges();
-      this._positioningSettled();
-    });
   }
 
   /** Returns the theme to be used on the panel. */
@@ -1348,12 +1388,29 @@ export class CuteSelect extends CuteInputDropdownControl
       value += ' ' + this.ariaLabelledby;
     }
 
+    // The value should not be used for the trigger's aria-labelledby,
+    // but this currently "breaks" accessibility tests since they complain
+    // there is no aria-labelledby. This is because they are not setting an
+    // appropriate label on the form field or select.
+    // TODO: remove this conditional after fixing clients by ensuring their
+    // selects have a label applied.
+    if (!value) {
+      //value = this._valueId;
+      value = this.inputId;
+    }
+
     return value;
   }
 
-  /** Called when the overlay panel is done animating. */
-  protected _panelDoneAnimating(isOpen: boolean) {
-    this.openedChange.emit(isOpen);
+  /**
+   * Implemented as part of CuteFormFieldControl.
+   * @docs-private
+   */
+  get describedByIds(): string[] {
+    const element = this._elementRef.nativeElement;
+    const existingDescribedBy = element.getAttribute('aria-describedby');
+
+    return existingDescribedBy?.split(' ') || [];
   }
 
   /**
@@ -1370,7 +1427,22 @@ export class CuteSelect extends CuteInputDropdownControl
   /**
    * Implemented as part of CuteFormFieldControl.
    */
-  onContainerClick() {
+  onContainerClick(event: MouseEvent) {
+    const target = _getEventTarget(event) as HTMLElement | null;
+
+    // Since the overlay is inside the form field, this handler can fire for interactions
+    // with the container. Note that while it's redundant to select both for the popover
+    // and select panel, we need to do it because it tests the clicks can occur after
+    // the panel was detached from the popover.
+    if (
+      target &&
+      (target.tagName === 'CUTE-OPTION' ||
+        target.classList.contains('cdk-overlay-backdrop') ||
+        target.closest('.cute-select-panel'))
+    ) {
+      return;
+    }
+
     this.focus();
     this.open();
   }
@@ -1382,6 +1454,13 @@ export class CuteSelect extends CuteInputDropdownControl
     // Since the panel doesn't overlap the trigger, we
     // want the label to only float when there's a value.
     return this.panelOpen || !this.empty || (this.focused && !!this.placeholder);
+  }
+
+  /** `input` element gets focus. */
+  protected onInputFocus(event: FocusEvent) {
+    const elem = event.target as HTMLInputElement;
+    // CWT: disable auto select input text
+    elem.selectionStart = elem.selectionEnd;
   }
 }
 
