@@ -11,7 +11,7 @@ import {Directive, ElementRef, Output, EventEmitter, HostListener, inject} from 
 /**
  * Tracks a click outside the target element.
  * @example
- * <div cuteClickOutside (clickOutside)="closeDropdown()">
+ * <div (cuteClickOutside)="closeDropdown()">
  *   <button (click)="toggleDropdown()">Toggle Dropdown</button>
  *   <div *ngIf="dropdownOpen" class="dropdown">
  *     Dropdown content

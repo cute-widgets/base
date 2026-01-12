@@ -6,7 +6,7 @@ export function getSortDuplicateSortableIdError(id: string): Error {
 
 /** @docs-private */
 export function getSortHeaderNotContainedWithinSortError(): Error {
-  return Error(`MatSortHeader must be placed within a parent element with the CuteSort directive.`);
+  return Error(`CuteSortHeader must be placed within a parent element with the CuteSort directive.`);
 }
 
 /** @docs-private */

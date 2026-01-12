@@ -32,10 +32,10 @@ const MAX_SAFE_INTEGER = 9007199254740991;
 
 /**
  * Data source that accepts a client-side data array and includes native support of filtering,
- * sorting (using CuteSort), and pagination (using CutePaginator).
+ * sorting (using `CuteSort`), and pagination (using `CutePaginator`).
  *
- * Allows for sort customization by overriding sortingDataAccessor, which defines how data
- * properties are accessed. It also allows for filter customization by overriding filterPredicate,
+ * Allows for sort customization by overriding `sortingDataAccessor`, which defines how data
+ * properties are accessed. It also allows for filter customization by overriding `filterPredicate`,
  * which defines how row data is converted to a string for filter matching.
  *
  * **Note:** This class is meant to be a simple data source to help you get started. As such,
@@ -97,8 +97,8 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
   }
 
   /**
-   * Instance of the CuteSort directive used by the table to control its sorting. Sort changes
-   * emitted by the CuteSort will trigger an update to the table's rendered data.
+   * Instance of the `CuteSort` directive used by the table to control its sorting. Sort changes
+   * emitted by the `CuteSort` will trigger an update to the table's rendered data.
    */
   get sort(): CuteSort | null { return this._sort; }
   set sort(sort: CuteSort | null) {
@@ -148,13 +148,13 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
   }
 
   /**
-   * Gets a sorted copy of the data array based on the state of the CuteSort. Called
-   * after changes are made to the filtered data or when sort changes are emitted from CuteSort.
+   * Gets a sorted copy of the data array based on the state of the `CuteSort`. Called
+   * after changes are made to the filtered data or when sort changes are emitted from `CuteSort`.
    * By default, the function retrieves the active sort and its direction and compares data
-   * by retrieving data using the sortingDataAccessor. May be overridden for a custom implementation
+   * by retrieving data using the {@link sortingDataAccessor}. May be overridden for a custom implementation
    * of data ordering.
    * @param data The array of data that should be sorted.
-   * @param sort The connected CuteSort that holds the current sort state.
+   * @param sort The connected `CuteSort` that holds the current sort state.
    */
   sortData = (data: T[], sort: CuteSort): T[] => {
     const active = sort.active;
@@ -282,7 +282,7 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
 
   /**
    * Returns a filtered data array where each filter object contains the filter string within
-   * the result of the filterPredicate function. If no filter is set, return the data array
+   * the result of the {@link filterPredicate} function. If no filter is set, return the data array
    * as provided.
    */
   protected _filterData(data: T[]) {
@@ -302,7 +302,7 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
   }
 
   /**
-   * Returns a sorted copy of the data if CuteSort has a sort applied, otherwise just returns the
+   * Returns a sorted copy of the data if `CuteSort` has a sort applied, otherwise just returns the
    * data array as provided. Uses the default data accessor for data lookup, unless a
    * sortDataAccessor function is defined.
    */
@@ -360,7 +360,7 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
   }
 
   /**
-   * Used by the CuteTable. Called when it connects to the data source.
+   * Used by the {@link CuteTable}. Called when it connects to the data source.
    */
   connect() {
     if (!this._renderChangesSubscription) {
@@ -370,7 +370,7 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
   }
 
   /**
-   * Used by the CuteTable. Called when it disconnects from the data source.
+   * Used by the {@link CuteTable}. Called when it disconnects from the data source.
    */
   disconnect() {
     this._renderChangesSubscription?.unsubscribe();

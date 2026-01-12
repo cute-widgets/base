@@ -53,6 +53,9 @@ export type TableBorders = "all" | "none";
 })
 export class CuteRecycleRows {}
 
+/**
+ * @inheritDoc
+ */
 @Component({
   selector: 'cute-table, table[cute-table]',
   exportAs: 'cuteTable',

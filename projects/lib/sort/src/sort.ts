@@ -34,7 +34,7 @@ import {CuteBaseControl} from "@cute-widgets/base/abstract";
 /** Position of the arrow that displays when sorted. */
 export type SortHeaderArrowPosition = 'before' | 'after';
 
-/** Interface for a directive that holds sorting state consumed by `MatSortHeader`. */
+/** Interface for a directive that holds sorting state consumed by `CuteSortHeader`. */
 export interface CuteSortable {
   /** The id of the column being sorted. */
   id: string;
@@ -69,7 +69,7 @@ export const CUTE_SORT_DEFAULT_OPTIONS = new InjectionToken<CuteSortDefaultOptio
 );
 
 
-/** Container for MatSortables to manage the sort state and provide default sort parameters. */
+/** Container for CuteSortables to manage the sort state and provide default sort parameters. */
 @Directive({
   selector: '[cuteSort]',
   exportAs: 'cuteSort',

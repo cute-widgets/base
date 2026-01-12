@@ -149,7 +149,7 @@ export class CuteSortHeader implements CuteSortable, OnDestroy, OnInit, AfterVie
   disabled: boolean = false;
 
   /**
-   * Description applied to MatSortHeader's button element with aria-describedby. This text should
+   * Description applied to CuteSortHeader's button element with aria-describedby. This text should
    * describe the action that will occur when the user clicks the sort header.
    */
   @Input()
@@ -299,7 +299,7 @@ export class CuteSortHeader implements CuteSortable, OnDestroy, OnInit, AfterVie
     }
   }
 
-  /** Whether this MatSortHeader is currently sorted in either ascending or descending order. */
+  /** Whether this CuteSortHeader is currently sorted in either ascending or descending order. */
   _isSorted() {
     return (
       this._sort.active == this.id &&

@@ -11,7 +11,7 @@
  */
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {FlatTreeControl, TreeControl} from '@angular/cdk/tree';
-import {BehaviorSubject, merge, Observable} from 'rxjs';
+import {BehaviorSubject, merge, Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 
 /**
@@ -49,6 +49,8 @@ import {map, take} from 'rxjs/operators';
  * and the output flattened type is `F` with additional information.
  */
 export class CuteTreeFlattener<T, F, K = F> {
+  private _subscription: Subscription | undefined;
+
   constructor(
     public transformFunction: (node: T, level: number) => F,
     public getLevel: (node: F) => number,
@@ -66,8 +68,10 @@ export class CuteTreeFlattener<T, F, K = F> {
         if (Array.isArray(childrenNodes)) {
           this._flattenChildren(childrenNodes, level, resultNodes, parentMap);
         } else {
-          childrenNodes.pipe(take(1)).subscribe(children => {
+          this._subscription?.unsubscribe();
+          this._subscription = childrenNodes.pipe(take(1)).subscribe(children => {
             this._flattenChildren(children, level, resultNodes, parentMap);
+            this._subscription?.unsubscribe();
           });
         }
       }
@@ -117,6 +121,15 @@ export class CuteTreeFlattener<T, F, K = F> {
     });
     return results;
   }
+
+  //++ CWT
+  /**
+   * Performs the final actions with the flattener before destroying it.
+   */
+  finalize() {
+    this._subscription?.unsubscribe();
+  }
+
 }
 
 /**
@@ -169,6 +182,6 @@ export class CuteTreeFlatDataSource<T, F, K = F> extends DataSource<F> {
   }
 
   disconnect() {
-    // no op
+    this._treeFlattener.finalize();
   }
 }
