@@ -29,7 +29,6 @@ import {
   getSortHeaderMissingIdError,
   getSortInvalidDirectionError,
 } from './sort-errors';
-import {CuteBaseControl} from "@cute-widgets/base/abstract";
 
 /** Position of the arrow that displays when sorted. */
 export type SortHeaderArrowPosition = 'before' | 'after';
@@ -63,13 +62,13 @@ export interface CuteSortDefaultOptions {
   arrowPosition?: SortHeaderArrowPosition;
 }
 
-/** Injection token to be used to override the default options for `mat-sort`. */
+/** Injection token to be used to override the default options for `cute-sort`. */
 export const CUTE_SORT_DEFAULT_OPTIONS = new InjectionToken<CuteSortDefaultOptions>(
   'CUTE_SORT_DEFAULT_OPTIONS',
 );
 
-
-/** Container for CuteSortables to manage the sort state and provide default sort parameters. */
+// CWT: Changes to Sort interface implementation
+/** Container for `CuteSortable`s to manage the sort state and provide default sort parameters. */
 @Directive({
   selector: '[cuteSort]',
   exportAs: 'cuteSort',
@@ -78,7 +77,7 @@ export const CUTE_SORT_DEFAULT_OPTIONS = new InjectionToken<CuteSortDefaultOptio
   },
   standalone: true,
 })
-export class CuteSort implements OnChanges, OnDestroy, OnInit {
+export class CuteSort implements OnChanges, OnDestroy, OnInit, Sort {
   private _initializedStream = new ReplaySubject<void>(1);
 
   /** Collection of all registered sortables that this directive manages. */
@@ -88,7 +87,7 @@ export class CuteSort implements OnChanges, OnDestroy, OnInit {
   readonly _stateChanges = new Subject<void>();
 
   /** The id of the most recently sorted CuteSortable. */
-  @Input('cuteSortActive') active: string | undefined;
+  @Input('cuteSortActive') active: string = "";
 
   /**
    * The direction to set when a CuteSortable is initially sorted.

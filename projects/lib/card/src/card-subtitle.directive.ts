@@ -22,7 +22,7 @@ import {ThemeColor} from "@cute-widgets/base/core";
 @Directive({
   selector: `cute-card-subtitle, [cute-card-subtitle], [cuteCardSubtitle]`,
   host: {
-    'class': 'cute-card-subtitle card-subtitle mb-2',
+    'class': 'cute-card-subtitle card-subtitle',
     '[class]': 'color ? "text-"+color : ""',
   },
   standalone: true

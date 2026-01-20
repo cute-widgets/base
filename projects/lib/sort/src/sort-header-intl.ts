@@ -32,7 +32,7 @@ export function CUTE_SORT_HEADER_INTL_PROVIDER_FACTORY(parentIntl: CuteSortHeade
 
 /** @docs-private */
 export const CUTE_SORT_HEADER_INTL_PROVIDER = {
-  // If there is already an MatSortHeaderIntl available, use that. Otherwise, provide a new one.
+  // If there is already an CuteSortHeaderIntl available, use that. Otherwise, provide a new one.
   provide: CuteSortHeaderIntl,
   deps: [[new Optional(), new SkipSelf(), CuteSortHeaderIntl]],
   useFactory: CUTE_SORT_HEADER_INTL_PROVIDER_FACTORY,

@@ -1,7 +1,9 @@
-<ng-content select="cute-card-title,  cute-card-subtitle,
+<div class="cute-card-title__wrapper">
+  <ng-content select="cute-card-title,  cute-card-subtitle,
                    [cute-card-title], [cute-card-subtitle],
                    [cuteCardTitle],   [cuteCardSubtitle]">
-</ng-content>
-<div class="card-text mt-2">
+  </ng-content>
+</div>
+<div class="card-text">
   <ng-content></ng-content>
 </div>

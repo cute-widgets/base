@@ -147,6 +147,7 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
     return value;
   }
 
+  // CWT: Attention! We change the second parameter's type from CuteSort to Sort interface!!!
   /**
    * Gets a sorted copy of the data array based on the state of the `CuteSort`. Called
    * after changes are made to the filtered data or when sort changes are emitted from `CuteSort`.
@@ -156,7 +157,7 @@ export class CuteTableDataSource<T, P extends CutePaginator = CutePaginator> ext
    * @param data The array of data that should be sorted.
    * @param sort The connected `CuteSort` that holds the current sort state.
    */
-  sortData = (data: T[], sort: CuteSort): T[] => {
+  sortData = (data: T[], sort: Sort): T[] => {
     const active = sort.active;
     const direction = sort.direction;
     if (!active || direction == '') {

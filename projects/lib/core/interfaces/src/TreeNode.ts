@@ -29,7 +29,7 @@ export interface TreeNode<D=unknown> {
   data?: D;
   /** Router link. */
   routerLink?: string | string[];
-  /** Identifies the picture displayed to the left of the item label. */
+  /** Identifies the image displayed next to the item label. */
   icon?: string;
   /** Icon color. */
   iconColor?: string;

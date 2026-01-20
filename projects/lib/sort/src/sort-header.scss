@@ -1,19 +1,24 @@
 @use '@angular/cdk';
 
-//@use '../core/tokens/m2/mat/sort' as tokens-mat-sort;
+//@use './m3-sort';
 //@use '../core/tokens/token-utils';
 //@use '../core/focus-indicators/private';
 
 $header-arrow-margin: 6px;
 $header-arrow-container-size: 12px;
-$header-arrow-stem-size: 10px;
-$header-arrow-pointer-length: 6px;
-$header-arrow-thickness: 2px;
+$header-arrow-opacity: 0.68;
 $header-arrow-hint-opacity: 0.38;
+
+.cute-sort-header {
+  cursor: pointer;
+}
+
+.cute-sort-header-disabled {
+  cursor: default;
+}
 
 .cute-sort-header-container {
   display: flex;
-  cursor: pointer;
   align-items: center;
   letter-spacing: normal;
 
@@ -28,10 +33,6 @@ $header-arrow-hint-opacity: 0.38;
     border-bottom: solid 1px currentColor;
   }
 
-  .cute-sort-header-disabled & {
-    cursor: default;
-  }
-
   // For the sort-header element, default inset/offset values are necessary to ensure that
   // the focus indicator is sufficiently contrastive and renders appropriately.
   &::before {
@@ -42,29 +43,97 @@ $header-arrow-hint-opacity: 0.38;
 }
 
 .cute-sort-header-content {
-  text-align: center;
   display: flex;
   align-items: center;
+  text-align: center;
 }
 
 .cute-sort-header-position-before {
   flex-direction: row-reverse;
 }
 
+@keyframes _cute-sort-header-recently-cleared-ascending {
+  from {
+    transform: translateY(0);
+    opacity: $header-arrow-opacity; //1;
+  }
+
+  to {
+    transform: translateY(-25%);
+    opacity: 0;
+  }
+}
+
+@keyframes _cute-sort-header-recently-cleared-descending {
+  from {
+    transform: translateY(0) rotate(180deg);
+    opacity: $header-arrow-opacity; //1;
+  }
+
+  to {
+    transform: translateY(25%) rotate(180deg);
+    opacity: 0;
+  }
+}
+
 .cute-sort-header-arrow {
+  $timing: 225ms cubic-bezier(0.4, 0, 0.2, 1);
   height: $header-arrow-container-size;
   width: $header-arrow-container-size;
   min-width: $header-arrow-container-size;
   position: relative;
-  display: flex;
-
-  //@include token-utils.use-tokens(tokens-mat-sort.$prefix, tokens-mat-sort.get-token-slots()) {
-  //  @include token-utils.create-token-slot(color, arrow-color);
-  //}
-
-  // Start off at 0 since the arrow may become visible while parent are animating.
-  // This will be overwritten when the arrow animations kick in. See #11819.
+  transition: transform $timing, opacity $timing;
   opacity: 0;
+  overflow: visible;
+  //color: var(--bs-body-color);
+
+  .cute-sort-header.cdk-keyboard-focused &,
+  .cute-sort-header.cdk-program-focused &,
+  .cute-sort-header:hover & {
+    opacity: $header-arrow-hint-opacity; // 0.54;
+  }
+
+  .cute-sort-header .cute-sort-header-sorted & {
+    opacity: $header-arrow-opacity; // 1;
+  }
+
+  .cute-sort-header-descending & {
+    transform: rotate(180deg);
+  }
+
+  .cute-sort-header-recently-cleared-ascending & {
+    transform: translateY(-25%);
+  }
+
+  .cute-sort-header-recently-cleared-ascending & {
+    transition: none; // Without this the animation looks glitchy on Safari.
+    animation: _cute-sort-header-recently-cleared-ascending $timing forwards;
+  }
+
+  .cute-sort-header-recently-cleared-descending & {
+    transition: none; // Without this the animation looks glitchy on Safari.
+    animation: _cute-sort-header-recently-cleared-descending $timing forwards;
+  }
+
+  // Set the durations to 0, but keep the actual animation, since we still want it to play.
+  .cute-sort-header-animations-disabled & {
+    transition-duration: 0ms;
+    animation-duration: 0ms;
+  }
+
+  > svg, [cuteSortHeaderIcon] {
+    // Even though this is 24x24, the actual `path` inside ends up being 12x12.
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -12px 0 0 -12px;
+
+    // Without this transform the element twitches at the end of the transition on Safari.
+    transform: translateZ(0);
+  }
 
   &,
   [dir='rtl'] .cute-sort-header-position-before & {
@@ -75,69 +144,4 @@ $header-arrow-hint-opacity: 0.38;
   [dir='rtl'] & {
     margin: 0 $header-arrow-margin 0 0;
   }
-}
-
-.cute-sort-header-stem {
-  background: currentColor;
-  height: $header-arrow-stem-size;
-  width: $header-arrow-thickness;
-  margin: auto;
-  display: flex;
-  align-items: center;
-
-  @include cdk.high-contrast(active, off) {
-    width: 0;
-    border-left: solid $header-arrow-thickness;
-  }
-}
-
-.cute-sort-header-indicator {
-  width: 100%;
-  height: $header-arrow-thickness;
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.cute-sort-header-pointer-middle {
-  margin: auto;
-  height: $header-arrow-thickness;
-  width: $header-arrow-thickness;
-  background: currentColor;
-  transform: rotate(45deg);
-
-  @include cdk.high-contrast(active, off) {
-    width: 0;
-    height: 0;
-    border-top: solid $header-arrow-thickness;
-    border-left: solid $header-arrow-thickness;
-  }
-}
-
-.cute-sort-header-pointer-left,
-.cute-sort-header-pointer-right {
-  background: currentColor;
-  width: $header-arrow-pointer-length;
-  height: $header-arrow-thickness;
-  position: absolute;
-  top: 0;
-
-  @include cdk.high-contrast(active, off) {
-    width: 0;
-    height: 0;
-    border-left: solid $header-arrow-pointer-length;
-    border-top: solid $header-arrow-thickness;
-  }
-}
-
-.cute-sort-header-pointer-left {
-  transform-origin: right;
-  left: 0;
-}
-
-.cute-sort-header-pointer-right {
-  transform-origin: left;
-  right: 0;
 }

@@ -11,6 +11,11 @@
 <div class="cute-sort-header-container cute-focus-indicator"
      [class.cute-sort-header-sorted]="_isSorted()"
      [class.cute-sort-header-position-before]="arrowPosition === 'before'"
+     [class.cute-sort-header-descending]="_sort.direction === 'desc'"
+     [class.cute-sort-header-ascending]="_sort.direction === 'asc'"
+     [class.cute-sort-header-recently-cleared-ascending]="_recentlyCleared() === 'asc'"
+     [class.cute-sort-header-recently-cleared-descending]="_recentlyCleared() === 'desc'"
+     [class.cute-sort-header-animations-disabled]="_animationsDisabled"
      [attr.tabindex]="_isDisabled() ? null : 0"
      [attr.role]="_isDisabled() ? null : 'button'">
 
@@ -26,18 +31,12 @@
 
   <!-- Disable animations while a current animation is running -->
   @if (_renderArrow()) {
-    <div class="cute-sort-header-arrow"
-         [@arrowOpacity]="_getArrowViewState()"
-         [@arrowPosition]="_getArrowViewState()"
-         [@allowChildren]="_getArrowDirectionState()"
-         (@arrowPosition.start)="_disableViewStateAnimation = true"
-         (@arrowPosition.done)="_disableViewStateAnimation = false">
-      <div class="cute-sort-header-stem"></div>
-      <div class="cute-sort-header-indicator" [@indicator]="_getArrowDirectionState()">
-        <div class="cute-sort-header-pointer-left" [@leftPointer]="_getArrowDirectionState()"></div>
-        <div class="cute-sort-header-pointer-right" [@rightPointer]="_getArrowDirectionState()"></div>
-        <div class="cute-sort-header-pointer-middle"></div>
-      </div>
+    <div class="cute-sort-header-arrow">
+      <ng-content select="[cuteSortHeaderIcon]">
+        <svg viewBox="0 -960 960 960" focusable="false" aria-hidden="true">
+          <path d="M440-240v-368L296-464l-56-56 240-240 240 240-56 56-144-144v368h-80Z"/>
+        </svg>
+      </ng-content>
     </div>
   }
 </div>

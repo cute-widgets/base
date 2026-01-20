@@ -36,8 +36,8 @@ import {ThemeColor} from "@cute-widgets/base/core";
  */
 export const CUTE_TABLE = new InjectionToken<CuteTable<any>>("CUTE_TABLE");
 
-/** Type of table borders. `all` - on all sides of the table and cells, `none` - without borders */
-export type TableBorders = "all" | "none";
+/** Type of table borders: `all` - on all sides of the table and cells, `rows` - line-divider of table rows, `none` - without borders. */
+export type TableBorders = "all" | "none" | "rows";
 
 /**
  * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
@@ -149,13 +149,13 @@ export class CuteTable<T> extends CdkTable<T> implements OnInit {
   /** Adds zebra-striping to any table row within the `<tbody>`. */
   @Input({transform: booleanAttribute}) stripedRows: boolean = false;
 
-  /** Adds zebra-striping to any table column */
+  /** Adds zebra-striping to any table column. */
   @Input({transform: booleanAttribute}) stripedColumns: boolean = false;
 
-  /** Enables a hover state on table rows within a `<tbody>` */
+  /** Enables a hover state on table rows within a `<tbody>`. */
   @Input({transform: booleanAttribute}) hoveredRows: boolean = false;
 
-  /** Makes a `<table>` more compact */
+  /** Makes a `<table>` more compact. */
   @Input({transform: booleanAttribute})
   get compact(): boolean { return this._compact; }
   set compact(value: boolean) {
@@ -167,7 +167,7 @@ export class CuteTable<T> extends CdkTable<T> implements OnInit {
   private _compact: boolean = false;
 
   /** What table borders to display. */
-  @Input() displayBorders: TableBorders | undefined;
+  @Input() displayBorders: TableBorders = "rows";
 
   /**
    *  Adds a thicker border, darker between table groups — `<thead>`, `<tbody>`, and `<tfoot>`.
