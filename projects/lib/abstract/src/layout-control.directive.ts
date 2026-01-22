@@ -47,7 +47,7 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
   @Input({transform: booleanAttribute}) clearfix: boolean = false;
 
   /** Symbolic name of the screen minimum width which determines how the responsive layout behaves across device or viewport sizes. */
-  @Input() breakpoint: LayoutBreakpoint | undefined;
+  @Input() breakpoint: LayoutBreakpoint | LayoutBreakpoint[] | undefined;
 
   /** Event that is raised when the width of viewport is changed and crosses the size of `breakpoint`'s value. */
   @Output() breakpointState = new EventEmitter<BreakpointState>();
@@ -60,10 +60,19 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
 
       this._subscription?.unsubscribe();
 
-      if (change.currentValue) { // && (change.currentValue !== change.previousValue)) {
-        const bpName = bsBreakpoints.getLabel(change.currentValue);
+      if (change.currentValue) {
+        let bpArray: string[];
+        if (Array.isArray(change.currentValue)) {
+          bpArray = change.currentValue;
+        } else {
+          bpArray = [change.currentValue];
+        }
+        const queries = bpArray.map(value => {
+          const label = bsBreakpoints.getLabel(value);
+          return bsBreakpoints.getQuery(label+"AndDown") ?? "";
+        });
         this._subscription = this.breakpointObserver
-          .observe((bsBreakpoints as any)[bpName+"AndDown"])
+          .observe( queries )
           .subscribe(state => this.breakpointState.emit(state));
       }
     }
