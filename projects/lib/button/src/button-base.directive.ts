@@ -71,9 +71,10 @@ export const CUTE_BUTTON_BASE = new InjectionToken<CuteButtonBase>(
 
 @Directive({
     host: {
-        class: 'btn',
-        '[style.--bs-focus-ring-color]': 'color? "rgba(var("+bsColorVarName+"), var(--bs-focus-ring-opacity))" : "var(--bs-border-color-translucent)"',
-        '(keydown)': '_haltDisabledEvents($event)',
+      class: 'btn',
+      '[attr.magnitude]': 'magnitude',
+      '[style.--bs-focus-ring-color]': 'color? "rgba(var("+bsColorVarName+"), var(--bs-focus-ring-opacity))" : "var(--bs-border-color-translucent)"',
+      '(keydown)': '_haltDisabledEvents($event)',
     }
 })
 export abstract class CuteButtonBase extends CuteFocusableControl implements DoCheck {

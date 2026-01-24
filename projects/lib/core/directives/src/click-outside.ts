@@ -29,7 +29,7 @@ export class CuteClickOutside {
 
   constructor() {}
 
-  @HostListener('document:click', ['$event'])
+  @HostListener('window:click', ['$event'])
   onClick(event: MouseEvent): void {
     if (!this._elementRef.nativeElement.contains(event.target)) {
       this.cuteClickOutside.emit(event);

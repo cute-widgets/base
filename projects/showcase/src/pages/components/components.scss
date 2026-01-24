@@ -1,5 +1,9 @@
 :host {
 
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
   cute-sidenav {
     width: 240px;
   }

@@ -85,7 +85,6 @@ export class CuteRadioButton extends CuteInputControl implements DoCheck {
 
   private _ngZone = inject(NgZone);
   private _injector = inject(Injector);
-  private _destroyRef = inject(DestroyRef);
   private readonly _radioDispatcher: UniqueSelectionDispatcher = inject(UniqueSelectionDispatcher);
   private _defaultOptions = inject<CuteRadioDefaultOptions>(CUTE_RADIO_DEFAULT_OPTIONS, {
     optional: true,

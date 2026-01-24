@@ -104,7 +104,6 @@ let nextId: number = -1;
 })
 export class CuteNav extends CuteLayoutControl  {
 
-  protected _destroyRef = inject(DestroyRef);
   protected _dir = inject(Directionality);
   protected _keyManager: ListKeyManager<CuteNavLink> | undefined;
 

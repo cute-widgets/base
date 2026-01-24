@@ -8,9 +8,9 @@
         [disabled]="disabled || null"
         [tabIndex]="disabled ? -1 : tabIndex"
 >
-        <span class="cute-expansion-panel-header-content">
+        <div class="cute-expansion-panel-header-content flex-sm-row">
             <ng-content select="cute-panel-title"></ng-content>
             <ng-content select="cute-panel-description"></ng-content>
             <ng-content></ng-content>
-        </span>
+        </div>
 </button>

@@ -6,7 +6,7 @@ import {CuteIcon} from '@cute-widgets/base/icon';
 @Component({
   selector: 'app-alert',
   imports: [
-    CuteHStack,
+    // CuteHStack,
     CuteAlertModule,
     CuteIcon,
   ],

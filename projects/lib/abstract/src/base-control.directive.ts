@@ -15,7 +15,7 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
-  Renderer2, AfterViewInit, OnInit, AfterContentInit, booleanAttribute, isDevMode, InjectionToken,
+  Renderer2, AfterViewInit, OnInit, AfterContentInit, booleanAttribute, isDevMode, InjectionToken, DestroyRef,
 } from '@angular/core';
 import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
 import {Observable, Subscriber} from "rxjs";
@@ -71,6 +71,7 @@ export abstract class CuteBaseControl
   protected readonly _elementRef: ElementRef<HTMLElement> = inject(ElementRef);
   protected readonly _changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
   protected readonly _renderer: Renderer2 = inject(Renderer2);
+  protected readonly _destroyRef: DestroyRef = inject(DestroyRef);
 
   /** Owner widget */
   readonly owner = inject(CUTE_WIDGET, {skipSelf: true, optional: true})

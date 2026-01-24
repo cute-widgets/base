@@ -3,7 +3,7 @@
 
 <cute-hstack gap="3">
   <cute-vstack gap="3">
-    <cute-hstack gap="4">
+    <cute-hstack gap="4" class="flex-wrap">
       <cute-checkbox #cbxImage (change)="!cbxImage.checked ? cbxBgImage.checked=false : null">With image</cute-checkbox>
       <cute-checkbox #cbxBgImage [disabled]="!cbxImage.checked">As background</cute-checkbox>
       <cute-checkbox #cbxNavs>With nav list</cute-checkbox>

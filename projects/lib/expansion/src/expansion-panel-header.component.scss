@@ -5,7 +5,7 @@
 
   .cute-expansion-panel-header-content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex: 1;
     overflow: hidden;
     align-items: start;
@@ -26,6 +26,10 @@
   }
   .cute-expansion-panel-header-description {
     flex-grow: 2;
+
+    &:empty {
+      display: none;
+    }
   }
 
   .accordion-button {

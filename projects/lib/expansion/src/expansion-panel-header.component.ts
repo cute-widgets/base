@@ -10,11 +10,9 @@
  * code licensed under MIT-style License (https://angular.dev/license).
  */
 import {
-  AfterViewInit, ANIMATION_MODULE_TYPE, Attribute,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
-  Directive, ElementRef, Host, HostAttributeToken, inject, Inject, Input, numberAttribute,
-  OnDestroy, Optional,
+  Directive, HostAttributeToken, inject, Input, numberAttribute,
   ViewEncapsulation
 } from "@angular/core";
 import {FocusableOption, FocusMonitor, FocusOrigin} from "@angular/cdk/a11y";
@@ -26,6 +24,8 @@ import {
 } from "./expansion-panel.component";
 import {EMPTY, filter, merge, Subscription} from "rxjs";
 import {CuteAccordionTogglePosition} from "./accordion-base.interface";
+import {CuteLayoutControl} from '@cute-widgets/base/abstract';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'cute-expansion-panel-header',
@@ -55,16 +55,16 @@ import {CuteAccordionTogglePosition} from "./accordion-base.interface";
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CuteExpansionPanelHeader implements AfterViewInit, OnDestroy, FocusableOption /* extends ... */ {
+export class CuteExpansionPanelHeader extends CuteLayoutControl implements FocusableOption /* extends ... */ {
   readonly panel = inject(CuteExpansionPanel, {host: true});
-  private _element = inject(ElementRef);
   private _focusMonitor = inject(FocusMonitor);
-  private _changeDetectorRef = inject(ChangeDetectorRef);
 
   private _parentChangeSubscription = Subscription.EMPTY;
 
   constructor(...args: unknown[]);
   constructor() {
+    super();
+
     const panel = this.panel;
     const defaultOptions = inject<CuteExpansionPanelDefaultOptions>(
       CUTE_EXPANSION_PANEL_DEFAULT_OPTIONS,
@@ -94,8 +94,11 @@ export class CuteExpansionPanelHeader implements AfterViewInit, OnDestroy, Focus
 
     // Avoids focus being lost if the panel contained the focused element and was closed.
     panel.closed
-        .pipe(filter(() => panel._containsFocus()))
-        .subscribe(() => this._focusMonitor.focusVia(this._element, 'program'));
+        .pipe(
+          takeUntilDestroyed(),
+          filter(() => panel._containsFocus())
+        )
+        .subscribe(() => this._focusMonitor.focusVia(this._elementRef, 'program'));
 
     if (defaultOptions) {
       this.expandedHeight = defaultOptions.expandedHeight;
@@ -115,8 +118,12 @@ export class CuteExpansionPanelHeader implements AfterViewInit, OnDestroy, Focus
   })
   tabIndex: number = 0;
 
+  protected override generateId(): string {
+    return "";
+  }
+
   /** Whether the associated panel is disabled. Implemented as a part of `FocusableOption`. */
-  get disabled(): boolean {
+  protected override getDisabledState(): boolean {
     return this.panel.disabled;
   }
 
@@ -192,23 +199,25 @@ export class CuteExpansionPanelHeader implements AfterViewInit, OnDestroy, Focus
    */
   focus(origin?: FocusOrigin, options?: FocusOptions) {
     if (origin) {
-      this._focusMonitor.focusVia(this._element, origin, options);
+      this._focusMonitor.focusVia(this._elementRef, origin, options);
     } else {
-      this._element.nativeElement.focus(options);
+      this._elementRef.nativeElement.focus(options);
     }
   }
 
-  ngAfterViewInit() {
-    this._focusMonitor.monitor(this._element).subscribe(origin => {
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this._focusMonitor.monitor(this._elementRef).subscribe(origin => {
       if (origin && this.panel.accordion) {
         this.panel.accordion._handleHeaderFocus(this);
       }
     });
   }
 
-  ngOnDestroy() {
+  override ngOnDestroy() {
+    super.ngOnDestroy();
     this._parentChangeSubscription.unsubscribe();
-    this._focusMonitor.stopMonitoring(this._element);
+    this._focusMonitor.stopMonitoring(this._elementRef);
   }
 
 }

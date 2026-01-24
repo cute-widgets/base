@@ -5,6 +5,10 @@ import {CuteTooltipModule} from '@cute-widgets/base/tooltip';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {CuteProgressSpinner} from '@cute-widgets/base/spinner';
 import {CuteTabsModule} from '@cute-widgets/base/tabs';
+import {ThemeColor} from '@cute-widgets/base/core';
+import {RelativeSize5} from '@cute-widgets/base/core/types';
+import {CuteCheckbox} from '@cute-widgets/base/checkbox';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-button-page',
@@ -13,12 +17,28 @@ import {CuteTabsModule} from '@cute-widgets/base/tabs';
     CuteIconModule,
     CuteHStack,
     CuteTooltipModule,
-    CuteStack,
+    //CuteStack,
     CuteProgressSpinner,
-    CuteTabsModule],
+    CuteTabsModule,
+    CuteCheckbox,
+    FormsModule
+  ],
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })
 export class ButtonPage {
+
+  protected colors: ThemeColor[] = ["primary", "secondary", "success", "info", "warning", "danger", "light", "dark", "link"];
+
+  protected sizes: RelativeSize5[] = ["smaller", "small", "middle", "large", "larger"];
+
+  protected reversedSizes = [...this.sizes].reverse();
+
+  protected applyGradient: boolean = false;
+  protected applyDisabled: boolean = false;
+
+  proper(s: string): string {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
 
 }

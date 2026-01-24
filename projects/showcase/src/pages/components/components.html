@@ -1,6 +1,24 @@
 @let LINK_CLASSES = "ms-4 text-body-secondary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover";
-<cute-sidenav-container>
-  <cute-sidenav #sidenav mode="side" opened disableClose [fixedInViewport]="true" fixedTopGap="58">
+
+@if (isScreenMedium()) {
+  <div class="mt-2 align-self-center">
+    <button cuteButton color="primary-emphasis" (click)="$event.stopImmediatePropagation(); toggleSidenav()">
+      <cute-icon color="primary">layout-sidebar-inset</cute-icon>
+      Menu...
+    </button>
+  </div>
+}
+
+<cute-sidenav-container [breakpoint]="['md','lg']"
+                        (breakpointState)="onBreakpointState($event)">
+  <cute-sidenav #sidenav
+                [mode]="isScreenMedium() ? 'over' : 'side'"
+                [opened]="!isScreenMedium()"
+                [fixedInViewport]="isScreenMedium()"
+                fixedTopGap="58"
+                disableClose
+                (cuteClickOutside)="isScreenMedium() && sidenav.opened ? sidenav.close() : null"
+  >
     <nav cuteNav="pills" orientation="vertical" class="p-3 mb-auto">
       <!-- Getting started -->
       <span class="text-body-emphasis">
@@ -8,7 +26,13 @@
         Getting started
       </span>
 
-      <a cute-nav-link color="secondary-emphasis" [class]="LINK_CLASSES" routerLink="overview"> Overview </a>
+      <a cute-nav-link color="secondary-emphasis"
+         [class]="LINK_CLASSES"
+         (click)="isScreenMedium() ? sidenav.close() : null"
+         routerLink="overview"
+      >
+        Overview
+      </a>
 
       <!-- Components -->
       <span class="text-body-emphasis">
@@ -17,7 +41,7 @@
       </span>
 
       @for (item of items; track item) {
-        <a cute-nav-link [class]="LINK_CLASSES" [routerLink]="item.id"> {{item.name}} </a>
+        <a cute-nav-link [class]="LINK_CLASSES" [routerLink]="item.id" (click)="isScreenMedium() ? sidenav.close() : null"> {{item.name}} </a>
       }
 
     </nav>

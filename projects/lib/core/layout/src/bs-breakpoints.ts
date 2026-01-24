@@ -13,18 +13,18 @@
 export const bsBreakpoints = {
 
   query: {
-    SmallAndDown: '(max-width: 575.98px)',
-    MediumAndDown: '(max-width: 767.98px)',
-    LargeAndDown: '(max-width: 991.98px)',
-    XLargeAndDown: '(max-width: 1199.98px)',
-    XXLargeAndDown: '(max-width: 1399.98px)',
+    SmallAndDown:   '(max-width: 576px)',
+    MediumAndDown:  '(max-width: 768px)',
+    LargeAndDown:   '(max-width: 992px)',
+    XLargeAndDown:  '(max-width: 1200px)',
+    XXLargeAndDown: '(max-width: 1400px)',
 
-    XSmall: '(max-width: 575.98px)',
-    Small:  '(min-width: 576px) and (max-width: 767.98px)',
-    Medium: '(min-width: 768px) and (max-width: 991.98px)',
-    Large:  '(min-width: 992px) and (max-width: 1199.98px)',
-    XLarge: '(min-width: 1200px) and (max-width: 1399.98px)',
-    XXLarge: '(min-width: 1400px)',
+    XSmall:   '(max-width: 575.98px)',
+    Small:    '(min-width: 576px) and (max-width: 767.98px)',
+    Medium:   '(min-width: 768px) and (max-width: 991.98px)',
+    Large:    '(min-width: 992px) and (max-width: 1199.98px)',
+    XLarge:   '(min-width: 1200px) and (max-width: 1399.98px)',
+    XXLarge:  '(min-width: 1400px)',
 
     get xs(): string {return this.XSmall},
     get sm(): string {return this.Small},
@@ -38,23 +38,6 @@ export const bsBreakpoints = {
     return {xs:0, sm:576, md:768, lg: 992, xl: 1200, xxl: 1400};
   },
 
-  /**
-   * Gets the object's property name of the media-query by its value
-   * @param query The media-query text
-   * @returns The property name of the media-query or _undefined_ if it was not found
-   */
-  getQueryName(query: string): string | undefined {
-    let res: string | undefined;
-    if (query) {
-      for (const key in this) {
-        if ((this as any)[key] === query) {
-          res = key;
-          break;
-        }
-      }
-    }
-    return res;
-  },
   /**
    * Gets the breakpoint label by Bootstrap's breakpoint abbreviation
    * @param code Bootstrap's breakpoint abbreviation.
@@ -94,5 +77,24 @@ export const bsBreakpoints = {
       return (this.query as any)[code];
     }
     return undefined;
-  }
+  },
+
+  /**
+   * Gets the name of the media-query by its value.
+   * @param query The media-query text.
+   * @returns The name of the media-query or _undefined_ if it was not found.
+   */
+  getQueryName(query: string): string | undefined {
+    let res: string | undefined;
+    if (query) {
+      for (const [key, value] of Object.entries(this.query)) {
+        if (value === query) {
+          res = key;
+          break;
+        }
+      }
+    }
+    return res;
+  },
+
 }

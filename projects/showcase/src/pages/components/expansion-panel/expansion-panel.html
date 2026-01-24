@@ -1,6 +1,6 @@
 <h5 class="mb-3">Expansion Panel</h5>
 
-<cute-expansion-panel style="width: 50%">
+<cute-expansion-panel class="col col-md-8">
   <cute-expansion-panel-header>
     <cute-panel-title>
       Expansion header
@@ -10,7 +10,12 @@
     </cute-panel-description>
   </cute-expansion-panel-header>
 
-  <h3>Expansion content</h3>
+  <h6>Expansion content</h6>
+  <p>It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element.</p>
+  <button cuteButton="flat-button" color="primary">
+    Share
+    <cute-icon iconPositionEnd>share-fill</cute-icon>
+  </button>
 
 </cute-expansion-panel>
 
@@ -19,13 +24,14 @@
 
 <cute-vstack gap="3">
 
-  <cute-hstack gap="3">
+  <cute-hstack gap="3" class="align-items-start">
     <cute-checkbox #cbxMulti (change)="acc1.closeAll()">Multi</cute-checkbox>
     <cute-checkbox #cbxFlush>Flush borders</cute-checkbox>
     <cute-checkbox #cbxToggleBefore>Toggle before</cute-checkbox>
   </cute-hstack>
 
-  <cute-accordion #acc1="cuteAccordion" style="width: 50%"
+  <cute-accordion #acc1="cuteAccordion"
+                  class="col col-md-8"
                   [multi]="cbxMulti.checked"
                   [displayMode]="cbxFlush.checked ? 'flush' : 'default'"
                   [togglePosition]="cbxToggleBefore.checked ? 'before' : 'after'"
