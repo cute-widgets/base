@@ -1,20 +1,23 @@
-<h5>Select</h5>
+<h5 componentHeader>Select</h5>
 
 <cute-vstack gap="3">
 
   <cute-hstack gap="3" class="align-items-end">
-    <cute-select id="selectEx"
-                 style="width: 350px"
-                 placeholder="Pick Your Holiday Destination"
-                 value="4"
-    >
-      <cute-option value="1">Paris</cute-option>
-      <cute-option value="2">Mauritius</cute-option>
-      <cute-option value="3" disabled >Singapore</cute-option>
-      <cute-option value="4">Malaysia</cute-option>
-      <cute-option value="5">Goa</cute-option>
-      <cute-option value="6">Thailand</cute-option>
-    </cute-select>
+    <cute-form-field subscriptSizing="dynamic">
+      <cute-label>Location</cute-label>
+      <cute-select id="selectEx"
+                   style="width: 350px"
+                   placeholder="Pick Your Holiday Destination"
+                   value="4"
+      >
+        <cute-option value="1">Paris</cute-option>
+        <cute-option value="2">Mauritius</cute-option>
+        <cute-option value="3" disabled >Singapore</cute-option>
+        <cute-option value="4">Malaysia</cute-option>
+        <cute-option value="5">Goa</cute-option>
+        <cute-option value="6">Thailand</cute-option>
+      </cute-select>
+    </cute-form-field>
 
     <cute-form-field style="width: 350px" subscriptSizing="dynamic">
       <cute-label>Toppings</cute-label>
@@ -35,7 +38,7 @@
 
   </cute-hstack>
 
-  <cute-hstack gap="5" class="align-items-end">
+  <cute-hstack gap="3" class="align-items-end">
     <div>
       <p>
         <cute-checkbox [formControl]="disableSelect">Disable select</cute-checkbox>
@@ -51,9 +54,9 @@
         </cute-select>
       </cute-form-field>
     </div>
-    <div>
-      <h6>native html select</h6>
-      <cute-form-field>
+    <div class="w-50">
+      <h6>native select</h6>
+      <cute-form-field class="w-100">
         <cute-label>Choose an option</cute-label>
         <select cuteNativeControl [disabled]="disableSelect.value||false" placeholder="Choose your auto...">
           <option value="" selected></option>
@@ -69,7 +72,7 @@
   </cute-hstack>
 
   <h6>Select with reset option</h6>
-  <cute-hstack gap="5">
+  <cute-hstack gap="3">
     <div>
       <h6>cute-select</h6>
       <cute-form-field>
@@ -84,7 +87,7 @@
 
     </div>
     <div>
-      <h6>native html select</h6>
+      <h6>native select</h6>
       <cute-form-field>
         <cute-label>Select your car</cute-label>
         <select cuteNativeControl id="mySelectId">
@@ -99,7 +102,7 @@
     </div>
   </cute-hstack>
 
-  <cute-vstack gap="3" class="w-25">
+  <cute-vstack gap="3" style="width: 350px">
     <cute-vstack>
       <h6>Selection of nullable options</h6>
       <cute-form-field>

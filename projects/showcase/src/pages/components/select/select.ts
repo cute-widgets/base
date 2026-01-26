@@ -5,6 +5,7 @@ import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CuteCheckboxModule} from '@cute-widgets/base/checkbox';
 import {CuteInputModule} from '@cute-widgets/base/input';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 interface Pokemon {
   value: string;
@@ -28,6 +29,7 @@ interface PokemonGroup {
     CuteVStack,
     CuteSelectModule,
     CuteFormFieldModule,
+    ComponentHeader,
   ],
   templateUrl: './select.html',
   styleUrl: './select.scss',

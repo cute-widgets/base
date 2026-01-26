@@ -9,6 +9,9 @@
 import {booleanAttribute, Directive, Input} from "@angular/core";
 import {CuteNav, CUTE_NAV} from "@cute-widgets/base/core/nav";
 
+/**
+ * A full-height and lightweight navigation container for including other navigation components.
+ */
 @Directive({
   selector: '[cuteNavbarNav], [cute-navbar-nav]',
   exportAs: 'cuteNavbarNav',

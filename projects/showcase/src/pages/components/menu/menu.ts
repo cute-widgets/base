@@ -5,6 +5,7 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteDividerModule} from '@cute-widgets/base/divider';
 import {CuteMenuItem} from '@cute-widgets/base/menu';
 import {CuteIconModule} from '@cute-widgets/base/icon';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-menu',
@@ -15,6 +16,7 @@ import {CuteIconModule} from '@cute-widgets/base/icon';
     CuteButtonModule,
     CuteIconModule,
     CuteDividerModule,
+    ComponentHeader,
   ],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',

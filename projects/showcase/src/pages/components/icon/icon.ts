@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {CuteIcon, CuteIconRegistry} from '@cute-widgets/base/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 const THUMBUP_ICON = `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
@@ -17,7 +18,8 @@ const THUMBUP_ICON = `
   imports: [
     CuteIcon,
     CuteHStack,
-    CuteVStack
+    CuteVStack,
+    ComponentHeader
   ],
   templateUrl: './icon.html',
   styleUrl: './icon.scss',

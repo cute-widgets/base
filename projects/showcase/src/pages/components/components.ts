@@ -19,6 +19,7 @@ import {BreakpointState} from '@angular/cdk/layout';
 import {bsBreakpoints} from '@cute-widgets/base/core';
 import {CuteButton} from '@cute-widgets/base/button';
 import {CuteClickOutside} from '@cute-widgets/base/core/directives';
+import {CuteToolbar} from '@cute-widgets/base/toolbar';
 
 @Component({
   selector: 'app-components',
@@ -34,6 +35,7 @@ import {CuteClickOutside} from '@cute-widgets/base/core/directives';
     CuteContainer,
     CuteButton,
     CuteClickOutside,
+    CuteToolbar,
     //AppFooter,
     // RouterLinkActive,
     // RouterOutlet

@@ -2,13 +2,15 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteProgressBar, CuteProgressBarModule} from '@cute-widgets/base/progress';
 import {ThemeColor} from '@cute-widgets/base/core';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-progress-bar',
   imports: [
     CuteVStack,
     CuteProgressBarModule,
-    CuteHStack
+    CuteHStack,
+    ComponentHeader
   ],
   templateUrl: './progress-bar.html',
   styleUrl: './progress-bar.scss',

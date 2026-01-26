@@ -9,6 +9,7 @@ import {ThemeColor} from '@cute-widgets/base/core';
 import {RelativeSize5} from '@cute-widgets/base/core/types';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {FormsModule} from '@angular/forms';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-button-page',
@@ -21,7 +22,8 @@ import {FormsModule} from '@angular/forms';
     CuteProgressSpinner,
     CuteTabsModule,
     CuteCheckbox,
-    FormsModule
+    FormsModule,
+    ComponentHeader
   ],
   templateUrl: './button.html',
   styleUrl: './button.scss',

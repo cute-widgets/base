@@ -9,6 +9,7 @@ import {Observable, of} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {map, startWith} from 'rxjs/operators';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-autocomplete',
@@ -22,7 +23,8 @@ import {CuteCheckbox} from '@cute-widgets/base/checkbox';
     AsyncPipe,
     CuteVStack,
     CuteCheckbox,
-    FormsModule
+    FormsModule,
+    ComponentHeader
   ],
   templateUrl: './autocomplete.html',
   styleUrl: './autocomplete.scss',

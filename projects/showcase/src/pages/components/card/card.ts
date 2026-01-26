@@ -4,6 +4,7 @@ import {CuteButton} from '@cute-widgets/base/button';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteListModule} from '@cute-widgets/base/list';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-card',
@@ -14,6 +15,7 @@ import {CuteCheckbox} from '@cute-widgets/base/checkbox';
     CuteListModule,
     CuteCheckbox,
     CuteVStack,
+    ComponentHeader,
   ],
   templateUrl: './card.html',
   styleUrl: './card.scss',

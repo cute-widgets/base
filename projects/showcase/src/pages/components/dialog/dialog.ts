@@ -4,6 +4,7 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteTooltipModule} from '@cute-widgets/base/tooltip';
 import {CuteDialog, CuteDialogConfig } from '@cute-widgets/base/dialog';
 import {DialogExampleComponent} from './dialog-example.component';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 export interface DialogData {
   animal: string;
@@ -15,6 +16,7 @@ export interface DialogData {
   imports: [
     CuteHStack,
     CuteButtonModule,
+    ComponentHeader,
     //CuteTooltipModule
   ],
   templateUrl: './dialog.html',

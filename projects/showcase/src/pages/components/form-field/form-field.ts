@@ -13,6 +13,7 @@ import {merge} from 'rxjs';
 import {CuteCardModule} from '@cute-widgets/base/card';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {CuteTooltip} from '@cute-widgets/base/tooltip';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-form-field',
@@ -30,6 +31,7 @@ import {CuteTooltip} from '@cute-widgets/base/tooltip';
     CuteCheckbox,
     CuteHStack,
     CuteTooltip,
+    ComponentHeader,
   ],
   templateUrl: './form-field.html',
   styleUrl: './form-field.scss',

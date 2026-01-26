@@ -5,9 +5,9 @@
   <cute-list flushBorders="partial">
     @for (item of items; track $index) {
       <cute-list-item>
-        <cute-icon cuteListItemIcon color="secondary" [fontIcon]="item.icon"></cute-icon>
+        <cute-icon cuteListItemIcon color="secondary" [fontIcon]="item.icon" class="pe-1"></cute-icon>
         <span cuteListItemTitle>{{item.name}}</span>
-        <div #divSum cuteListItemLine class="text-secondary-emphasis" [innerHTML]="item.summary | safe"></div>
+        <div #divSum class="text-secondary-emphasis" [innerHTML]="item.summary | safe"></div>
       </cute-list-item>
     }
   </cute-list>

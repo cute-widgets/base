@@ -16,13 +16,31 @@
       <cute-navbar-content #navbarContent="cuteNavbarContent" >
         <ul cute-navbar-nav class="me-auto mb-2 mb-lg-0">
           <li cute-nav-item>
-            <a cute-nav-link routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+            <a cute-nav-link routerLink="/home"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: true}"
+               (click)="navbarContent.close()"
+            >
+              Home
+            </a>
           </li>
           <li cute-nav-item>
-            <a cute-nav-link routerLink="/components/overview" routerLinkActive="active">Components</a>
+            <a cute-nav-link
+               routerLink="/components/overview"
+               routerLinkActive="active"
+               (click)="navbarContent.close()"
+            >
+              Components
+            </a>
           </li>
           <li cute-nav-item>
-            <a cute-nav-link routerLink="/pro-components" routerLinkActive="active">PRO Components</a>
+            <a cute-nav-link
+               routerLink="/pro-components"
+               routerLinkActive="active"
+               (click)="navbarContent.close()"
+            >
+              PRO Components
+            </a>
           </li>
         </ul>
 
@@ -41,7 +59,7 @@
           </cute-button-toggle>
         </cute-button-toggle-group>
 
-        <a cuteButton color="primary-emphasis" class="ms-2" [href]="githubURL">
+        <a cuteButton color="secondary-emphasis" class="ms-2" [href]="githubURL" (click)="navbarContent.close()">
           <cute-icon>github</cute-icon>
           GitHub
         </a>

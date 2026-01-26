@@ -1,4 +1,4 @@
-<h5 class="mb-3">Snack-bar</h5>
+<h5 componentHeader>Snack-bar</h5>
 
 <cute-vstack gap="3">
   <cute-hstack gap="3">
@@ -23,7 +23,7 @@
 
   <cute-hstack gap="3">
     <cute-form-field>
-      <cute-label>Snack bar duration (seconds)</cute-label>
+      <cute-label>Duration (seconds)</cute-label>
       <input type="number" [(ngModel)]="duration" cuteInput>
     </cute-form-field>
     <cute-form-field>
@@ -40,7 +40,7 @@
     </cute-form-field>
   </cute-hstack>
 
-  <cute-vstack gap="2" class="w-25">
+  <cute-vstack gap="2" class="col-xs-12 col-md-3">
     <button cuteButton="flat-button" color="secondary"
             (click)="openSnackBar()" aria-label="Show an example snack-bar">
       Pool party!

@@ -3,6 +3,7 @@ import {CuteRadioModule} from '@cute-widgets/base/radio';
 import {CuteTooltipModule} from '@cute-widgets/base/tooltip';
 import {CuteCardModule} from '@cute-widgets/base/card';
 import {CuteVStack} from '@cute-widgets/base/layout';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-radio-button',
@@ -11,6 +12,7 @@ import {CuteVStack} from '@cute-widgets/base/layout';
     CuteTooltipModule,
     CuteCardModule,
     CuteVStack,
+    ComponentHeader,
   ],
   templateUrl: './radio-button.html',
   styleUrl: './radio-button.scss',

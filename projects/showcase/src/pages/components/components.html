@@ -1,12 +1,18 @@
 @let LINK_CLASSES = "ms-4 text-body-secondary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover";
 
 @if (isScreenMedium()) {
-  <div class="mt-2 align-self-center">
+  <cute-toolbar class="justify-content-center">
     <button cuteButton color="primary-emphasis" (click)="$event.stopImmediatePropagation(); toggleSidenav()">
       <cute-icon color="primary">layout-sidebar-inset</cute-icon>
       Menu...
     </button>
-  </div>
+  </cute-toolbar>
+<!--  <div class="mt-2 align-self-center">-->
+<!--    <button cuteButton color="primary-emphasis" (click)="$event.stopImmediatePropagation(); toggleSidenav()">-->
+<!--      <cute-icon color="primary">layout-sidebar-inset</cute-icon>-->
+<!--      Menu...-->
+<!--    </button>-->
+<!--  </div>-->
 }
 
 <cute-sidenav-container [breakpoint]="['md','lg']"
@@ -48,7 +54,7 @@
     <!--      <div class="b-example-divider cute-vr"></div>-->
   </cute-sidenav>
 
-  <cute-sidenav-content #content>
+  <cute-sidenav-content #content class="py-0 py-lg-3">
 
     <cute-container class="router-outlet-wrapper">
       <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>

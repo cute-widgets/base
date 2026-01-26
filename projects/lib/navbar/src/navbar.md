@@ -22,9 +22,9 @@ Navbars come with built-in support for a handful of subcomponents. Choose from t
 * `[cuteNavbarNav]` for a full-height and lightweight navigation (including support for dropdowns).
 * `[cuteNavbarToggler]` for collapse/expand our `<cute-navbar-content>` and other navigation toggling behaviors.
 * `[cuteNavbarText]` for adding vertically centered strings of text.
-* Use **Bootstrap**'s flex and spacing utilities for any form controls and actions.
-* Use `<cute-navbar-content>` component for grouping and hiding navbar contents by a parent breakpoint.
-* Add an optional .navbar-nav-scroll to set a max-height and scroll expanded navbar content.
+* Use flex and spacing utilities from **Bootstrap** for any form controls and actions.
+* Use `<cute-navbar-content>` component - our `CuteCollapse` extension for grouping and hiding navbar contents by a parent breakpoint.
+* Apply `scrollable` attribute to `[cuteNavbarNav]` to set a max-height and scroll expanded navbar content.
 
 ## Brand
 The `cuteNavbarBrand` directive can be applied to most elements, but an _anchor_ works best, as some elements might require utility classes or custom styles.

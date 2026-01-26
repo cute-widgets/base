@@ -4,6 +4,7 @@ import {CuteInputModule} from '@cute-widgets/base/input';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CuteSliderModule} from '@cute-widgets/base/slider';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-slider',
@@ -13,7 +14,8 @@ import {CuteCheckbox} from '@cute-widgets/base/checkbox';
     CuteInputModule,
     CuteSliderModule,
     FormsModule,
-    CuteCheckbox
+    CuteCheckbox,
+    ComponentHeader
   ],
   templateUrl: './slider.html',
   styleUrl: './slider.scss',

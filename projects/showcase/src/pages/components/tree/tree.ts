@@ -4,6 +4,7 @@ import {CuteTreeModule} from '@cute-widgets/base/tree';
 import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {TreeDynamicExample} from './dynamic/tree-dynamic-example';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 /**
  * Food data with nested structure.
@@ -44,6 +45,7 @@ const TREE_DATA: FoodNode[] = [
     CuteIconModule,
     CuteVStack,
     TreeDynamicExample,
+    ComponentHeader,
   ],
   templateUrl: './tree.html',
   styleUrl: './tree.scss',

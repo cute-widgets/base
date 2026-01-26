@@ -12,6 +12,9 @@
 import {Directive} from "@angular/core";
 import {CuteCollapseTrigger} from "@cute-widgets/base/collapse";
 
+/**
+ * A trigger element for expand/collapse the `cute-navbar-content`.
+ */
 @Directive({
     selector: '[cuteNavbarToggler], [cute-navbar-toggler]',
     exportAs: 'cuteNavbarToggler',

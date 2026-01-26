@@ -4,6 +4,7 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteCardModule} from '@cute-widgets/base/card';
 import {CuteCollapseModule} from '@cute-widgets/base/collapse';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-collapse',
@@ -14,6 +15,7 @@ import {CuteCheckbox} from '@cute-widgets/base/checkbox';
     CuteCollapseModule,
     CuteVStack,
     CuteCheckbox,
+    ComponentHeader,
 
   ],
   templateUrl: './collapse.html',

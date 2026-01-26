@@ -12,6 +12,7 @@ import {CuteIconModule} from '@cute-widgets/base/icon';
 import {FormsModule} from '@angular/forms';
 import {CuteInputModule} from '@cute-widgets/base/input';
 import {ThemeColor} from '@cute-widgets/base/core';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-snack-bar',
@@ -23,6 +24,7 @@ import {ThemeColor} from '@cute-widgets/base/core';
     CuteSelectModule,
     CuteButtonModule,
     CuteVStack,
+    ComponentHeader,
   ],
   templateUrl: './snack-bar.html',
   styleUrl: './snack-bar.scss',

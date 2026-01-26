@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {CuteButtonModule} from '@cute-widgets/base/button';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-input',
@@ -15,7 +16,8 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
     CuteIconModule,
     CuteButtonModule,
     CuteVStack,
-    CuteHStack
+    CuteHStack,
+    ComponentHeader
   ],
   templateUrl: './input.html',
   styleUrl: './input.scss',

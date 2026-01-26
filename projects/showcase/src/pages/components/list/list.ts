@@ -5,6 +5,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {CuteDivider} from '@cute-widgets/base/divider';
 import {CuteIcon} from '@cute-widgets/base/icon';
 import {DatePipe} from '@angular/common';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 interface Shoes {
   value: string;
@@ -26,6 +27,7 @@ export interface Section {
     CuteDivider,
     CuteIcon,
     DatePipe,
+    ComponentHeader,
     //CuteButton
   ],
   templateUrl: './list.html',

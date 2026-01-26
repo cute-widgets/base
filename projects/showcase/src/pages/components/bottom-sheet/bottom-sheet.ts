@@ -3,12 +3,14 @@ import {CuteButton} from '@cute-widgets/base/button';
 import {CuteListModule} from '@cute-widgets/base/list';
 import {CuteBottomSheetModule, CuteBottomSheet, CuteBottomSheetRef} from '@cute-widgets/base/bottom-sheet';
 import {CuteIcon} from '@cute-widgets/base/icon';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-bottom-sheet',
   imports: [
     CuteButton,
-    CuteIcon
+    CuteIcon,
+    ComponentHeader
   ],
   templateUrl: './bottom-sheet.html',
   styleUrl: './bottom-sheet.scss',

@@ -4,10 +4,11 @@ import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {CuteButton} from '@cute-widgets/base/button';
 import {CuteIconModule} from '@cute-widgets/base/icon';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-expansion-panel',
-  imports: [CuteExpansionModule, CuteVStack, CuteCheckbox, CuteHStack, CuteButton, CuteIconModule],
+  imports: [CuteExpansionModule, CuteVStack, CuteCheckbox, CuteHStack, CuteButton, CuteIconModule, ComponentHeader],
   templateUrl: './expansion-panel.html',
   styleUrl: './expansion-panel.scss',
 })

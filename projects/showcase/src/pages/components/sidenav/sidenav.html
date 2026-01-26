@@ -1,4 +1,4 @@
-<h5 class="mb-3"> Sidenav </h5>
+<h5 componentHeader> Sidenav </h5>
 
 <cute-vstack gap="3">
   <cute-hstack gap="4">
@@ -32,9 +32,9 @@
 
   </cute-hstack>
 
-  <cute-hstack gap="2">
+  <div class="d-flex gap-3 flex-column flex-sm-row">
     <!-- #1 -->
-    <cute-vstack class="w-50">
+    <cute-vstack>
       <h6>Autosize sidenav</h6>
       <cute-drawer-container class="example-container" autosize>
         <cute-drawer #drawer class="example-sidebar" mode="side">
@@ -87,7 +87,7 @@
 
     </cute-vstack>
 
-  </cute-hstack>
+  </div>
 
 </cute-vstack>
 

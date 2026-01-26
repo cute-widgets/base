@@ -4,6 +4,7 @@ import {CuteChipsModule} from '@cute-widgets/base/chips';
 import {ThemeColor} from '@cute-widgets/base/core';
 import {ChipsFromControlComponent} from './examples/chips-from-control.component';
 import {ChipsAutocompleteComponent} from './examples/chips-autocomplete/chips-autocomplete.component';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 
 export interface ChipColor {
@@ -18,6 +19,7 @@ export interface ChipColor {
     CuteChipsModule,
     ChipsFromControlComponent,
     ChipsAutocompleteComponent,
+    ComponentHeader,
   ],
   templateUrl: './chips.html',
   styleUrl: './chips.scss',

@@ -5,6 +5,7 @@ import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {CuteSelectModule} from '@cute-widgets/base/select';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {CuteButtonModule} from '@cute-widgets/base/button';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-tooltip',
@@ -15,6 +16,7 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
     CuteFormFieldModule,
     CuteSelectModule,
     CuteButtonModule,
+    ComponentHeader,
   ],
   templateUrl: './tooltip.html',
   styleUrl: './tooltip.scss',

@@ -9,6 +9,7 @@ import {CuteDivider} from '@cute-widgets/base/divider';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteSelectModule} from '@cute-widgets/base/select';
 import {ThemeColor} from '@cute-widgets/base/core';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 @Component({
   selector: 'app-paginator',
@@ -23,6 +24,7 @@ import {ThemeColor} from '@cute-widgets/base/core';
     CuteVStack,
     CuteHStack,
     CuteSelectModule,
+    ComponentHeader,
   ],
   templateUrl: './paginator.html',
   styleUrl: './paginator.scss',

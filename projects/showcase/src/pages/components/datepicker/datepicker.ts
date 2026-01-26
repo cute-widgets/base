@@ -7,6 +7,7 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteInputModule} from '@cute-widgets/base/input';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {CuteCardModule} from '@cute-widgets/base/card';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 const today = new Date();
 const month = today.getMonth();
@@ -25,6 +26,7 @@ const year = today.getFullYear();
     CuteIconModule,
     CuteCardModule,
     CuteDatepickerModule,
+    ComponentHeader,
   ],
   templateUrl: './datepicker.html',
   styleUrl: './datepicker.scss',

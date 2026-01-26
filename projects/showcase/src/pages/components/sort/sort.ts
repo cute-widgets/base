@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {CuteHStack} from '@cute-widgets/base/layout';
 import {CuteSortModule, Sort} from '@cute-widgets/base/sort';
+import {ComponentHeader} from '../../../shared/utils/component-header';
 
 export interface Dessert {
   calories: number;
@@ -15,6 +16,7 @@ export interface Dessert {
   imports: [
     CuteHStack,
     CuteSortModule,
+    ComponentHeader,
   ],
   templateUrl: './sort.html',
   styleUrl: './sort.scss',
