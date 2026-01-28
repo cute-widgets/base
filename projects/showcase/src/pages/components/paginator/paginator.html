@@ -6,7 +6,6 @@
                 middleSectionStyle="5-pages"
                 [pageSizeOptions]="[5, 10, 25, 100]"
                 [showFirstLastButtons]="true"
-                class="w-50"
                 aria-label="Select page">
 </cute-paginator>
 
@@ -61,11 +60,13 @@
       </cute-select>
 
       <label>Alignment</label>
-      <cute-select #selAlign value="between">
+      <cute-select #selAlign value="start">
         <cute-option value="start">Start</cute-option>
         <cute-option value="end">End</cute-option>
         <cute-option value="center">Center</cute-option>
         <cute-option value="between">Between</cute-option>
+        <cute-option value="around">Around</cute-option>
+        <cute-option value="evenly">Evenly</cute-option>
       </cute-select>
 
       <cute-label>Color</cute-label>

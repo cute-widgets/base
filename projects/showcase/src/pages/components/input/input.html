@@ -1,8 +1,8 @@
 <h5 componentHeader>Input</h5>
 
-<cute-vstack gap="2">
+<cute-vstack gap="3">
 
-  <cute-form-field class="example-form-field" hideValidStyle>
+  <cute-form-field class="example-form-field" hideValidStyle subscriptSizing="dynamic">
     <cute-label>Clearable input</cute-label>
     <input cuteInput type="text" [(ngModel)]="value">
     <button cuteSuffix cuteButton="outline-button" color="secondary" (click)="value ? value='' : undefined">
@@ -15,16 +15,20 @@
   </cute-form-field>
 
 
-  <h6>File input</h6>
-  <cute-vstack gap="1">
-    <input #inpFile cuteInput type="file" class="example-file-input">
-    <span class="ms-3">File: <b>{{inpFile.value}}</b></span>
-  </cute-vstack>
+  <div>
+    <h6>File input</h6>
+    <cute-vstack gap="1">
+      <input #inpFile cuteInput type="file" class="example-file-input">
+      <span class="ms-3">File: {{inpFile.value}}</span>
+    </cute-vstack>
+  </div>
 
-  <h6>Color input</h6>
-  <cute-hstack gap="3">
-    <input #inpColor cuteInput type="color" value="#563d7c" title="Choose your color">
-    <span>Color: <b>{{inpColor.value}}</b></span>
-  </cute-hstack>
+  <div>
+    <h6>Color input</h6>
+    <cute-hstack gap="3">
+      <input #inpColor cuteInput type="color" value="#563d7c" title="Choose your color">
+      <span>Color: <strong>{{inpColor.value}}</strong></span>
+    </cute-hstack>
+  </div>
 
 </cute-vstack>

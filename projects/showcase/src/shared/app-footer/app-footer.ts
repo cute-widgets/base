@@ -4,6 +4,7 @@ import {CuteIcon} from '@cute-widgets/base/icon';
 import {CuteButton} from '@cute-widgets/base/button';
 import {CuteNavModule} from '@cute-widgets/base/core/nav';
 import {RouterModule} from '@angular/router';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-footer',
@@ -13,10 +14,13 @@ import {RouterModule} from '@angular/router';
     CuteNavModule,
     CuteIcon,
     CuteButton,
+    DatePipe,
   ],
   templateUrl: './app-footer.html',
   styleUrl: './app-footer.scss',
 })
 export class AppFooter {
+
+  protected currentDate = new Date();
 
 }

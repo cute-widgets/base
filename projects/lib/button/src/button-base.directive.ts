@@ -88,7 +88,7 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
 
   @ContentChildren(CuteIcon) private _icons: QueryList<CuteIcon> | undefined;
 
-  /** Button's appearance style in the following format: `{style}-button` */
+  /** Button's appearance style in the following format: `{style}-button`. */
   @Input("cuteButton") //, transform: (v: any): ButtonStyle=>{return !v ? "base-button" : v}})
   get inputButtonStyle(): CuteButtonStyle {return this._inputButtonStyle;}
   set inputButtonStyle(value: CuteButtonStyle | undefined | "") {
@@ -114,13 +114,14 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
   private _inputButtonStyle: CuteButtonStyle = "base-button";
   private _buttonStyle: string = "base";
 
-  /** Relative size of the Button */
+  /** Relative size of the Button. */
   @Input() magnitude: RelativeSize7 | undefined;
 
-  /** Whether to disable text wrapping */
-  @Input() nowrap: boolean = false;
+  /** Whether to enable label wrapping. */
+  @Input({transform: booleanAttribute})
+  wrapLabel: boolean = false;
 
-  /** Whether to disable the ripple effect on button clicking */
+  /** Whether to disable the ripple effect on button clicking. */
   @Input()
   get disableRipple(): boolean {return this._ripple.disabled}
   set disableRipple(value: boolean) { this._ripple.disabled = value; }

@@ -9,6 +9,9 @@
     flex: 1;
     overflow: hidden;
     align-items: start;
+    // We want to get the overall height of the expansion panel header with single row as in Bootstrap examples.
+    // Our height is 56px, in Bootstrap - 52px. So, do following:
+    margin-top: -4px;
   }
 
   .cute-expansion-panel-header-title,
@@ -35,9 +38,9 @@
   .accordion-button {
     align-items: start;
 
-    &:after {
-      margin-top: 3px;
-    }
+    //&:after {
+    //  margin-top: 3px;
+    //}
 
     &:disabled:after {
       filter: opacity(0.35);

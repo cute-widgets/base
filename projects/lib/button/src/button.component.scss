@@ -43,10 +43,12 @@
     //align-items: center;
     //gap: 0.25rem;
 
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    &:not(.cute-button-label__wrap) {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     // adjust height of .badge elements (if any)
     & .badge {

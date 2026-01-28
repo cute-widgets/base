@@ -28,7 +28,7 @@ import {CuteCard} from "./card.component";
     '[class]': "'card-img'+(position=='top'||position=='bottom' ? '-'+position : '')",
     //'[class.cute-card-image-cover]': 'position=="cover"',
     '[class.img-fluid]': 'position=="fluid"',
-    '[style.border-radius]': "position=='top' && card?._header ? 0 : (position=='bottom' && card?._footer ? 0 : undefined)",
+    '[style.border-radius]': "position=='top' && card?._header() ? 0 : (position=='bottom' && card?._footer() ? 0 : undefined)",
     '[style.--cute-card-image-height]': 'height>=0 ? height+"px" : undefined'
   },
   standalone: true,

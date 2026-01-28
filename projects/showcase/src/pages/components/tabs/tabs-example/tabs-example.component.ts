@@ -24,7 +24,7 @@ import {CuteNav} from '@cute-widgets/base/core/nav';
   imports: [
     DatePipe,
     CuteTabsModule,
-    CuteHStack,
+    // CuteHStack,
     CuteDivider,
     CuteSelectModule,
     CuteVStack,

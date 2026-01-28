@@ -1,7 +1,9 @@
 .cute-paginator {
   display: flex;
+  flex-wrap: wrap-reverse;
   max-width: 100%;
   align-items: center;
+  justify-content: center;  // Mobile first
   gap: 0.5rem;
 
   .page-size {
@@ -23,8 +25,15 @@
       width: 6rem;
       padding: 0 .25rem;
     }
+
   }
 
+  &[magnitude='small'] .page-size-value {
+    font-size: 0.875rem;
+  }
+  &[magnitude='large'] .page-size-value {
+    font-size: 1.25rem;
+  }
 
   // Navigation list
   .pagination {
@@ -84,7 +93,7 @@
       text-align: center;
       text-overflow: ellipsis;
       text-decoration: none;
-      min-width: 7rem;
+      min-width: 4em;
       padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
       font-size: var(--bs-pagination-font-size);
       //color: var(--bs-pagination-color);

@@ -1,6 +1,9 @@
-<cute-hstack class="align-items-start" gap="3">
-  <cute-vstack class="w-50 gap-3">
-    <cute-select #position [(value)]="tabEdge">
+<cute-vstack gap="3">
+
+  <h6>Example #1</h6>
+
+  <cute-vstack class="gap-3">
+    <cute-select #position [(value)]="tabEdge" style="width: 350px;">
       <cute-option value="top">Top</cute-option>
       <cute-option value="bottom">Bottom</cute-option>
       <cute-option value="left">Left</cute-option>
@@ -11,7 +14,7 @@
 
     <cute-checkbox [(ngModel)]="preserveContent">Preserve content</cute-checkbox>
     <cute-checkbox [(ngModel)]="stretchTabs">Stretch Tabs</cute-checkbox>
-    <button #b1 cute-button (click)="openTab()">Open new Tab</button>
+    <button #b1 cute-button (click)="openTab()" style="max-width: 600px;">Open new Tab</button>
 
     <!-- Basic use of the tab group -->
     <cute-tab-group #dynTab
@@ -19,7 +22,7 @@
                     [preserveContent]="preserveContent"
                     [cute-stretch-tabs]="stretchTabs"
                     [dragEnabled]="false"
-                    style="height: 250px"
+                    style="height: 250px; max-width: 600px"
                     (selectedIndexChange)="log('(Tabs) indexChange:', $event)"
                     (selectedTabChange)="log('(Tabs) tabChange:', $event)"
                     (selectedTabChanging)="log('(Tabs) tabChanging:', $event)"
@@ -54,7 +57,11 @@
     </cute-tab-group>
   </cute-vstack>
 
-  <cute-tab-group #grp1 class="w-50" underlineTabs cute-stretch-tabs="true">
+  <cute-divider lineStyle="dashed"></cute-divider>
+
+  <h6>Example #2</h6>
+
+  <cute-tab-group #grp1 underlineTabs cute-stretch-tabs="true" style="height: 250px; max-width: 600px;">
     <!-- Вкладка с контекстом для заголовка и содержимого -->
     <cute-tab [contentTemplate]="ctxContent"
               [contentContext]="{ message: 'Hello from context!' }">
@@ -78,7 +85,7 @@
     </cute-tab>
   </cute-tab-group>
 
-</cute-hstack>
+</cute-vstack>
 
 
 <!-- Шаблон заголовка с контекстом -->

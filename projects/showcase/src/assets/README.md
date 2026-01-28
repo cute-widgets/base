@@ -4,7 +4,7 @@
 All of its components are implemented as native directives and styled using the design and utility
 classes of the [Bootstrap 5+](https://getbootstrap.com/) framework. At the same time, the internal implementation and external API of 
 core **Cute Widgets** are based on the source code of the popular MIT-licensed [Angular Material](https://material.angular.dev/) 
-library. In a sense, **[@cute-widgets/base](https://github.com/cute-widgets/base)** is a complete reincarnation of the latter.
+library. In a sense, **CuteWidgets** is a complete reincarnation of the latter.
 
 ### Architecture and Design Principles
 
@@ -17,7 +17,6 @@ Components adopt structural and behavioral patterns from **Angular Material**, i
 - Accessibility attributes (ARIA roles, labels, states)
 - Responsive behavior out of the box
 - Seamless integration with **Bootstrap** classes and layout
-
 
 ### Highlights
 
@@ -103,17 +102,17 @@ export class AppComponent {}
 
 ### Why @cute-widgets/base?
 
-###### ✅ Simpler than Angular Material
+[ x ] _Simpler than Angular Material_
 
 Angular Material is powerful but often too heavy for simple projects.
-`@cute-widgets/base` offers:
+Cute Widgets offer:
 
 - Smaller bundle size
 - Fewer dependencies
 - More intuitive APIs
 - No mandatory theming engine
 
-###### ✅ Better than raw Bootstrap
+[ x ] _Better than raw Bootstrap_
 
 Bootstrap is great, but lacks true Angular integration.
 Our components:
@@ -123,7 +122,7 @@ Our components:
 - Have proper change detection
 - Emit events, not just DOM events
 
-###### ✅ Designed for Real Projects
+[ x ] _Designed for Real Projects_
 
 We focus on what developers actually need:
 
@@ -133,7 +132,7 @@ We focus on what developers actually need:
 - Supporting i18n and RTL
 - Great developer experience
 
-###### ✅ All components:
+[ x ] _All components_:
 
 - Use standard Bootstrap classes (e.g., `.btn`, `.form-control`)
 - Are fully accessible (ARIA, keyboard support)

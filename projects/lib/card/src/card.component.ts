@@ -11,7 +11,7 @@
  */
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, contentChild,
   ContentChild,
   inject,
   Input,
@@ -61,9 +61,10 @@ export class CuteCard extends CuteLayoutControl {
   private _backgroundImage: string | undefined;
 
   /** `CuteCardHeader` element if it was defined in the `CuteCard` template. */
-  @ContentChild(CuteCardHeader, {descendants: false}) readonly _header: CuteCardHeader | undefined;
+  readonly _header = contentChild(CuteCardHeader, {descendants: false});
+
   /** `CuteCardFooter` element if it was defined in the `CuteCard` template. */
-  @ContentChild(CuteCardFooter, {descendants: false}) readonly _footer: CuteCardFooter | undefined;
+  readonly _footer = contentChild(CuteCardFooter, {descendants: false});
 
   constructor() {
     super();

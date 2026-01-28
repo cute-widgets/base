@@ -17,7 +17,7 @@ import {
   EventEmitter,
   forwardRef, inject,
   Input,
-  Output, SimpleChanges,
+  Output, signal, SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -113,15 +113,15 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
 
   /** Whether the checkbox is checked. */
   @Input({transform: booleanAttribute})
-  get checked(): boolean { return this._checked; }
+  get checked(): boolean { return this._checked(); }
   set checked(newVal: boolean) {
     if (newVal != this.checked) {
-      this._checked = newVal;
+      this._checked.set(newVal);
       //this.value = this.checked ? this.valueOn : this.valueOff;
       this.markForCheck();
     }
   }
-  private _checked: boolean = false;
+  private _checked = signal(false);
   /**
    * Whether the checkbox is indeterminate. This is also known as "mixed" mode and can be used to
    * represent a checkbox with three states, e.g. a checkbox that represents a nested list of
@@ -129,18 +129,18 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
    * set to false.
    */
   @Input({transform: booleanAttribute})
-  get indeterminate(): boolean { return this._indeterminate; }
+  get indeterminate(): boolean { return this._indeterminate(); }
   set indeterminate(value: boolean) {
-    const changed = value != this._indeterminate;
-    this._indeterminate = value;
+    const changed = value != this._indeterminate();
+    this._indeterminate.set(value);
 
     if (changed) {
-      this.indeterminateChange.emit(this._indeterminate);
+      this.indeterminateChange.emit(value);
     }
 
-    this._syncIndeterminate(this._indeterminate);
+    this._syncIndeterminate(value);
   }
-  private _indeterminate: boolean = false;
+  private _indeterminate= signal(false);
 
   /** Whether the label should appear after or before the checkbox. Defaults to 'after' */
   @Input()
@@ -191,7 +191,7 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
 
   override ngAfterViewInit() {
     super.ngAfterViewInit();
-    this._syncIndeterminate(this._indeterminate);
+    this._syncIndeterminate(this._indeterminate());
   }
 
   // Implemented as a part of Validator.
@@ -249,12 +249,12 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
       // When a user manually clicks on the checkbox, `indeterminate` is set to false.
       if (this.indeterminate && clickAction !== 'check') {
         Promise.resolve().then(() => {
-          this._indeterminate = false;
-          this.indeterminateChange.emit(this._indeterminate);
+          this._indeterminate.set(false);
+          this.indeterminateChange.emit(false);
         });
       }
 
-      this._checked = !this._checked;
+      this._checked.set( !this._checked() );
 
       // Emit our custom change event if the native input emitted one.
       // It is important to only emit it, if the native input triggered one, because
@@ -281,7 +281,7 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
     this._changeDetectorRef.detectChanges();
   }
 
-  protected _onInputChange(event: Event): void {
+  protected _onInteractionEvent(event: Event): void {
     // We always have to stop propagation on the change event.
     // Otherwise, the change event from the input element will bubble up and
     // emit its event object to the `change` output.

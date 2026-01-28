@@ -15,6 +15,7 @@ import {CuteOption} from '@cute-widgets/base/core/option';
 import {CuteSelect} from '@cute-widgets/base/select';
 import {FormsModule} from '@angular/forms';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {CuteExpansionModule} from '@cute-widgets/base/expansion';
 
 
 export interface PeriodicElement {
@@ -96,6 +97,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     CuteOption,
     CuteSelect,
     ComponentHeader,
+    CuteExpansionModule,
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',

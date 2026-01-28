@@ -38,7 +38,6 @@ import {toThemeColor} from "@cute-widgets/base/core";
     '[class.icon-link]': 'toThemeColor(color)=="link"',
     '[class.cute-button-expandable]': 'withAriaExpandedIndicator',
     //'[class.focus-ring]': 'buttonStyle=="base" && hasClass("cdk-keyboard-focused")', // See: CuteButtonBase.ngDoCheck()
-    '[class.nowrap]': 'nowrap',
     '[class.disabled]': '(_isAnchor || buttonStyle=="icon" || disabledInteractive) && disabled',
     '[class.cute-button-disabled-interactive]': 'disabledInteractive',
     '[class.cute-unthemed]': '!color',

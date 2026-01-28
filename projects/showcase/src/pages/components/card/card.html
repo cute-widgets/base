@@ -10,10 +10,10 @@
       <cute-checkbox #cbxFoot>With footer</cute-checkbox>
     </cute-hstack>
 
-    <div style="width: 18rem;">
+    <div style="width: 300px;">
       <cute-card [backgroundImage]="cbxBgImage.checked ? 'assets/images/unsplash-photo-2.jpg' : undefined" [attr.data-bs-theme]='cbxBgImage.checked ? "dark" : undefined'>
         @if (cbxHead.checked) {
-          <cute-card-header >
+          <cute-card-header>
             Header
           </cute-card-header>
         }

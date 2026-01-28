@@ -108,7 +108,8 @@ let nextUniqueId = 0;
     'class': 'cute-paginator',
     '[class.pe-none]': 'disabled',
     '[class.opacity-75]': 'disabled',
-    '[class]': 'alignment ? "justify-content-"+alignment : undefined',
+    '[class]': 'alignment ? "justify-content-"+alignment : "justify-content-sm-start"',
+    '[attr.magnitude]': 'magnitude',
     'tabindex': '-1',
     'role': 'group',
   },
@@ -189,11 +190,11 @@ export class CutePaginator extends CuteFocusableControl implements AfterViewChec
   @Input()
   middleSectionStyle: 'pages'|'5-pages'|'range'|'none' = 'range';
 
-  /** Changes the alignment of the pagination sections in the parent container */
+  /** Changes the alignment of the pagination sections in the parent container. */
   @Input()
-  alignment: 'start'|'end'|'center'|'between' = "between";
+  alignment: 'start'|'end'|'center'|'between'|'around'|'evenly'|undefined;
 
-  /** Changes the pagination's size to smaller or larger */
+  /** Changes the pagination's size to smaller or larger. */
   @Input() magnitude: RelativeSize | undefined;
 
   /** Used to configure the underlying `CuteSelect` inside the paginator. */
