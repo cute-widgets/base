@@ -1,67 +1,67 @@
 @let LINK_CLASSES = "ms-4 text-body-secondary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover";
 
-@if (isScreenMedium()) {
-  <cute-toolbar class="justify-content-center">
-    <button cuteButton color="primary-emphasis" (click)="$event.stopImmediatePropagation(); toggleSidenav()">
-      <cute-icon color="primary">layout-sidebar-inset</cute-icon>
-      Menu...
-    </button>
-  </cute-toolbar>
-<!--  <div class="mt-2 align-self-center">-->
-<!--    <button cuteButton color="primary-emphasis" (click)="$event.stopImmediatePropagation(); toggleSidenav()">-->
-<!--      <cute-icon color="primary">layout-sidebar-inset</cute-icon>-->
-<!--      Menu...-->
-<!--    </button>-->
-<!--  </div>-->
-}
+<div class="app-components-wrapper">
 
-<cute-sidenav-container [breakpoint]="['md','lg']"
-                        (breakpointState)="onBreakpointState($event)">
-  <cute-sidenav #sidenav
-                [mode]="isScreenMedium() ? 'over' : 'side'"
-                [opened]="!isScreenMedium()"
-                [fixedInViewport]="isScreenMedium()"
-                fixedTopGap="58"
-                disableClose
-                (cuteClickOutside)="isScreenMedium() && sidenav.opened ? sidenav.close() : null"
-  >
-    <nav cuteNav="pills" orientation="vertical" class="p-3 mb-auto">
-      <!-- Getting started -->
-      <span class="text-body-emphasis">
-        <cute-icon class="me-1" color="primary">book-half</cute-icon>
-        Getting started
-      </span>
+  @if (isScreenMedium()) {
+    <cute-toolbar class="justify-content-center">
+      <button cuteButton color="primary-emphasis" (click)="$event.stopImmediatePropagation(); toggleSidenav()">
+        <cute-icon color="primary">layout-sidebar-inset</cute-icon>
+        Menu...
+      </button>
+    </cute-toolbar>
+  }
 
-      <a cute-nav-link color="secondary-emphasis"
-         [class]="LINK_CLASSES"
-         (click)="isScreenMedium() ? sidenav.close() : null"
-         routerLink="overview"
-      >
-        Overview
-      </a>
+  <cute-sidenav-container class="app-components-sidenav-container"
+          [breakpoint]="['md','lg']"
+          (breakpointState)="onBreakpointState($event)">
+    <cute-sidenav #sidenav class="app-components-sidenav"
+                  [mode]="isScreenMedium() ? 'over' : 'side'"
+                  [opened]="!isScreenMedium()"
+                  [fixedInViewport]="isScreenMedium()"
+                  fixedTopGap="58"
+                  disableClose
+                  (cuteClickOutside)="isScreenMedium() && sidenav.opened ? sidenav.close() : null"
+    >
+      <div class="app-components-sidenav__nav">
+        <nav cuteNav="pills" orientation="vertical" class="p-3 mb-auto">
+          <!-- Getting started -->
+          <span class="text-body-emphasis">
+            <cute-icon class="me-1" color="primary">book-half</cute-icon>
+            Getting started
+          </span>
 
-      <!-- Components -->
-      <span class="text-body-emphasis">
-        <cute-icon color="primary" class="me-1">ui-radios</cute-icon>
-        Base Components
-      </span>
+          <a cute-nav-link routerLink="overview" routerLinkActive="active"
+             color="secondary-emphasis"
+             [class]="LINK_CLASSES"
+             (click)="sidenav.mode=='over' ? sidenav.close() : null"
+          >
+            Overview
+          </a>
 
-      @for (item of items; track item) {
-        <a cute-nav-link [class]="LINK_CLASSES" [routerLink]="item.id" (click)="isScreenMedium() ? sidenav.close() : null"> {{item.name}} </a>
-      }
+          <!-- Components -->
+          <span class="text-body-emphasis">
+            <cute-icon color="primary" class="me-1">ui-radios</cute-icon>
+            Base Components
+          </span>
 
-    </nav>
-    <!--      <div class="b-example-divider cute-vr"></div>-->
-  </cute-sidenav>
+          @for (item of items; track item) {
+            <a cute-nav-link [class]="LINK_CLASSES" [routerLink]="item.id" routerLinkActive="active" (click)="sidenav.mode=='over' ? sidenav.close() : null"> {{item.name}} </a>
+          }
+        </nav>
+      </div>
 
-  <cute-sidenav-content #content class="py-0 py-lg-3">
+    </cute-sidenav>
 
-    <cute-container class="router-outlet-wrapper">
-      <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>
-    </cute-container>
+    <cute-sidenav-content #content class="app-components-sidenav-content py-0 py-lg-3">
 
-  </cute-sidenav-content>
+      <cute-container class="app-components-router-outlet">
+        <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>
+      </cute-container>
 
-</cute-sidenav-container>
+    </cute-sidenav-content>
+
+  </cute-sidenav-container>
+
+</div>
 
 <!--<app-footer/>-->

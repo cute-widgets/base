@@ -1,20 +1,51 @@
-:host {
-
+app-components {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 
-  cute-sidenav {
-    width: 240px;
+  .app-components-sidenav-container {
+
+    .app-components-sidenav {
+      width: 240px;
+
+      &.cute-drawer-side {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+
+        & .app-components-sidenav__nav {
+          height: calc(100vh - var(--cute-navbar-height));
+        }
+      }
+
+      &.cute-drawer-over {
+        width: 220px;
+      }
+
+      .app-components-sidenav__nav {
+        height: 100%;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+          height: 4px;
+          width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: rgba(128, 128, 128, 0.26);
+        }
+      }
+
+    }
+
+    .app-components-sidenav-content {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
   }
 
-  cute-sidenav-content {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .router-outlet-wrapper {
+  .app-components-router-outlet {
     min-height: calc(100vh - var(--cute-navbar-height));
+    overflow-y: hidden;
   }
 
 }

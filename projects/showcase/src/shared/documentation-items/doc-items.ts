@@ -11,7 +11,6 @@
  */
 
 import {Injectable} from '@angular/core';
-//import type {LiveExample} from '@angular/components-examples';
 
 export interface AdditionalApiDoc {
   name: string;
@@ -614,6 +613,15 @@ const DOCS: {[key: string]: DocItem[]} = {
       icon: 'columns',
       exampleSpecs: {
         prefix: 'cute-splitter-',
+      },
+    },
+    {
+      id: 'tree-table',
+      name: 'TreeTable',
+      summary: 'TreeTable is used to display hierarchical data in tabular format.',
+      icon: 'list-nested',
+      exampleSpecs: {
+        prefix: 'cute-tree-table-',
       },
     },
     {

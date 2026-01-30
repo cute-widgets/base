@@ -87,6 +87,12 @@
       background: none;
       overflow: visible;
 
+      & .cute-icon {
+        // CWT: Overflow property is set to `hidden` in the `cute-icon` component. But, in some cases
+        // this causes the visible part of some icons to be cut off from the end. We're trying to fix it.
+        overflow: visible;
+      }
+
       [dir=rtl] & {
         padding-left: 0;
         padding-right: 4px;

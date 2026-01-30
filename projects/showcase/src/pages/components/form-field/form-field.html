@@ -2,8 +2,8 @@
 
 <cute-vstack gap="3">
 
-    <cute-card class="p-3 col-xs-12 col-lg-6">
-      <cute-form-field class="example-form-field mb-2">
+    <cute-card class="p-3 col-xs-12 col-md-6">
+      <cute-form-field class="w-100 mb-2">
         <cute-label>Enter your email</cute-label>
         <input cuteInput
                [formControl]="email"
@@ -15,7 +15,7 @@
         }
       </cute-form-field>
 
-      <cute-form-field class="example-form-field">
+      <cute-form-field class="w-100">
         <cute-label>Select</cute-label>
         <cute-select>
           <cute-option value="one">First option</cute-option>
@@ -23,7 +23,7 @@
         </cute-select>
       </cute-form-field>
 
-      <cute-form-field class="example-form-field" subscriptSizing="dynamic">
+      <cute-form-field class="w-100" subscriptSizing="dynamic">
         <cute-label>Example textarea</cute-label>
         <textarea cuteInput></textarea>
       </cute-form-field>
@@ -132,7 +132,7 @@
         <cute-radio-button value="middle" inline checked>Middle</cute-radio-button>
         <cute-radio-button value="large" inline>Large</cute-radio-button>
       </cute-radio-group>
-      <cute-form-field hintLabel="Max 10 characters" [magnitude]="rgpSize.value" style="width: 400px;">
+      <cute-form-field hintLabel="Max 10 characters" [magnitude]="rgpSize.value" class="example-form-field">
 
         <cute-label>Enter some input</cute-label>
         <input cuteInput #input2 maxlength="10" placeholder="Ex. Nougat">

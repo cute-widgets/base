@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {CuteHStack} from '@cute-widgets/base/layout';
 import {CuteAlertModule} from '@cute-widgets/base/alert';
 import {CuteIcon} from '@cute-widgets/base/icon';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-alert',
@@ -15,11 +15,18 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
   templateUrl: './alert.html',
   styleUrl: './alert.scss',
 })
-export class AlertPage {
+export class AlertPage extends AbstractPage {
   successAlertShow: boolean = true;
   holyMessage: boolean = true;
+
+  constructor() {
+    super();
+
+
+  }
 
   log(...msg: string[]) {
     console.log(...msg);
   }
+
 }

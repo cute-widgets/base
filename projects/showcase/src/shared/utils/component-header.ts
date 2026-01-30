@@ -6,11 +6,5 @@ import {Directive} from "@angular/core";
   host: {
     'class': 'sticky-top p-3 mb-3 text-center text-md-start bg-body-tertiary'
   },
-  standalone: true,
 })
-export class ComponentHeader /* extends ... */ {
-
-  constructor() {
-  }
-
-}
+export class ComponentHeader {}

@@ -42,7 +42,7 @@ import {
   ViewEncapsulation,
   DOCUMENT, inject, Injector, afterNextRender, signal
 } from '@angular/core';
-import {fromEvent, merge, Observable, Subject} from 'rxjs';
+import {merge, Observable, Subject} from 'rxjs';
 import {
   debounceTime,
   filter,
@@ -85,7 +85,7 @@ export const CUTE_DRAWER_DEFAULT_AUTOSIZE = new InjectionToken<boolean>(
 export const CUTE_DRAWER_CONTAINER = new InjectionToken('CUTE_DRAWER_CONTAINER');
 
 /**
- * The main content of the 'cute-drawer' component
+ * The main content of the 'cute-drawer' component.
  */
 @Component({
   selector: 'cute-drawer-content',
@@ -111,10 +111,6 @@ export class CuteDrawerContent extends CdkScrollable implements AfterContentInit
   private _changeDetectorRef = inject(ChangeDetectorRef);
   _container = inject(CuteDrawerContainer);
 
-  protected generateId(): string {
-    return "";
-  }
-
   constructor(...args: unknown[]);
   constructor() {
     const elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -125,9 +121,11 @@ export class CuteDrawerContent extends CdkScrollable implements AfterContentInit
   }
 
   ngAfterContentInit() {
-    this._container._contentMarginChanges.subscribe(() => {
-      this._changeDetectorRef.markForCheck();
-    });
+    this._container._contentMarginChanges
+      .pipe(takeUntil(this._destroyed))
+      .subscribe(() => {
+        this._changeDetectorRef.markForCheck();
+      });
   }
 
   /** Determines whether the content element should be hidden from the user. */
@@ -356,27 +354,23 @@ export class CuteDrawer extends CuteLayoutControl implements Expandable, AfterVi
      * time a key is pressed. Instead, we re-enter the zone only if the `ESC` key is pressed,
      * and we don't have a close disabled.
      */
-    this._ngZone.runOutsideAngular(() => {
+    this._eventCleanups = this._ngZone.runOutsideAngular(() => {
+      const renderer = this._renderer;
       const element = this._elementRef.nativeElement;
-      (fromEvent(element, 'keydown') as Observable<KeyboardEvent>)
-        .pipe(
-          filter(event => {
-            return event.keyCode === ESCAPE && !this.disableClose && !hasModifierKey(event);
-          }),
-          takeUntil(this._destroyed),
-        )
-        .subscribe(event =>
-          this._ngZone.run(() => {
-            this.close();
-            event.stopPropagation();
-            event.preventDefault();
-          }),
-        );
 
-      this._eventCleanups = [
-        this._renderer.listen(element, 'transitionrun', this._handleTransitionEvent),
-        this._renderer.listen(element, 'transitionend', this._handleTransitionEvent),
-        this._renderer.listen(element, 'transitioncancel', this._handleTransitionEvent),
+      return [
+        renderer.listen(element, 'keydown', (event: KeyboardEvent) => {
+          if (event.keyCode === ESCAPE && !this.disableClose && !hasModifierKey(event)) {
+            this._ngZone.run(() => {
+              this.close();
+              event.stopPropagation();
+              event.preventDefault();
+            });
+          }
+        }),
+        renderer.listen(element, 'transitionrun', this._handleTransitionEvent),
+        renderer.listen(element, 'transitionend', this._handleTransitionEvent),
+        renderer.listen(element, 'transitioncancel', this._handleTransitionEvent),
       ];
     });
 
@@ -624,7 +618,7 @@ export class CuteDrawer extends CuteLayoutControl implements Expandable, AfterVi
     if (this._focusTrap) {
       // Trap focus only if the backdrop is enabled. Otherwise, allow end user to interact with the
       // sidenav content.
-      this._focusTrap.enabled = !!this._container?.hasBackdrop && this.opened;;
+      this._focusTrap.enabled = this.opened && !!this._container?._isShowingBackdrop();
     }
   }
 
@@ -665,7 +659,7 @@ export class CuteDrawer extends CuteLayoutControl implements Expandable, AfterVi
           this._animationStarted.next(event);
         } else {
           // Don't toggle the animating state on `transitioncancel` since another animation should
-          // start afterwards. This prevents the drawer from blinking if an animation is interrupted.
+          // start afterward. This prevents the drawer from blinking if an animation is interrupted.
           if (event.type === 'transitionend') {
             this._setIsAnimating(false);
           }
@@ -849,25 +843,27 @@ export class CuteDrawerContainer extends CuteLayoutControl implements AfterConte
         this._drawers.notifyOnChanges();
       });
 
-    this._drawers.changes.pipe(startWith(null)).subscribe(() => {
-      this._validateDrawers();
+    this._drawers.changes
+      .pipe(startWith(null), takeUntil(this._destroyed))
+      .subscribe(() => {
+        this._validateDrawers();
 
-      this._drawers.forEach((drawer: CuteDrawer) => {
-        this._watchDrawerToggle(drawer);
-        this._watchDrawerPosition(drawer);
-        this._watchDrawerMode(drawer);
+        this._drawers.forEach((drawer: CuteDrawer) => {
+          this._watchDrawerToggle(drawer);
+          this._watchDrawerPosition(drawer);
+          this._watchDrawerMode(drawer);
+        });
+
+        if (
+          !this._drawers.length ||
+          this._isDrawerOpen(this._start) ||
+          this._isDrawerOpen(this._end)
+        ) {
+          this.updateContentMargins();
+        }
+
+        this._changeDetectorRef.markForCheck();
       });
-
-      if (
-        !this._drawers.length ||
-        this._isDrawerOpen(this._start) ||
-        this._isDrawerOpen(this._end)
-      ) {
-        this.updateContentMargins();
-      }
-
-      this._changeDetectorRef.markForCheck();
-    });
 
     // Avoid hitting the NgZone through the debounce timeout.
     this._ngZone.runOutsideAngular(() => {
@@ -907,7 +903,7 @@ export class CuteDrawerContainer extends CuteLayoutControl implements AfterConte
     // 1. For drawers in `over` mode, they don't affect the content.
     // 2. For drawers in `side` mode they should shrink the content. We do this by adding to the
     //    left margin (for left drawer) or right margin (for right the drawer).
-    // 3. For drawers in `push` mode the should shift the content without resizing it. We do this by
+    // 3. For drawers in `push` mode they should shift the content without resizing it. We do this by
     //    adding to the left or right margin and simultaneously subtracting the same amount of
     //    margin from the other side.
     let left = 0;

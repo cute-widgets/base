@@ -10,6 +10,7 @@ import {RelativeSize5} from '@cute-widgets/base/core/types';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {FormsModule} from '@angular/forms';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-button-page',
@@ -28,7 +29,7 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })
-export class ButtonPage {
+export class ButtonPage extends AbstractPage {
 
   protected colors: ThemeColor[] = ["primary", "secondary", "success", "info", "warning", "danger", "light", "dark", "link"];
 
@@ -38,9 +39,5 @@ export class ButtonPage {
 
   protected applyGradient: boolean = false;
   protected applyDisabled: boolean = false;
-
-  proper(s: string): string {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
 
 }

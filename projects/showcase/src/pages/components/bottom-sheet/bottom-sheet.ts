@@ -4,6 +4,7 @@ import {CuteListModule} from '@cute-widgets/base/list';
 import {CuteBottomSheetModule, CuteBottomSheet, CuteBottomSheetRef} from '@cute-widgets/base/bottom-sheet';
 import {CuteIcon} from '@cute-widgets/base/icon';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-bottom-sheet',
@@ -15,7 +16,7 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
   templateUrl: './bottom-sheet.html',
   styleUrl: './bottom-sheet.scss',
 })
-export class BottomSheetPage {
+export class BottomSheetPage extends AbstractPage {
   private _bottomSheet = inject(CuteBottomSheet);
 
   openBottomSheet(): void {

@@ -7,7 +7,8 @@ import {
   OnInit,
   signal,
   viewChild,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import {CuteIcon} from '@cute-widgets/base/icon';
 import {CuteNav, CuteNavLink} from '@cute-widgets/base/core/nav';
@@ -20,6 +21,7 @@ import {bsBreakpoints} from '@cute-widgets/base/core';
 import {CuteButton} from '@cute-widgets/base/button';
 import {CuteClickOutside} from '@cute-widgets/base/core/directives';
 import {CuteToolbar} from '@cute-widgets/base/toolbar';
+import {CdkScrollable} from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-components',
@@ -36,10 +38,12 @@ import {CuteToolbar} from '@cute-widgets/base/toolbar';
     CuteButton,
     CuteClickOutside,
     CuteToolbar,
-    //AppFooter,
+    RouterLinkActive,
+    // CdkScrollable,
     // RouterLinkActive,
     // RouterOutlet
   ],
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './components.html',
   styleUrl: './components.scss',
 })

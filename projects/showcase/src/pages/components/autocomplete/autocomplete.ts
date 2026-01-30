@@ -10,6 +10,7 @@ import {AsyncPipe} from '@angular/common';
 import {map, startWith} from 'rxjs/operators';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-autocomplete',
@@ -29,7 +30,7 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
   templateUrl: './autocomplete.html',
   styleUrl: './autocomplete.scss',
 })
-export class AutocompletePage {
+export class AutocompletePage extends AbstractPage {
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   protected myControl = new FormControl('');
   protected options: string[] = ['One', 'Two', 'Three', 'Four', 'Five'];
@@ -38,6 +39,7 @@ export class AutocompletePage {
   protected requiredSelection = false;
 
   constructor() {
+    super();
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this.filter(value || '')),

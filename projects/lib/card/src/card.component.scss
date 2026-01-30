@@ -1,6 +1,6 @@
 .cute-card {
 
-  --cute-card-image-height: 200px;
+  --cute-card-image-height: auto;
   padding: 0;
   overflow: hidden;
 
@@ -19,7 +19,20 @@
     }
   }
 
+  &.cute-thematic-widget {
+    // color was set explicitly
+    .list-group-item {
+      opacity: 0.65;
+    }
+  }
+
   &.cute-card-with-background-image, .card-img-overlay {
+    background-color: transparent !important;
+
+    .list-group {
+      --bs-bg-opacity: 0.25;
+    }
+
     .list-group-item {
       opacity: 0.65;
     }

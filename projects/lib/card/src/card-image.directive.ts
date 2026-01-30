@@ -9,8 +9,10 @@
  * This code is a modification of the `@angular/material` original
  * code licensed under MIT-style License (https://angular.dev/license).
  */
-import {Directive, inject, Input} from "@angular/core";
+import {ChangeDetectorRef, Directive, HostAttributeToken, inject, input, Input, isDevMode} from "@angular/core";
 import {CuteCard} from "./card.component";
+
+export type CuteCardImagePosition = "top"|"bottom"|"fluid";
 
 /**
  * Primary image content for a card, intended for use within `<cute-card>`. Can be applied to
@@ -22,13 +24,13 @@ import {CuteCard} from "./card.component";
  * `CuteCardImage` provides no behaviors, instead serving as a purely visual treatment.
  */
 @Directive({
-  selector: '[cute-card-image], [cuteCardImage]',
+  selector: '[cute-card-image], [cute-card-top-image], [cute-card-bottom-image], [cute-card-fluid-image]',
   host: {
     'class': 'cute-card-image',
-    '[class]': "'card-img'+(position=='top'||position=='bottom' ? '-'+position : '')",
-    //'[class.cute-card-image-cover]': 'position=="cover"',
-    '[class.img-fluid]': 'position=="fluid"',
-    '[style.border-radius]': "position=='top' && card?._header() ? 0 : (position=='bottom' && card?._footer() ? 0 : undefined)",
+    '[class]': "'card-img'+(_position=='top'||_position=='bottom' ? '-'+_position : '')",
+    '[class.img-fluid]': '_position=="fluid"',
+    '[attr.height]': 'height',
+    '[style.border-radius]': "_position=='top' && card?._header() ? 0 : (_position=='bottom' && card?._footer() ? 0 : undefined)",
     '[style.--cute-card-image-height]': 'height>=0 ? height+"px" : undefined'
   },
   standalone: true,
@@ -37,9 +39,9 @@ export class CuteCardImage {
   protected card= inject(CuteCard);
 
   /** Image position in the card layout */
-  @Input() position: "top"|"bottom"|"fluid" = "top";
+  protected readonly _position: CuteCardImagePosition = "top";
 
-  /** Image height in pixels */
+  /** The intrinsic height of the image, in pixels. */
   @Input()
   get height(): number|undefined {return this._height;}
   set height(value: number|string|undefined) {
@@ -50,5 +52,25 @@ export class CuteCardImage {
     this._height = value;
   }
   private _height: number | undefined;
+
+  constructor() {
+    let attribs: (string|null)[] = [];
+    attribs[0] = inject(new HostAttributeToken("cute-card-top-image"), {optional: true});
+    attribs[1] = inject(new HostAttributeToken("cute-card-bottom-image"), {optional: true});
+    attribs[2] = inject(new HostAttributeToken("cute-card-fluid-image"), {optional: true});
+
+    if (attribs.filter(v => v != null).length > 1 && isDevMode()) {
+      throw new Error("Only one attribute with name 'cute-card-*-image' should be applied.")
+    }
+
+    // We take into account the first value only
+    const attrInd = attribs.findIndex(v => v != null);
+    switch (attrInd) {
+      case 0: this._position = "top"; break;
+      case 1: this._position = "bottom"; break;
+      case 2: this._position = "fluid"; break;
+    }
+    this.card.markForCheck();
+  }
 
 }

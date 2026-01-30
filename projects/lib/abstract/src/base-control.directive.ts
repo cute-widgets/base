@@ -344,6 +344,11 @@ export abstract class CuteBaseControl
   markForCheck(): void {
     this._changeDetectorRef.markForCheck();
   }
+  
+  /** Checks this view and its children. */
+  detectChanges(): void {
+    this._changeDetectorRef.detectChanges();
+  }
 
   /** Toggles the `disabled` state of the component */
   toggleDisabled(): void {

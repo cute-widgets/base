@@ -1,36 +1,65 @@
 <h5 componentHeader>Card</h5>
 
-<cute-hstack gap="3">
-  <cute-vstack gap="3">
+<!--<cute-hstack gap="3">-->
+  <cute-vstack gap="3" class="mb-3">
     <cute-hstack gap="4" class="flex-wrap">
       <cute-checkbox #cbxImage (change)="!cbxImage.checked ? cbxBgImage.checked=false : null">With image</cute-checkbox>
       <cute-checkbox #cbxBgImage [disabled]="!cbxImage.checked">As background</cute-checkbox>
+      <cute-checkbox #cbxImageBottom [checked]="cbxBgImage.checked ? false : cbxImageBottom.checked"
+                     [disabled]="!cbxImage.checked || cbxBgImage.checked">
+        Image bottom
+      </cute-checkbox>
       <cute-checkbox #cbxNavs>With nav list</cute-checkbox>
       <cute-checkbox #cbxHead>With header</cute-checkbox>
       <cute-checkbox #cbxFoot>With footer</cute-checkbox>
     </cute-hstack>
 
-    <div style="width: 300px;">
-      <cute-card [backgroundImage]="cbxBgImage.checked ? 'assets/images/unsplash-photo-2.jpg' : undefined" [attr.data-bs-theme]='cbxBgImage.checked ? "dark" : undefined'>
+    <div>
+      <cute-label>Color</cute-label>
+      <cute-select #selColor>
+        <cute-option>None</cute-option>
+        <cute-option value="primary">primary</cute-option>
+        <cute-option value="secondary">secondary</cute-option>
+        <cute-option value="danger">danger</cute-option>
+        <cute-option value="warning">warning</cute-option>
+        <cute-option value="success">success</cute-option>
+        <cute-option value="info">info</cute-option>
+        <cute-option value="light">Light</cute-option>
+        <cute-option value="dark">Dark</cute-option>
+      </cute-select>
+    </div>
+
+    <div style="width: 300px">
+      <cute-card
+        [color]="selColor.value"
+        [backgroundImage]="cbxBgImage.checked ? 'assets/images/unsplash-photo-2.jpg' : undefined"
+        [attr.data-bs-theme]='cbxBgImage.checked ? "dark" : undefined'>
         @if (cbxHead.checked) {
           <cute-card-header>
             Header
           </cute-card-header>
         }
 
-        @if (cbxImage.checked && !cbxBgImage.checked) {
-          <img cute-card-image style="height: 200px;" src="assets/images/unsplash-photo-2.jpg" alt="Flowers"  >
+        @let cardImageSource = "assets/images/unsplash-photo-2.jpg";
+        @if (cbxImage.checked && !cbxBgImage.checked && cbxImageBottom.checked) {
+            <img cute-card-bottom-image [height]="200"
+                 [src]="cardImageSource" alt="Flowers">
         }
+        @if (cbxImage.checked && !cbxBgImage.checked && !cbxImageBottom.checked) {
+          <img cute-card-image [height]="200"
+               [src]="cardImageSource" alt="Flowers">
+        }
+
         <cute-card-body>
           <h5 cuteCardTitle>Card title</h5>
-          <h6 cuteCardSubtitle color="secondary">Card subtitle</h6>
+          <h6 cuteCardSubtitle [color]="$any((selColor.value || 'secondary')+'-emphasis')">Card subtitle</h6>
           <p>
             Some quick example text to build on the card title and make up the bulk of the card's content.
           </p>
-          <a cuteButton="flat-button" color="primary">Go somewhere</a>
+          <a cuteButton="flat-button" [color]="$any(selColor.value || 'primary')" gradientFill>Go somewhere</a>
         </cute-card-body>
         @if (cbxNavs.checked) {
-          <cute-nav-list flushBorders="partial">
+          <cute-nav-list flushBorders="partial" [color]="selColor.value">
             <cute-list-item>An item</cute-list-item>
             <cute-list-item>A second item</cute-list-item>
             <cute-list-item>A third item</cute-list-item>
@@ -45,6 +74,6 @@
     </div>
 
   </cute-vstack>
-</cute-hstack>
+<!--</cute-hstack>-->
 
 

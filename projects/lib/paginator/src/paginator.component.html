@@ -75,8 +75,8 @@
       </li>
     }
 
-    <li class="page-item" [class.me-auto]="alignment=='between'">
-      <a class="page-link page-prev rounded-start-1"
+    <li class="page-item page-prev" [class.me-auto]="alignment=='between'">
+      <a class="page-link rounded-start-1"
          [tabindex]="_previousButtonDisabled() ? -1 : 0"
          [class]="color && !_previousButtonDisabled() ? 'link-'+color : ''"
          [class.disabled]="_previousButtonDisabled()"
@@ -87,6 +87,7 @@
          [cuteTooltipDisabled]="_previousButtonDisabled()"
          [cuteTooltipPosition]="'above'"
          (mousedown)="onMouseDown($event)"
+         (mouseup)="onMouseUp($event)"
          (click)="previousPage()"
          (keydown.space)="previousPage();$event.preventDefault();"
       >
@@ -104,18 +105,20 @@
     </li>
 
     @if (middleSectionStyle.endsWith('pages')) {
-      @for (pageNo of getPageNumbers(); track pageNo) {
-        <li class="page-item">
+      @let pageNumbers = getPageNumbers();
+      @for (pageNo of pageNumbers; track pageNo) {
+        <li class="page-item page-number">
           <a [attr.tabindex]="isNaN(pageNo)?-1:0"
-             class="page-link page-number"
-             [class.active]="isActivePage(pageNo) && !hideActive"
-             [class.shadow]="isActivePage(pageNo) && !hideActive"
+             class="page-link"
+             [class.active]="!hideActive() && isActivePage(pageNo)"
+             [class.shadow]="!hideActive() && isActivePage(pageNo)"
              [class.rounded-1]="hideBorders"
              [class]="color && !isActivePage(pageNo) ? 'link-'+color : ''"
              [class.focus-ring]="color != null"
              [attr.aria-current]="isActivePage(pageNo) ? 'page' : ''"
              (mousedown)="onMouseDown($event)"
-             (click)="gotoPage(pageNo);"
+             (mouseup)="onMouseUp($event)"
+             (click)="gotoPage(pageNo)"
              (keydown.space)="gotoPage(pageNo);$event.preventDefault();"
           >
             {{pageNo + 1}}
@@ -129,8 +132,8 @@
       </li>
     }
 
-    <li class="page-item" [class.ms-auto]="alignment=='between'">
-      <a class="page-link page-next rounded-end-1"
+    <li class="page-item page-next" [class.ms-auto]="alignment=='between'">
+      <a class="page-link rounded-end-1"
          [tabindex]="_nextButtonDisabled() ? -1 : 0"
          [class]="color && !_nextButtonDisabled() ? 'link-'+color : ''"
          [class.disabled]="_nextButtonDisabled()"
@@ -141,6 +144,7 @@
          [cuteTooltipDisabled]="_nextButtonDisabled()"
          [cuteTooltipPosition]="'above'"
          (mousedown)="onMouseDown($event)"
+         (mouseup)="onMouseUp($event)"
          (click)="nextPage()"
          (keydown.space)="nextPage();$event.preventDefault();"
       >
@@ -158,8 +162,8 @@
     </li>
 
     @if (showFirstLastButtons) {
-      <li class="page-item">
-        <a class="page-link page-last"
+      <li class="page-item page-last">
+        <a class="page-link"
            [tabindex]="_nextButtonDisabled() ? -1 : 0"
            [class.disabled]="_nextButtonDisabled()"
            [class]="color && !_nextButtonDisabled() ? 'link-'+color : ''"

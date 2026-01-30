@@ -20,7 +20,7 @@ import {
   Output,
   ViewEncapsulation,
   booleanAttribute,
-  numberAttribute, SimpleChanges, AfterViewChecked,
+  numberAttribute, SimpleChanges, AfterViewChecked, signal,
 } from '@angular/core';
 import {CuteFormField, CuteLabel} from '@cute-widgets/base/form-field';
 import {CuteSelect} from '@cute-widgets/base/select';
@@ -128,7 +128,7 @@ export class CutePaginator extends CuteFocusableControl implements AfterViewChec
 
   /** ID for the DOM node containing the pagination's items per-page label. */
   protected readonly _pageSizeLabelId = `cute-paginator-page-size-label-${nextUniqueId++}`;
-  protected hideActive: boolean = false;
+  protected hideActive = signal<boolean>(false);
 
   /** The zero-based page index of the displayed list of items. Defaulted to 0. */
   @Input({transform: numberAttribute})
@@ -250,7 +250,6 @@ export class CutePaginator extends CuteFocusableControl implements AfterViewChec
   }
 
   ngAfterViewChecked() {
-    this.hideActive = false;
   }
 
   override ngOnDestroy() {
@@ -260,9 +259,12 @@ export class CutePaginator extends CuteFocusableControl implements AfterViewChec
 
   protected onMouseDown(event: MouseEvent): void {
     if (this.middleSectionStyle=="5-pages") {
-      this.hideActive = true;
-      this._changeDetectorRef.detectChanges();
+      this.hideActive.set(true);
     }
+  }
+
+  protected onMouseUp(event: MouseEvent): void {
+    this.hideActive.set(false);
   }
 
   /** Whether the specified index is the `active` page of the paginator */
@@ -360,6 +362,10 @@ export class CutePaginator extends CuteFocusableControl implements AfterViewChec
     if (index >= 0 && index < this.getNumberOfPages() && !this.isActivePage(index)) {
       const previousPageIndex = this.pageIndex;
       this.pageIndex = index;
+
+      //this.hideActive.set(false);
+
+      this.markForCheck();
 
       this._emitPageEvent(previousPageIndex);
     }
