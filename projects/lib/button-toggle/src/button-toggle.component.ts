@@ -76,6 +76,11 @@ export class CuteButtonToggleChange {
     'class': 'cute-button-toggle',
     '[class.cute-button-toggle-standalone]': '!buttonToggleGroup',
     '[class.active]': 'checked',
+    '[class.disabled]': 'disabled',
+    '[class.cute-button-disabled-interactive]': 'disabledInteractive',
+    '[class.cute-unthemed]': '!color',
+    '[attr.disabled]': '_getDisabledAttribute()',
+    '[attr.aria-disabled]': '_getAriaDisabled()',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[attr.name]': 'null',
@@ -148,6 +153,11 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
 
   /** Event emitted when the group value changes. */
   @Output() readonly change = new EventEmitter<CuteButtonToggleChange>();
+
+
+  protected override setDisabledState(newState: boolean): boolean {
+    return super.setDisabledState(newState);
+  }
 
   /** Whether the button is disabled. */
   // protected override getDisabledState(): boolean {

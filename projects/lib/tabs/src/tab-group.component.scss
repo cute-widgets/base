@@ -71,7 +71,9 @@
       white-space: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
-      //padding: 0.25rem;
+      // we try to avoid the bootstrap's focus shadow partial clipping on the active tab
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
 
       scrollbar-width: none; /* Firefox */
       //-ms-overflow-style: none; /* IE/Edge */
@@ -132,7 +134,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    gap: 0.25rem;
+    gap: 0.5rem;
 
     [dir="rtl"] & {
       flex-direction: row-reverse;
@@ -237,107 +239,3 @@
     right: 0;
   }
 }
-
-///* Base Styles */
-//.tab-container {
-//  display: flex;
-//  min-height: 300px;
-//  position: relative;
-//  background: #fff;
-//  border-radius: 4px;
-//  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-//}
-//
-///* Positioning */
-//.tabs-top {
-//  flex-direction: column;
-//}
-//
-//.tabs-bottom {
-//  flex-direction: column-reverse;
-//}
-//
-//.tabs-left {
-//  flex-direction: row;
-//}
-//
-//.tabs-right {
-//  flex-direction: row-reverse;
-//}
-//
-///* Header Styles */
-//.tab-header-wrapper {
-//  position: relative;
-//  flex-shrink: 0;
-//  background: #f8f9fa;
-//  border-radius: 4px 4px 0 0;
-//}
-//
-//.tabs-top .tab-header-wrapper,
-//.tabs-bottom .tab-header-wrapper {
-//  overflow-x: auto;
-//  overflow-y: hidden;
-//  white-space: nowrap;
-//}
-//
-//.tabs-left .tab-header-wrapper,
-//.tabs-right .tab-header-wrapper {
-//  overflow-x: hidden;
-//  overflow-y: auto;
-//  width: 200px;
-//  height: 100%;
-//}
-//
-//
-//.nav-link {
-//  display: flex;
-//  align-items: center;
-//  padding: 10px 15px;
-//  color: #495057;
-//  text-decoration: none;
-//  transition: all 0.2s;
-//  border: none;
-//  background: transparent;
-//  cursor: pointer;
-//}
-//
-//.nav-link.active {
-//  color: #0d6efd;
-//  background: #fff;
-//  border-color: #dee2e6 #dee2e6 #fff;
-//}
-//
-//.nav-link.disabled {
-//  color: #6c757d;
-//  pointer-events: none;
-//  background-color: transparent;
-//}
-//
-///* Content Styles */
-//.tab-content-wrapper {
-//  flex: 1;
-//  min-width: 0;
-//  padding: 15px;
-//  position: relative;
-//}
-//
-//.tab-content {
-//  height: 100%;
-//}
-//
-
-///* Responsive */
-//@media (max-width: 768px) {
-//  .tabs-left,
-//  .tabs-right {
-//    flex-direction: column;
-//  }
-//
-//  .tabs-left .tab-header-wrapper,
-//  .tabs-right .tab-header-wrapper {
-//    width: 100%;
-//    height: auto;
-//    overflow-x: auto;
-//    overflow-y: hidden;
-//  }
-//}

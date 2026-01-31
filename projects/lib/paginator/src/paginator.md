@@ -2,17 +2,19 @@
 
 ````html
 <!-- example(paginator-overview) -->
-<cute-paginator 
-    [pageSizeOptions]="[5, 10, 20]" 
-    pageSize="10"
-    showFirstLastButtons="true"
-    showPrevNextLabels="true"
-    hideBorders="true"
-    autoMargin="true"
-    color="secondary"
-    magnitude="small"
-    align="start"
-    aria-label="Select page of periodic elements">
+<cute-paginator
+  [length]="500"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 20]"
+  [showFirstLastButtons]="true"
+  [showPrevNextLabels]="true"
+  [hideBorders]="false"
+  middleSectionStyle="range"
+  color="secondary"
+  magnitude="small"
+  alignment="start"
+  aria-label="Select page of periodic elements"
+  (page)="onPageChanged($event)">
 </cute-paginator>
 ````
 

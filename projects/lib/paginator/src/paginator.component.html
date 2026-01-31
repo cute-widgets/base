@@ -86,8 +86,8 @@
          [cuteTooltip]="_intl.previousPageLabelHint || _intl.previousPageLabel"
          [cuteTooltipDisabled]="_previousButtonDisabled()"
          [cuteTooltipPosition]="'above'"
-         (mousedown)="onMouseDown($event)"
-         (mouseup)="onMouseUp($event)"
+         (pointerdown)="onPointerDown($event)"
+         (pointerup)="onPointerUp($event)"
          (click)="previousPage()"
          (keydown.space)="previousPage();$event.preventDefault();"
       >
@@ -116,8 +116,8 @@
              [class]="color && !isActivePage(pageNo) ? 'link-'+color : ''"
              [class.focus-ring]="color != null"
              [attr.aria-current]="isActivePage(pageNo) ? 'page' : ''"
-             (mousedown)="onMouseDown($event)"
-             (mouseup)="onMouseUp($event)"
+             (pointerdown)="onPointerDown($event)"
+             (pointerup)="onPointerUp($event)"
              (click)="gotoPage(pageNo)"
              (keydown.space)="gotoPage(pageNo);$event.preventDefault();"
           >
@@ -143,8 +143,8 @@
          [cuteTooltip]="_intl.nextPageLabelHint || _intl.nextPageLabel"
          [cuteTooltipDisabled]="_nextButtonDisabled()"
          [cuteTooltipPosition]="'above'"
-         (mousedown)="onMouseDown($event)"
-         (mouseup)="onMouseUp($event)"
+         (pointerdown)="onPointerDown($event)"
+         (pointerup)="onPointerUp($event)"
          (click)="nextPage()"
          (keydown.space)="nextPage();$event.preventDefault();"
       >

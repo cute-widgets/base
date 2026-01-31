@@ -32,7 +32,7 @@ For more complex labels, add a template with the `cute-tab-label` directive insi
 
 ```html
 <ng-template cute-tab-label>
-  <cute-icon fontSet="bi" fontIcon="house-door" class="example-tab-icon">l</cute-icon>
+  <cute-icon fontSet="bi" fontIcon="house-door" class="example-tab-icon"></cute-icon>
   First
 </ng-template>
 ```
@@ -94,9 +94,9 @@ You can control the duration of the tabs' animation using the `animationDuration
 want to disable the animation completely, you can do so by setting the properties to `0ms`. The
 duration can be configured globally using the `CUTE_TABS_CONFIG` injection token.
 
- <!-- example({"example": "tab-group-animations",
-               "file": "tab-group-animations-example.html",
-               "region": "slow-animation-duration"}) -->
+```html
+<cute-tab-group animationDuration="2000ms">
+```
 
 ### Keeping the tab content inside the DOM while it's off-screen
 By default, the `<cute-tab-group>` will remove the content of off-screen tabs from the DOM until they

@@ -86,7 +86,11 @@ export class CuteButtonGroup extends CuteFocusableControl {
 
     this._buttons?.forEach(b => {
       b.defaultColor = this.color ?? "primary";
-      b.disabled = this.disabled;
+
+      if (this.disabled) {
+        b.disabled = this.disabled;
+      }
+
       if (b.buttonStyle == "base") {
         b.inputButtonStyle = this.buttonStyle ?? "flat-button";
       }

@@ -11,7 +11,8 @@
 
   box-shadow: none;
 
-  &:has(> :not(.cute-ripple):nth-child(2)) {
+  //&:has(> :not(.cute-ripple):nth-child(2)) {
+  &:has(> :nth-child(2)) {
     // Gap between icon(s) and label, if any
     gap: 0.5em;
   }

@@ -257,13 +257,13 @@ export class CutePaginator extends CuteFocusableControl implements AfterViewChec
     this._intlChanges.unsubscribe();
   }
 
-  protected onMouseDown(event: MouseEvent): void {
+  protected onPointerDown(event: MouseEvent): void {
     if (this.middleSectionStyle=="5-pages") {
       this.hideActive.set(true);
     }
   }
 
-  protected onMouseUp(event: MouseEvent): void {
+  protected onPointerUp(event: MouseEvent): void {
     this.hideActive.set(false);
   }
 

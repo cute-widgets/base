@@ -8,12 +8,16 @@ app-components {
     .app-components-sidenav {
       width: 240px;
 
+      .nav-pills {
+        --bs-nav-pills-link-active-bg: rgba(var(--bs-body-color-rgb), 0.08);
+      }
+
       &.cute-drawer-side {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
 
         & .app-components-sidenav__nav {
-          height: calc(100vh - var(--cute-navbar-height));
+          //height: calc(100vh - var(--cute-navbar-height));
         }
       }
 

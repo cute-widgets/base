@@ -26,8 +26,7 @@ import {
   booleanAttribute, ViewContainerRef, ViewChild, ComponentRef, ElementRef, inject, DestroyRef
 } from '@angular/core';
 import {CuteTab} from './tab.component';
-import {CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
-import {animate, animation, state, style} from '@angular/animations';
+import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {NgTemplateOutlet} from "@angular/common";
 import {CuteLayoutControl} from "@cute-widgets/base/abstract";
 import {
@@ -43,11 +42,6 @@ import {CuteButton} from "@cute-widgets/base/button";
 import {debounceTime, fromEvent} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CuteObserveVisibility} from "@cute-widgets/base/core/observers";
-
-export const transitionAnimation = animation([
-  state('void', style({ transform: 'translateX({{offset}})', opacity: 0 })),
-  animate('300ms ease-out', style({ transform: 'translateX(0)', opacity: 1 })),
-], { params: { offset: '30px' }});
 
 let nextId: number = 0;
 
@@ -108,6 +102,8 @@ export class CuteTabChangeEvent extends Event {
     "[class.tabs-right]": "headerPosition === 'right'",
     "[class.tabs-end]": "headerPosition === 'end'",
     "[class.tabs-start]": "headerPosition === 'start'",
+    "[attr.cute-align-tabs]": "alignTabs",
+    "[style.--cute-tab-animation-duration]": "animationDuration",
   },
   imports: [
     CdkDropList,
@@ -188,6 +184,15 @@ export class CuteTabGroup extends CuteLayoutControl {
     }
   }
   private _stretchTabs: CuteNavStretch = "none";
+
+  /** Duration for the tab animation. Will be normalized to milliseconds if no units are set. */
+  @Input()
+  get animationDuration(): string { return this._animationDuration; }
+  set animationDuration(value: string | number) {
+    const stringValue = value + '';
+    this._animationDuration = /^\d+$/.test(stringValue) ? value + 'ms' : stringValue;
+  }
+  private _animationDuration: string = "";
 
   /**
    * By default, tabs remove their lazy content from the DOM while it's off-screen. Setting this to _true_ will keep it in the DOM,
