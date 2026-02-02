@@ -73,11 +73,14 @@ export class CuteButtonToggleChange {
   styleUrls: ['../../button/src/button.component.scss', './button-toggle.component.scss'],
   exportAs: 'cuteButtonToggle',
   host: {
-    'class': 'cute-button-toggle',
+    // Many CSS properties are in CuteButton component's css file and depend on
+    // `cute-button` and `cute-anchor` CSS classes. So, we include ancestor class name `cute-button`.
+    'class': 'cute-button-toggle cute-button',
     '[class.cute-button-toggle-standalone]': '!buttonToggleGroup',
     '[class.active]': 'checked',
     '[class.disabled]': 'disabled',
     '[class.cute-button-disabled-interactive]': 'disabledInteractive',
+    '[class.cute-button-checked-disabled]': 'checked && disabled',
     '[class.cute-unthemed]': '!color',
     '[attr.disabled]': '_getDisabledAttribute()',
     '[attr.aria-disabled]': '_getAriaDisabled()',
@@ -100,7 +103,7 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
   private _animationDisabled = _animationsDisabled();
   protected _multiple: boolean = true;
   /** The parent button toggle group (exclusive selection). Optional. */
-  protected readonly buttonToggleGroup: CuteButtonToggleGroup;
+  protected readonly buttonToggleGroup: CuteButtonToggleGroup|null = null;
 
   /** Unique ID for the underlying `button` element. */
   get buttonId(): string {
@@ -155,10 +158,6 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
   @Output() readonly change = new EventEmitter<CuteButtonToggleChange>();
 
 
-  protected override setDisabledState(newState: boolean): boolean {
-    return super.setDisabledState(newState);
-  }
-
   /** Whether the button is disabled. */
   // protected override getDisabledState(): boolean {
   //   const isDisabled = super.getDisabledState();
@@ -169,7 +168,7 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
   constructor() {
     super();
 
-    const toggleGroup = inject<CuteButtonToggleGroup>(CUTE_BUTTON_TOGGLE_GROUP, {optional: true})!;
+    const toggleGroup = inject<CuteButtonToggleGroup>(CUTE_BUTTON_TOGGLE_GROUP, {optional: true});
     //const defaultTabIndex = inject(new HostAttributeToken('tabindex'), {optional: true}) || '';
     const defaultOptions = inject<CuteButtonToggleDefaultOptions>(
       CUTE_BUTTON_TOGGLE_DEFAULT_OPTIONS,
@@ -178,6 +177,7 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
 
     //this._tabIndex = parseInt(defaultTabIndex) || 0;
     this.buttonToggleGroup = toggleGroup;
+    if (!toggleGroup) this.inputButtonStyle = "outline-button";
     this.disabledInteractive = defaultOptions?.disabledInteractive ?? false;
   }
 
@@ -249,7 +249,7 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
     }
 
     if (this.isSingleSelector()) {
-      const focusable = this.buttonToggleGroup._buttonToggles?.find(toggle => {
+      const focusable = this.buttonToggleGroup?._buttonToggles?.find(toggle => {
         return toggle.tabIndex === 0;
       });
       // Modify the tabindex attribute of the last focusable button toggle to -1.
@@ -266,7 +266,7 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
 
   /** Gets the name that should be assigned to the inner DOM node. */
   protected _getButtonName(): string | null {
-    if (this.isSingleSelector()) {
+    if (this.buttonToggleGroup && this.isSingleSelector()) {
       return this.buttonToggleGroup.name;
     }
     return this.name || null;
@@ -274,7 +274,7 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
 
   /** Whether the toggle is in single selection mode. */
   private isSingleSelector(): boolean {
-    return this.buttonToggleGroup && !this.buttonToggleGroup.multiple;
+    return (this.buttonToggleGroup && !this.buttonToggleGroup.multiple) ?? false;
   }
 
   protected readonly toThemeColor = toThemeColor;

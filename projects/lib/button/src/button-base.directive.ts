@@ -27,6 +27,8 @@ import {Ripple, RippleManager, RippleOptions} from "@cute-widgets/base/core/ripp
 import {fromEvent, Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {toColorCssClass, toThemeColor} from "@cute-widgets/base/core";
+import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
+import {CUTE_BUTTON_GROUP} from './button-group.directive';
 
 /** Button's appearance style */
 export type CuteButtonStyle =
@@ -54,6 +56,9 @@ export interface CuteButtonConfig {
 
   /** Default palette color to apply to buttons. */
   color?: ThemeColor;
+
+  /** Whether to enable text wrapping. */
+  wrapText?: boolean;
 }
 
 /** Injection token that can be used to provide the default options the button component. */
@@ -84,6 +89,7 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
 
   protected readonly _ripple: Ripple;
   protected readonly _ngZone: NgZone = inject(NgZone);
+  protected readonly _group = inject(CUTE_BUTTON_GROUP, {optional: true, host: true});
   protected readonly _isAnchor: boolean = false;
 
   @ContentChildren(CuteIcon) private _icons: QueryList<CuteIcon> | undefined;
@@ -117,9 +123,9 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
   /** Relative size of the Button. */
   @Input() magnitude: RelativeSize7 | undefined;
 
-  /** Whether to enable label wrapping. */
+  /** Whether to enable text wrapping. */
   @Input({transform: booleanAttribute})
-  wrapLabel: boolean = false;
+  wrapText: boolean = false;
 
   /** Whether to disable the ripple effect on button clicking. */
   @Input()
@@ -215,6 +221,7 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
     super();
     const config = inject(CUTE_BUTTON_CONFIG, {optional: true});
     this.disabledInteractive = config?.disabledInteractive ?? false;
+    this.wrapText = config?.wrapText ?? false;
     this._ripple = RippleManager.getInstance(this._nativeElement);
 
     this._isAnchor = (this._nativeElement.tagName == "A");
@@ -242,9 +249,10 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
     );
   }
 
-  protected override setDisabledState(newState: boolean): boolean {
+  protected override setDisabledState(newState: BooleanInput): boolean {
     if (this._isAnchor) {
-      if (newState) {
+      const isDisabled = coerceBooleanProperty(newState);
+      if (isDisabled) {
         this._savedTabIndex = this.tabIndex;
         this.tabIndex = -1;
       } else {

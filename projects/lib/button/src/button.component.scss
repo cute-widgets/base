@@ -44,7 +44,7 @@
     //align-items: center;
     //gap: 0.25rem;
 
-    &:not(.cute-button-label__wrap) {
+    &.cute-button-label__nowrap {
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;

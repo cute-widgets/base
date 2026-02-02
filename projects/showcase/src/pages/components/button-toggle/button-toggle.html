@@ -2,25 +2,49 @@
 
 <!--<cute-vstack gap="3">-->
 
-  <h6>Multiple selection</h6>
-  <cute-button-toggle-group #grp1="cuteButtonToggleGroup" color="primary" name="fontStyle" aria-label="Font Style" multiple="true">
-    <cute-button-toggle color="secondary" value="bold">Bold</cute-button-toggle>
-    <cute-button-toggle value="italic">Italic</cute-button-toggle>
-    <cute-button-toggle value="underline">Underline</cute-button-toggle>
-    <cute-button-toggle value="disabled" disabled>Disabled</cute-button-toggle>
-  </cute-button-toggle-group>
+  <h6>Multiple selection (toggle-group)</h6>
+
+  <cute-hstack gap="5">
+    <cute-button-toggle-group #grp1="cuteButtonToggleGroup"
+                              [disabled]="cbxDisableGrp1.checked"
+                              color="primary"
+                              name="fontStyle"
+                              aria-label="Font Style" multiple="true">
+      <cute-button-toggle color="secondary" value="bold">Bold</cute-button-toggle>
+      <cute-button-toggle value="italic">Italic</cute-button-toggle>
+      <cute-button-toggle value="underline">Underline</cute-button-toggle>
+      <cute-button-toggle value="disabled" disabled>Disabled</cute-button-toggle>
+    </cute-button-toggle-group>
+    <cute-checkbox #cbxDisableGrp1>Disable</cute-checkbox>
+  </cute-hstack>
 
   <p>Values: {{grp1.value}}</p>
 
-  <h6 class="mt-3">Single selection</h6>
-  <cute-button-toggle-group #grp2="cuteButtonToggleGroup" color="primary" name="fontStyle" aria-label="Font Style" multiple="false">
-    <cute-button-toggle color="secondary" value="bold">Bold</cute-button-toggle>
-    <cute-button-toggle value="italic">Italic</cute-button-toggle>
-    <cute-button-toggle value="underline">Underline</cute-button-toggle>
-    <cute-button-toggle value="disabled" disabled>Disabled</cute-button-toggle>
-  </cute-button-toggle-group>
+  <h6 class="mt-3">Single selection (toggle-group)</h6>
+
+  <cute-hstack gap="5">
+    <cute-button-toggle-group #grp2="cuteButtonToggleGroup"
+                              color="primary"
+                              name="fontStyle"
+                              aria-label="Font Style"
+                              multiple="false"
+                              [disabled]="cbxDisableGrp2.checked">
+      <cute-button-toggle color="secondary" value="bold">Bold</cute-button-toggle>
+      <cute-button-toggle value="italic">Italic</cute-button-toggle>
+      <cute-button-toggle value="underline">Underline</cute-button-toggle>
+      <cute-button-toggle value="disabled" disabled disabledInteractive cuteTooltip="Tool tip text">Disabled</cute-button-toggle>
+    </cute-button-toggle-group>
+    <cute-checkbox #cbxDisableGrp2>Disable</cute-checkbox>
+  </cute-hstack>
 
   <p>Value: {{grp2.value}}</p>
 
+
+  <h6 class="mt-3">Check box (standalone)</h6>
+  <cute-hstack gap="3">
+    <cute-button-toggle #tgl1 color="primary" value="italic">Italic</cute-button-toggle>
+    <cute-button-toggle value="disabled" disabled disabledInteractive cuteTooltip="Tool tip text">Disabled</cute-button-toggle>
+  </cute-hstack>
+  <p>Checked: {{tgl1.checked}}</p>
 <!--</cute-vstack>-->
 

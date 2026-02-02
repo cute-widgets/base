@@ -1,3 +1,9 @@
 .cute-button-toggle {
   --bs-btn-hover-bg: transparent;
+
+  &.cute-button-checked-disabled {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    opacity: var(--bs-btn-disabled-opacity);
+  }
 }

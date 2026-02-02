@@ -9,9 +9,9 @@
 import {
   booleanAttribute,
   ContentChildren,
-  Directive,
-  HostBinding,
-  Input,
+  Directive, EventEmitter,
+  HostBinding, InjectionToken,
+  Input, Output,
   QueryList
 } from "@angular/core";
 import {CuteFocusableControl} from "@cute-widgets/base/abstract";
@@ -23,21 +23,35 @@ import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
 let uniqueIdCounter = 0;
 
 /**
+ * Injection token that can be used to reference instances of `CuteButtonGroup`.
+ * It serves as an alternative token to the actual `CuteButtonGroup` class which
+ * could cause unnecessary retention of the class and its component metadata.
+ */
+export const CUTE_BUTTON_GROUP = new InjectionToken<CuteButtonGroup>(
+  'CuteButtonGroup',
+);
+
+
+/**
  * Group a series of buttons together on a single line or stack them in a vertical column.
  */
 @Directive({
-    selector: "cute-button-group",
-    exportAs: "cuteButtonGroup",
-    host: {
-      'role':  'group',
-      'class': 'cute-button-group',
-      '[class]': '"btn-group" +(vertical?"-vertical":"")',
-      '[attr.aria-label]': 'ariaLabel || null',
-      '[attr.aria-labelledby]': 'ariaLabelledby || null',
-      '[attr.aria-describedby]': 'ariaDescribedby || null',
-      '[id]': 'id || null'
-    },
-    standalone: true
+  selector: "cute-button-group",
+  exportAs: "cuteButtonGroup",
+  host: {
+    'role':  'group',
+    'class': 'cute-button-group',
+    '[class]': '"btn-group" +(vertical?"-vertical":"")',
+    '[class.disabled]': 'disabled',
+    '[attr.aria-disabled]': 'disabled',
+    '[attr.aria-label]': 'ariaLabel || null',
+    '[attr.aria-labelledby]': 'ariaLabelledby || null',
+    '[attr.aria-describedby]': 'ariaDescribedby || null',
+    '[attr.tabindex]': '-1',
+    '[id]': 'id || null'
+  },
+  providers: [{provide: CUTE_BUTTON_GROUP, useExisting: CuteButtonGroup}],
+  standalone: true
 })
 export class CuteButtonGroup extends CuteFocusableControl {
 
@@ -63,6 +77,9 @@ export class CuteButtonGroup extends CuteFocusableControl {
   @ContentChildren(CUTE_BUTTON_BASE, {descendants: true})
   _buttons: QueryList<CuteButtonBase> | undefined;
 
+  /** Raised when the disabled state of a component group changes. */
+  @Output() disabledChange = new EventEmitter<boolean>();
+
   constructor() {
     super();
   }
@@ -71,12 +88,34 @@ export class CuteButtonGroup extends CuteFocusableControl {
     return `button-group-${++uniqueIdCounter}`;
   }
 
+  // Buttons that have `disabled` states before the group is disabled as a whole. Uses to restore `disabled` states
+  // when the group's state will be enabled again.
+  // CuteButtonToggleGroup, as an ancestor, uses this algo too.
+  #disablesCache = new Set<CuteButtonBase>();
+
   protected override setDisabledState(newState: BooleanInput, emitEvent?: boolean): boolean {
     let res = super.setDisabledState(newState, emitEvent);
     if (res && this._buttons) {
-      this._buttons.forEach(btn => {
-        btn.disabled = coerceBooleanProperty(newState);
-      });
+      const isDisabled = coerceBooleanProperty(newState);
+      if (isDisabled) {
+        this._buttons.forEach(btn => {
+          if (btn.disabled) {
+            this.#disablesCache.add(btn);
+          }
+          btn.disabled = isDisabled;
+        });
+      } else {
+        this._buttons.forEach(btn => {
+          if (!this.#disablesCache.has(btn)) {
+            btn.disabled = false;
+          }
+        });
+        this.#disablesCache.clear();
+      }
+
+      this._markButtonsForCheck();
+
+      this.disabledChange.emit(isDisabled);
     }
     return res;
   }
@@ -96,5 +135,17 @@ export class CuteButtonGroup extends CuteFocusableControl {
       }
     });
   }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+
+    this.#disablesCache.clear();
+  }
+
+  /** Marks all the child button toggles to be checked. */
+  protected _markButtonsForCheck() {
+    this._buttons?.forEach(btn => btn.markForCheck());
+  }
+
 
 }

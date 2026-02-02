@@ -11,7 +11,7 @@
   </ng-content>
 </span>
 
-<span class="cute-button-label" [class.cute-button-label__wrap]="wrapLabel">
+<span class="cute-button-label" [class.cute-button-label__nowrap]="!wrapText">
   <ng-content>
       @if(visuallyHiddenLabel) {
         <span class="visually-hidden"> {{visuallyHiddenLabel}} </span>

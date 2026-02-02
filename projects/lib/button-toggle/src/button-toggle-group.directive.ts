@@ -25,7 +25,8 @@ import {
   CuteButtonToggleDefaultOptions
 } from "./button-toggle.component";
 import {Direction, Directionality} from "@angular/cdk/bidi";
-import {CuteButtonGroup, CuteButtonStyle} from '@cute-widgets/base/button';
+import {CuteButtonGroup, CuteButtonStyle, CUTE_BUTTON_GROUP} from '@cute-widgets/base/button';
+import {BooleanInput} from '@angular/cdk/coercion';
 
 /**
  * Injection token that can be used to reference instances of `CuteButtonToggleGroup`.
@@ -53,19 +54,17 @@ let uniqueIdCounter = 0;
 /** Exclusive selection button toggle group that behaves like a radio-button group. */
 @Directive({
   selector: 'cute-button-toggle-group',
-  providers: [
-    CUTE_BUTTON_TOGGLE_GROUP_VALUE_ACCESSOR,
-    {provide: CUTE_BUTTON_TOGGLE_GROUP, useExisting: CuteButtonToggleGroup},
-  ],
+  exportAs: 'cuteButtonToggleGroup',
   host: {
     'class': 'cute-button-toggle-group',
     '[attr.role]': 'multiple ? "group" : "radiogroup"',
-    '[attr.aria-disabled]': 'disabled',
-    '[attr.tabindex]': '-1',
     '(keydown)': '_keydown($event)',
   },
-  exportAs: 'cuteButtonToggleGroup',
-  standalone: true,
+  providers: [
+    CUTE_BUTTON_TOGGLE_GROUP_VALUE_ACCESSOR,
+    {provide: CUTE_BUTTON_GROUP, useExisting: CuteButtonToggleGroup},
+    {provide: CUTE_BUTTON_TOGGLE_GROUP, useExisting: CuteButtonToggleGroup},
+  ],
 })
 export class CuteButtonToggleGroup extends CuteButtonGroup implements ControlValueAccessor, OnInit, AfterContentInit {
   private _dir = inject(Directionality, {optional: true});
@@ -236,6 +235,15 @@ export class CuteButtonToggleGroup extends CuteButtonGroup implements ControlVal
   }
 
   /**
+   * Implemented as part of ControlValueAccessor.
+   *
+   * @inheritDoc
+   */
+  override setDisabledState(newState: BooleanInput, emitEvent?: boolean): boolean {
+    return super.setDisabledState(newState, emitEvent);
+  }
+
+  /**
    * Sets the model value. Implemented as part of ControlValueAccessor.
    * @param value Value to be set to the model.
    */
@@ -254,14 +262,6 @@ export class CuteButtonToggleGroup extends CuteButtonGroup implements ControlVal
     this._onTouched = fn;
   }
 
-  // Implemented as part of ControlValueAccessor.
-  override setDisabledState(isDisabled: boolean): boolean {
-    if (super.setDisabledState(isDisabled)) {
-      this._buttonToggles?.forEach(toggle => toggle.disabled = isDisabled)
-      this._markButtonsForCheck();
-    }
-    return false;
-  }
 
   /** Handle keydown event calling to single-select button toggle. */
   protected _keydown(event: KeyboardEvent) {
@@ -462,11 +462,6 @@ export class CuteButtonToggleGroup extends CuteButtonGroup implements ControlVal
     // Note: we emit this one no matter whether it was a user interaction, because
     // it is used by Angular to sync up the two-way data binding.
     this.valueChange.emit(this.value);
-  }
-
-  /** Marks all the child button toggles to be checked. */
-  private _markButtonsForCheck() {
-    this._buttonToggles?.forEach(toggle => toggle.markForCheck());
   }
 
 }

@@ -61,8 +61,8 @@
       <cute-label>Filter</cute-label>
       <input cuteInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
     </cute-form-field>
-    <button cute-button wrapLabel (click)="exportToExcel('table1',{filename:'export.xls'})">Export to Excel</button>
-    <button cute-button wrapLabel (click)="exportToCSV('table1',{filename:'data', delimiter: ';', columns: ['name', 'symbol']})">Export to CSV</button>
+    <button cute-button wrapText (click)="exportToExcel('table1',{filename:'export.xls'})">Export to Excel</button>
+    <button cute-button wrapText (click)="exportToCSV('table1',{filename:'data', delimiter: ';', columns: ['name', 'symbol']})">Export to CSV</button>
   </cute-hstack>
 
   <section class="example-container shadow">
