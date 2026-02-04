@@ -448,7 +448,7 @@ export class CuteTabGroup extends CuteLayoutControl {
     newTab.contentTemplate = content;
     newTab.contentContext = context;
     newTab.active = true; // !this.tabs || this.tabs.length === 0;
-    newTab.isDynamic = true;
+    newTab._isDynamic = true;
     //componentRef.setInput("closable", true);
     newTab.closable = closable ?? true;
     componentRef.changeDetectorRef.detectChanges();

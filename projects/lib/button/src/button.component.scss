@@ -6,10 +6,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
   overflow: visible;
 
   box-shadow: none;
+
+  &:not(.btn-close) {
+    box-sizing: border-box;
+  }
 
   //&:has(> :not(.cute-ripple):nth-child(2)) {
   &:has(> :nth-child(2)) {

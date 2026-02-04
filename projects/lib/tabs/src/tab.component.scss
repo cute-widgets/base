@@ -4,11 +4,12 @@
   padding: 0.25rem;
 
   &:not(.show) {
-    display: none;
+    height: 0;
+    padding: 0;
+    //display: none;
   }
 
   &.ng-animating {
     overflow: hidden;
   }
-
 }

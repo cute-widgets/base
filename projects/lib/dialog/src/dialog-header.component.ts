@@ -18,7 +18,7 @@ import {
 } from "@angular/core";
 import {CuteButton} from "@cute-widgets/base/button";
 import {CdkDrag, CdkDragHandle, DragAxis} from "@angular/cdk/drag-drop";
-import {CuteDialogClose} from "./dialog-close.directive";
+import {CuteDialogClose} from "./dialog-content-directives";
 import {CuteDialogContainer} from "./dialog-container.component";
 import {CuteDialogConfig} from "./dialog-config";
 
@@ -30,26 +30,29 @@ import {CuteDialogConfig} from "./dialog-config";
            class="modal-header"
            role="heading"
            cdkDrag
+           cdkDragHandle
            cdkDragRootElement=".cdk-overlay-pane"
            [cdkDragDisabled]="!draggable || container.isFullScreenDialog()"
            [style.cursor]="getCursorStyle()"
       >
           <ng-content select="[cute-dialog-title], [cuteDialogTitle]"></ng-content>
           <ng-content></ng-content>
-          <button cuteButton="close-button" tabindex="-1" color="light" magnitude="smaller" cute-dialog-close></button>
+          <button cuteButton="close-button"
+                  magnitude="small"
+                  cute-dialog-close></button>
       </div>
-<!--      cdkDragHandle-->
-  `,
+    `,
     host: {
         'class': 'cute-dialog-header',
     },
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CuteButton,
-        CdkDrag,
-        CuteDialogClose
-    ]
+  imports: [
+    CuteButton,
+    CdkDrag,
+    CuteDialogClose,
+    CdkDragHandle
+  ]
 })
 export class CuteDialogHeader implements OnInit {
 

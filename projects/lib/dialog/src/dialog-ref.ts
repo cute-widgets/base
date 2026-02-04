@@ -12,7 +12,7 @@
 
 /** Possible states of the lifecycle of a dialog. */
 import {FocusOrigin} from '@angular/cdk/a11y';
-import {merge, Observable, Subject} from 'rxjs';
+import {merge, Observable, ReplaySubject, Subject} from 'rxjs';
 import {DialogRef} from '@angular/cdk/dialog';
 import {DialogPosition, CuteDialogConfig} from './dialog-config';
 import {CuteDialogContainer} from './dialog-container.component';
@@ -48,10 +48,10 @@ export class CuteDialogRef<T, R = any> {
   id: string;
 
   /** Subject for notifying the user that the dialog has finished opening. */
-  private readonly _afterOpened = new Subject<void>();
+  private readonly _afterOpened = new ReplaySubject<void>(1);
 
   /** Subject for notifying the user that the dialog has started closing. */
-  private readonly _beforeClosed = new Subject<R | undefined>();
+  private readonly _beforeClosed = new ReplaySubject<R | undefined>(1);
 
   /** Result to be passed to afterClosed. */
   private _result: R | undefined;
@@ -72,7 +72,7 @@ export class CuteDialogRef<T, R = any> {
   constructor(
     private _ref: DialogRef<R, T>,
     private _config: CuteDialogConfig,
-    protected _containerInstance: CuteDialogContainer,
+    public _containerInstance: CuteDialogContainer,
   ) {
     this.disableClose = _config.disableClose;
     this.id = _ref.id;

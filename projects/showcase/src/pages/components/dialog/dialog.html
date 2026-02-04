@@ -1,12 +1,37 @@
 <h5 componentHeader>Dialog</h5>
 
-<cute-hstack gap="3">
-  <button cuteButton="outline-button" color="primary" (click)="openDialog()">
-    Open Dialog...
-  </button>
-  <button cuteButton="outline-button" color="primary" (click)="openDialog(true)">
-    Open Full Screen Dialog...
-  </button>
+<cute-vstack gap="3">
 
-</cute-hstack>
+  Dialog Overview
+
+  <ol>
+    <li>
+      <cute-form-field>
+        <cute-label>What's your name?</cute-label>
+        <input cuteInput [(ngModel)]="name" />
+      </cute-form-field>
+    </li>
+    <li>
+      <button cuteButton="elevated" (click)="openOverviewDialog()">Pick one</button>
+    </li>
+    @if (animal()) {
+      <li>
+        You chose: <em>{{animal()}}</em>
+      </li>
+    }
+  </ol>
+
+
+  Dialog with header, scrollable content and actions
+
+  <cute-hstack gap="3">
+    <button cuteButton="outline-button" color="primary" (click)="openDialog()">
+      Open Dialog...
+    </button>
+    <button cuteButton="outline-button" color="primary" (click)="openDialog(true)">
+      Open Full Screen Dialog...
+    </button>
+
+  </cute-hstack>
+</cute-vstack>
 

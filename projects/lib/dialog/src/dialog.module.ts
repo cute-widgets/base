@@ -8,12 +8,9 @@
  */
 import {NgModule, Type} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CuteDialogFooter} from "./dialog-footer.directive";
-import {CuteDialogBody} from "./dialog-body.directive";
 import {CuteDialogHeader} from "./dialog-header.component";
-import {CuteDialogTitle} from "./dialog-title.directive";
 import {CuteDialogContainer} from "./dialog-container.component";
-import {CuteDialogClose} from "./dialog-close.directive";
+import {CuteDialogClose, CuteDialogTitle, CuteDialogBody, CuteDialogFooter} from "./dialog-content-directives";
 import {CuteDialog} from "./dialog.service";
 
 const TYPES: (any | Type<any>)[] = [

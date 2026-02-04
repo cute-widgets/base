@@ -30,7 +30,7 @@ import {toTextBgCssClass} from "@cute-widgets/base/core";
 })
 export class CuteBadge extends CuteBaseControl {
 
-  /** Makes a badge more rounded with a larger border-radius */
+  /** Makes a badge more rounded with a larger border-radius. */
   @Input({transform: booleanAttribute})
   roundedPill: boolean = false;
 

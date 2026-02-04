@@ -22,7 +22,6 @@ import {
   booleanAttribute,
   inject,
 } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {NgTemplateOutlet} from "@angular/common";
 import {CuteTabLabel} from "./tab-label.directive";
 import {CuteTabContent} from "./tab-content.directive";
@@ -31,6 +30,7 @@ import {Subject} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CUTE_TAB_GROUP} from "./tab-group.component";
 import {CuteNavLink} from "@cute-widgets/base/core/nav";
+import {_animationsDisabled} from '@cute-widgets/base/core';
 
 /**
  * Used to provide a tab label to a tab without causing a circular dependency.
@@ -44,23 +44,15 @@ let nextId: number = 0;
   selector: 'cute-tab',
   templateUrl: './tab.component.html',
   styleUrls: ['./tab.component.scss'],
-  animations: [
-    trigger('contentFade', [
-      state('in', style({ opacity: 1, height: '*'})),
-      state('out', style({ opacity: 0, height: '0px'})),
-      transition('in <=> out', animate('150ms linear'))
-    ])
-  ],
   host: {
     "class": "cute-tab tab-pane",
+    "[class.fade]": "_animationEnabled",
     "[class.show]": "active",
     "[class.active]": "active",
-//    "[class.d-none]": "!active",
     '[attr.tabindex]': 'active && !disabled ? 0 : -1',
     '[attr.aria-labelledby]': 'ariaLabelledby || null',
     '[attr.id]': 'id || null',
     "role": "tabpanel",
-    "[@contentFade]": "active ? 'in' : 'out'"
   },
   imports: [
     NgTemplateOutlet,
@@ -72,6 +64,7 @@ export class CuteTab extends CuteFocusableControl {
 
   protected _tabGroup = inject(CUTE_TAB_GROUP, {optional: true});
   private _intersectionRatio: number = NaN;
+  protected _animationEnabled = !_animationsDisabled();
 
   /** Plain text label for the tab, used when there is no template label. */
   @Input("label") textLabel: string = "";
@@ -124,7 +117,7 @@ export class CuteTab extends CuteFocusableControl {
   }
 
   /** Whether the tab was added dynamically */
-  public isDynamic: boolean = false;
+  public _isDynamic: boolean = false;
 
   protected isPreserveContent(): boolean {
     return this.preserveContent ?? this._tabGroup?.preserveContent ?? false;

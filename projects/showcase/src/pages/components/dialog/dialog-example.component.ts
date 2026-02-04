@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Inject} from "@angular/core";
+import {Component, Inject} from "@angular/core";
 import {CuteButton} from "@cute-widgets/base/button";
 import {
   CUTE_DIALOG_DATA,
@@ -12,41 +12,39 @@ import {FormsModule} from "@angular/forms";
 import {CuteTooltip} from "@cute-widgets/base/tooltip";
 
 @Component({
-    selector: 'app-dialog-example',
-    'template': `
+  selector: 'app-dialog-example',
+  'template': `
       <cute-dialog-header>
-        <h1 class="h5" cuteDialogTitle>My First Dialog</h1>
+        <h4 cuteDialogTitle>Install Angular</h4>
       </cute-dialog-header>
       <cute-dialog-body>
-        <p>This is a dialog Content!</p>
-
-        <h3>Develop across all platforms</h3>
+        <h6>Develop across all platforms</h6>
         <p>Learn one way to build applications with Angular and reuse your code and abilities to build
           apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>
 
-        <h3>Speed &amp; Performance</h3>
+        <h6>Speed &amp; Performance</h6>
         <p>Achieve the maximum speed possible on the Web Platform today, and take it further, via Web
           Workers and server-side rendering. Angular puts you in control over scalability. Meet huge
           data requirements by building data models on RxJS, Immutable.js or another push-model.</p>
 
-        <h3>Incredible tooling</h3>
+        <h6>Incredible tooling</h6>
         <p>Build features quickly with simple, declarative templates. Extend the template language with
           your own components and use a wide array of existing components. Get immediate Angular-specific
           help and feedback with nearly every IDE and editor. All this comes together so you can focus
           on building amazing apps rather than trying to make the code work.</p>
 
-        <h3>Loved by millions</h3>
+        <h6>Loved by millions</h6>
         <p>From prototype through global deployment, Angular delivers the productivity and scalable
           infrastructure that supports Google's largest applications.</p>
 
-        <h3>What is Angular?</h3>
+        <h6>What is Angular?</h6>
 
         <p>Angular is a platform that makes it easy to build applications with the web. Angular
           combines declarative templates, dependency injection, end to end tooling, and integrated
           best practices to solve development challenges. Angular empowers developers to build
           applications that live on the web, mobile, or the desktop</p>
 
-        <h3>Architecture overview</h3>
+        <h6>Architecture overview</h6>
 
         <p>Angular is a platform and framework for building client applications in HTML and TypeScript.
           Angular is itself written in TypeScript. It implements core and optional functionality as a
@@ -81,37 +79,18 @@ import {CuteTooltip} from "@cute-widgets/base/tooltip";
       </cute-dialog-body>
       <cute-dialog-footer align="end">
         <button cute-button (click)="closeWithResult(0)" style="width:5rem"
-            cuteTooltip="Exit without save result">Cancel</button>
+                cuteTooltip="Exit without save result">Cancel</button>
         <button cute-button cuteFocusInitial color="primary" (click)="closeWithResult(1)" style="width:5rem"
                 cuteTooltip="Exit with save result">OK</button>
       </cute-dialog-footer>
-    <!--
-      <cute-dialog-content>
-          <cute-dialog-header draggable="true">
-              <h1 class="h5" cuteDialogTitle>My First Dialog</h1>
-          </cute-dialog-header>
-          <cute-dialog-body>
-              <div>
-                  <label id="favorite-animal">What's your favorite animal?</label>
-                  <input for="favorite-animal" [(ngModel)]="data.animal" placeholder="Enter your name">
-              </div>
-          </cute-dialog-body>
-          <cute-dialog-footer horAlign="end">
-            <button cute-button color="light" magnitude="small" (click)="dlgRef.close(data.animal)">OK</button>
-            <button cute-button cuteFocusInitial color="primary" magnitude="small" (click)="dlgRef.close()">Cancel</button>
-          </cute-dialog-footer>
-      </cute-dialog-content>
-    -->
   `,
-    imports: [CuteDialogModule, CuteButton, CuteFocusInitial, A11yModule, FormsModule, CuteTooltip]
+  imports: [CuteDialogModule, CuteButton, CuteFocusInitial, A11yModule, FormsModule, CuteTooltip]
 })
 export class DialogExampleComponent {
 
   constructor(public dlgRef: CuteDialogRef<DialogExampleComponent>,
-              @Inject(CUTE_DIALOG_DATA) public data: DialogData,
-              protected _cdr: ChangeDetectorRef) {
-    //super();
-
+              @Inject(CUTE_DIALOG_DATA) public data: DialogData)
+  {
     dlgRef.afterOpened().subscribe(()=>console.log("Dialog opened."))
     dlgRef.afterClosed().subscribe(()=>console.log("Dialog closed."))
   }

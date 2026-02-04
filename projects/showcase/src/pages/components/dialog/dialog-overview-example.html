@@ -1,0 +1,12 @@
+<h2 cute-dialog-title>Hi {{data.name}}</h2>
+<cute-dialog-content>
+  <p>What's your favorite animal?</p>
+  <cute-form-field>
+    <cute-label>Favorite Animal</cute-label>
+    <input cuteInput [(ngModel)]="animal" />
+  </cute-form-field>
+</cute-dialog-content>
+<cute-dialog-actions>
+  <button cuteButton (click)="onNoClick()">No Thanks</button>
+  <button cuteButton [cute-dialog-close]="animal()" cuteFocusInitial>Ok</button>
+</cute-dialog-actions>

@@ -8,6 +8,7 @@ import {CuteInputModule} from '@cute-widgets/base/input';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {CuteCardModule} from '@cute-widgets/base/card';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 const today = new Date();
 const month = today.getMonth();
@@ -31,7 +32,7 @@ const year = today.getFullYear();
   templateUrl: './datepicker.html',
   styleUrl: './datepicker.scss',
 })
-export class DatepickerPage {
+export class DatepickerPage extends AbstractPage {
   protected startDate = new Date(1990, 0, 1);
   protected selected: Date | null = null;
   protected fcStartDate = new FormControl<any>(null, {updateOn: "change"}); //"change"

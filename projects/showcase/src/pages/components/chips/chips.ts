@@ -5,6 +5,7 @@ import {ThemeColor} from '@cute-widgets/base/core';
 import {ChipsFromControlComponent} from './examples/chips-from-control.component';
 import {ChipsAutocompleteComponent} from './examples/chips-autocomplete/chips-autocomplete.component';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 
 export interface ChipColor {
@@ -24,7 +25,7 @@ export interface ChipColor {
   templateUrl: './chips.html',
   styleUrl: './chips.scss',
 })
-export class ChipsPage {
+export class ChipsPage extends AbstractPage {
 
   // Chips
   availableColors: ChipColor[] = [

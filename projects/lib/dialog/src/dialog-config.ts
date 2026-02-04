@@ -99,11 +99,11 @@ export class CuteDialogConfig<D = any> {
   /** Min-height of the dialog. If a number is provided, assumes pixel units. */
   minHeight?: number | string;
 
-  /** Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw. */
-  maxWidth?: number | string = '80vw';
+  /** Max-width of the dialog. If a number is provided, assumes pixel units. */
+  maxWidth?: number | string = '560px';
 
   /** Max-height of the dialog. If a number is provided, assumes pixel units. */
-  maxHeight?: number | string = '95vh';
+  maxHeight?: number | string = '85vh';
 
   /** Position overrides. */
   position?: DialogPosition;

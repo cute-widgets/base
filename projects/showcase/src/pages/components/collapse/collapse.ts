@@ -5,6 +5,7 @@ import {CuteCardModule} from '@cute-widgets/base/card';
 import {CuteCollapseModule} from '@cute-widgets/base/collapse';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {ComponentHeader} from '../../../shared/utils/component-header';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-collapse',
@@ -21,6 +22,6 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
   templateUrl: './collapse.html',
   styleUrl: './collapse.scss',
 })
-export class CollapsePage {
+export class CollapsePage extends AbstractPage {
 
 }

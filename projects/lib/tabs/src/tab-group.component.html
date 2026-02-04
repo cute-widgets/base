@@ -45,9 +45,9 @@
               <!--            </ng-container>-->
             }
 
-            @if (tab.closable && tab.isDynamic) {
+            @if (tab.closable && tab._isDynamic) {
               <button cuteButton="close-button"
-                      magnitude="smaller"
+                      magnitude="smallest"
                       tabIndex="-1"
                       (click)="removeTab(i); $event.preventDefault();"
                       aria-label="Close tab">
