@@ -1,6 +1,9 @@
-<h5 componentHeader>Button toggles</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="buttonToggleExamples">
+</app-component-viewer>
 
-<!--<cute-vstack gap="3">-->
+<ng-template #buttonToggleExamples>
 
   <h6>Multiple selection (toggle-group)</h6>
 
@@ -46,5 +49,5 @@
     <cute-button-toggle value="disabled" disabled disabledInteractive cuteTooltip="Tool tip text">Disabled</cute-button-toggle>
   </cute-hstack>
   <p>Checked: {{tgl1.checked}}</p>
-<!--</cute-vstack>-->
 
+</ng-template>

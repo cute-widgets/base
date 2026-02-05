@@ -9,27 +9,28 @@ import {CuteDivider} from '@cute-widgets/base/divider';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteSelectModule} from '@cute-widgets/base/select';
 import {ThemeColor} from '@cute-widgets/base/core';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-paginator',
-  imports: [
-    FormsModule,
-    CuteFormFieldModule,
-    CuteInputModule,
-    CuteCheckboxModule,
-    CutePaginatorModule,
-    JsonPipe,
-    CuteDivider,
-    CuteVStack,
-    CuteHStack,
-    CuteSelectModule,
-    ComponentHeader,
-  ],
+    imports: [
+        FormsModule,
+        CuteFormFieldModule,
+        CuteInputModule,
+        CuteCheckboxModule,
+        CutePaginatorModule,
+        JsonPipe,
+        CuteDivider,
+        CuteVStack,
+        CuteHStack,
+        CuteSelectModule,
+        ComponentViewer,
+    ],
   templateUrl: './paginator.html',
   styleUrl: './paginator.scss',
 })
-export class PaginatorPage {
+export class PaginatorPage extends AbstractPage {
   length = 50;
   pageSize = 10;
   pageIndex = 0;

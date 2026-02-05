@@ -12,24 +12,25 @@ import {CuteIconModule} from '@cute-widgets/base/icon';
 import {FormsModule} from '@angular/forms';
 import {CuteInputModule} from '@cute-widgets/base/input';
 import {ThemeColor} from '@cute-widgets/base/core';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-snack-bar',
-  imports: [
-    FormsModule,
-    CuteHStack,
-    CuteInputModule,
-    CuteFormFieldModule,
-    CuteSelectModule,
-    CuteButtonModule,
-    CuteVStack,
-    ComponentHeader,
-  ],
+    imports: [
+        FormsModule,
+        CuteHStack,
+        CuteInputModule,
+        CuteFormFieldModule,
+        CuteSelectModule,
+        CuteButtonModule,
+        CuteVStack,
+        ComponentViewer,
+    ],
   templateUrl: './snack-bar.html',
   styleUrl: './snack-bar.scss',
 })
-export class SnackBarPage {
+export class SnackBarPage extends AbstractPage {
 
   private _snackBar = inject(CuteSnackBar);
 

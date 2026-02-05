@@ -13,30 +13,31 @@ import {merge} from 'rxjs';
 import {CuteCardModule} from '@cute-widgets/base/card';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {CuteTooltip} from '@cute-widgets/base/tooltip';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-form-field',
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CuteVStack,
-    CuteFormFieldModule,
-    CuteButtonModule,
-    CuteInputModule,
-    CuteIconModule,
-    CuteSelectModule,
-    CuteRadioModule,
-    CuteCardModule,
-    CuteCheckbox,
-    CuteHStack,
-    CuteTooltip,
-    ComponentHeader,
-  ],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CuteVStack,
+        CuteFormFieldModule,
+        CuteButtonModule,
+        CuteInputModule,
+        CuteIconModule,
+        CuteSelectModule,
+        CuteRadioModule,
+        CuteCardModule,
+        CuteCheckbox,
+        CuteHStack,
+        CuteTooltip,
+        ComponentViewer,
+    ],
   templateUrl: './form-field.html',
   styleUrl: './form-field.scss',
 })
-export class FormFieldPage {
+export class FormFieldPage extends AbstractPage {
   protected floatLabel: FloatLabelType = "always";
   protected clearMeValue = ""; //"ClearMe";
   protected email = new FormControl('', [Validators.required, Validators.email]);
@@ -45,6 +46,7 @@ export class FormFieldPage {
   protected errorMessage = signal("");
 
   constructor() {
+    super();
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());

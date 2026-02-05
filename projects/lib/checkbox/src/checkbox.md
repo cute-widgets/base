@@ -33,11 +33,11 @@ While the `indeterminate` property of the checkbox is true, it will render as in
 regardless of the `checked` value. Any interaction with the checkbox by a user (i.e., clicking) will
 remove the indeterminate state.
 
-### Slide toggle
+### Toggle switch
 
 Apply the `cuteToggleSwitch` attribute to `<cute-checkbox>` to change the component's appearance to a
-switch (or slide toggle). For this purpose, you can use another and a more appropriate element's name - 
-`<cute-slide-switch>`.
+switch (or toggle switch). You can use also another, a more appropriate and compatible with Angular Material 
+element tag name - `<cute-slide-toggle>`.
 
 ### Click action config
 

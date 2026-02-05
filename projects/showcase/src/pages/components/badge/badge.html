@@ -1,22 +1,28 @@
-<h5 componentHeader>Badge</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="badgeExamples">
+</app-component-viewer>
 
-<cute-vstack gap="2">
-  <h1>Example heading <cute-badge color="secondary">New</cute-badge></h1>
-  <h2>Example heading <cute-badge color="secondary">New</cute-badge></h2>
-  <h3>Example heading <cute-badge color="secondary">New</cute-badge></h3>
-  <h4>Example heading <cute-badge color="secondary">New</cute-badge></h4>
-  <h5>Example heading <cute-badge color="secondary">New</cute-badge></h5>
-  <h6>Example heading <cute-badge color="secondary">New</cute-badge></h6>
+<ng-template #badgeExamples>
 
-  <button cuteButton="flat-button" color="primary" style="width: 9rem">
-    Notifications
-    <cute-badge color="danger">5</cute-badge>
-  </button>
+  <cute-vstack gap="2">
+    <h1>Example heading <cute-badge color="secondary">New</cute-badge></h1>
+    <h2>Example heading <cute-badge color="secondary">New</cute-badge></h2>
+    <h3>Example heading <cute-badge color="secondary">New</cute-badge></h3>
+    <h4>Example heading <cute-badge color="secondary">New</cute-badge></h4>
+    <h5>Example heading <cute-badge color="secondary">New</cute-badge></h5>
+    <h6>Example heading <cute-badge color="secondary">New</cute-badge></h6>
 
-  <a cuteButton="pill-button" color="warning-emphasis" style="width: 8rem">
-    Warning
-    <cute-badge roundedPill color="danger" style="width:2.2em">5</cute-badge>
-  </a>
+    <button cuteButton="flat-button" color="primary" style="width: 9rem">
+      Notifications
+      <cute-badge color="danger">5</cute-badge>
+    </button>
 
-</cute-vstack>
+    <a cuteButton="pill-button" color="warning-emphasis" style="width: 8rem">
+      Warning
+      <cute-badge roundedPill color="danger" style="width:2.2em">5</cute-badge>
+    </a>
 
+  </cute-vstack>
+
+</ng-template>

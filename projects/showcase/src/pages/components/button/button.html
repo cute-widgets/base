@@ -1,217 +1,225 @@
-<h5 componentHeader>Button</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="buttonExamples">
+</app-component-viewer>
 
-<cute-hstack gap="2" class="my-3">
-<!--  <cute-slide-toggle [(ngModel)]="applyGradient">With gradient fill</cute-slide-toggle>-->
-  <cute-slide-toggle [(ngModel)]="applyDisabled">Disabled</cute-slide-toggle>
-</cute-hstack>
+<ng-template #buttonExamples>
 
-<cute-tab-group headerPosition="start">
-  <cute-tab label="Base Buttons">
-    <button cuteButton [disabled]="applyDisabled">Default</button>
-    @for (color of colors; track color) {
-      <button cuteButton [color]="color"
-              [gradientFill]="applyGradient"
-              [disabled]="applyDisabled"
-              disabledInteractive
-              [cuteTooltip]="'Tooltip for '+color+' button'"
-              cuteTooltipShowDelay="500">
-        {{proper(color)}}
-      </button>
-    }
-  </cute-tab>
+  <cute-hstack gap="2" class="my-3">
+    <!--  <cute-slide-toggle [(ngModel)]="applyGradient">With gradient fill</cute-slide-toggle>-->
+    <cute-slide-toggle [(ngModel)]="applyDisabled">Disabled</cute-slide-toggle>
+  </cute-hstack>
 
-  <cute-tab label="Flat Buttons">
-    <button cuteButton="flat-button" [disabled]="applyDisabled">Default</button>
-    @for (color of colors; track color) {
-      <button cuteButton="flat-button"
-              [color]="color"
-              [gradientFill]="applyGradient"
-              [disabled]="applyDisabled"
-              disabledInteractive
-              [cuteTooltip]="'Tooltip for '+color+' button'"
-              cuteTooltipShowDelay="500">
-        {{proper(color)}}
-      </button>
-    }
-  </cute-tab>
-
-  <cute-tab label="Raised buttons">
-    <button cuteButton="raised-button" [disabled]="applyDisabled">Default</button>
-    @for (color of colors; track color) {
-      <button cuteButton="raised-button"
-              [gradientFill]="applyGradient"
-              [color]="color"
-              [disabled]="applyDisabled"
-              disabledInteractive
-              [cuteTooltip]="'Tooltip for '+color+' button'"
-              cuteTooltipShowDelay="500">
-        {{proper(color)}}
-      </button>
-    }
-  </cute-tab>
-
-  <cute-tab label="Outline Buttons">
-    <button cuteButton="outline-button" [disabled]="applyDisabled">Default</button>
-    @for (color of colors; track color) {
-      <button cuteButton="outline-button"
-              [color]="color"
-              [gradientFill]="applyGradient"
-              [disabled]="applyDisabled"
-              disabledInteractive
-              [cuteTooltip]="'Tooltip for '+color+' button'"
-              cuteTooltipShowDelay="500">
-        {{proper(color)}}
-      </button>
-    }
-  </cute-tab>
-
-  <cute-tab label="Icon buttons">
-    <cute-hstack class="flex-wrap">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="icon-button" color="info"
-                [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>house-fill</cute-icon>
+  <cute-tab-group headerPosition="start">
+    <cute-tab label="Base Buttons">
+      <button cuteButton [disabled]="applyDisabled">Default</button>
+      @for (color of colors; track color) {
+        <button cuteButton [color]="color"
+                [gradientFill]="applyGradient"
+                [disabled]="applyDisabled"
+                disabledInteractive
+                [cuteTooltip]="'Tooltip for '+color+' button'"
+                cuteTooltipShowDelay="500">
+          {{proper(color)}}
         </button>
       }
-    </cute-hstack>
-    <cute-hstack class="flex-wrap">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="icon-button" color="danger"
-                [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>person-fill</cute-icon>
+    </cute-tab>
+
+    <cute-tab label="Flat Buttons">
+      <button cuteButton="flat-button" [disabled]="applyDisabled">Default</button>
+      @for (color of colors; track color) {
+        <button cuteButton="flat-button"
+                [color]="color"
+                [gradientFill]="applyGradient"
+                [disabled]="applyDisabled"
+                disabledInteractive
+                [cuteTooltip]="'Tooltip for '+color+' button'"
+                cuteTooltipShowDelay="500">
+          {{proper(color)}}
         </button>
       }
-    </cute-hstack>
-    <cute-hstack class="flex-wrap">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="icon-button" color="primary"
-                [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>android2</cute-icon>
+    </cute-tab>
+
+    <cute-tab label="Raised buttons">
+      <button cuteButton="raised-button" [disabled]="applyDisabled">Default</button>
+      @for (color of colors; track color) {
+        <button cuteButton="raised-button"
+                [gradientFill]="applyGradient"
+                [color]="color"
+                [disabled]="applyDisabled"
+                disabledInteractive
+                [cuteTooltip]="'Tooltip for '+color+' button'"
+                cuteTooltipShowDelay="500">
+          {{proper(color)}}
         </button>
       }
-    </cute-hstack>
+    </cute-tab>
 
-  </cute-tab>
-
-  <cute-tab label="FAB buttons">
-    <cute-hstack class="flex-wrap">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="fab-button" color="primary"
-                [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>house-fill</cute-icon>
+    <cute-tab label="Outline Buttons">
+      <button cuteButton="outline-button" [disabled]="applyDisabled">Default</button>
+      @for (color of colors; track color) {
+        <button cuteButton="outline-button"
+                [color]="color"
+                [gradientFill]="applyGradient"
+                [disabled]="applyDisabled"
+                disabledInteractive
+                [cuteTooltip]="'Tooltip for '+color+' button'"
+                cuteTooltipShowDelay="500">
+          {{proper(color)}}
         </button>
       }
-    </cute-hstack>
+    </cute-tab>
 
-    <cute-hstack class="flex-wrap mt-2">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="fab-button" color="warning"
-                [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon color="danger">person-fill</cute-icon>
+    <cute-tab label="Icon buttons">
+      <cute-hstack class="flex-wrap">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="icon-button" color="info"
+                  [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>house-fill</cute-icon>
+          </button>
+        }
+      </cute-hstack>
+      <cute-hstack class="flex-wrap">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="icon-button" color="danger"
+                  [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>person-fill</cute-icon>
+          </button>
+        }
+      </cute-hstack>
+      <cute-hstack class="flex-wrap">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="icon-button" color="primary"
+                  [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>android2</cute-icon>
+          </button>
+        }
+      </cute-hstack>
+
+    </cute-tab>
+
+    <cute-tab label="FAB buttons">
+      <cute-hstack class="flex-wrap">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="fab-button" color="primary"
+                  [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>house-fill</cute-icon>
+          </button>
+        }
+      </cute-hstack>
+
+      <cute-hstack class="flex-wrap mt-2">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="fab-button" color="warning"
+                  [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon color="danger">person-fill</cute-icon>
+          </button>
+        }
+      </cute-hstack>
+
+      <cute-hstack class="flex-wrap mt-2">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="fab-button" color="info"
+                  [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon color="primary">android2</cute-icon>
+          </button>
+        }
+      </cute-hstack>
+    </cute-tab>
+
+    <cute-tab label="Anchor tags">
+      <a cute-button color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Primary anchor">Primary</a>
+      <a cuteButton="raised-button" color="secondary" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Secondary anchor">Secondary</a>
+      <a cuteButton="flat-button" color="success" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Success anchor">Success</a>
+      <a cuteButton="outline-button" color="danger" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Danger anchor">Danger</a>
+      <a cuteButton="outline-button" color="warning" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Warning anchor">Warning</a>
+      <a cuteButton="flat-button" color="info" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Info anchor">Info</a>
+      <a cute-button color="dark" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Dark anchor">Dark</a>
+      <a cute-button color="light" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Light anchor">Light</a>
+      <a cute-button color="link" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Link anchor">Link</a>
+    </cute-tab>
+
+    <cute-tab label="Button sizes">
+      <cute-hstack gap="1" class="flex-wrap">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="flat-button" color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>menu-app</cute-icon>
+            {{proper(size)}}
+          </button>
+        }
+      </cute-hstack>
+
+      <cute-hstack gap="1" class="flex-wrap mt-2">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="outlined" color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>android2</cute-icon>
+            {{proper(size)}}
+          </button>
+        }
+      </cute-hstack>
+
+      <cute-hstack gap="1" class="flex-wrap mt-2">
+        @for (size of reversedSizes; track size) {
+          <button cuteButton="pill-button" color="warning-emphasis" [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
+            <cute-icon>house-fill</cute-icon>
+            {{proper(size)}}
+          </button>
+        }
+      </cute-hstack>
+
+    </cute-tab>
+
+    <cute-tab label="Spinners">
+      <cute-hstack gap="1" class="overflow-y-hidden">
+        <button cuteButton="outline-button" color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabled>
+          <cute-progress-spinner magnitude="small"></cute-progress-spinner>
         </button>
-      }
-    </cute-hstack>
-
-    <cute-hstack class="flex-wrap mt-2">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="fab-button" color="info"
-                [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon color="primary">android2</cute-icon>
+        <button cuteButton="flat-button" color="danger" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabled>
+          <cute-progress-spinner growing="true" magnitude="small"></cute-progress-spinner>
+          Loading...
         </button>
-      }
-    </cute-hstack>
-  </cute-tab>
+      </cute-hstack>
+    </cute-tab>
 
-  <cute-tab label="Anchor tags">
-    <a cute-button color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Primary anchor">Primary</a>
-    <a cuteButton="raised-button" color="secondary" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Secondary anchor">Secondary</a>
-    <a cuteButton="flat-button" color="success" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Success anchor">Success</a>
-    <a cuteButton="outline-button" color="danger" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Danger anchor">Danger</a>
-    <a cuteButton="outline-button" color="warning" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Warning anchor">Warning</a>
-    <a cuteButton="flat-button" color="info" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Info anchor">Info</a>
-    <a cute-button color="dark" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Dark anchor">Dark</a>
-    <a cute-button color="light" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Light anchor">Light</a>
-    <a cute-button color="link" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabledInteractive cuteTooltip="Tooltip for Link anchor">Link</a>
-  </cute-tab>
+    <cute-tab label="Button groups">
 
-  <cute-tab label="Button sizes">
-    <cute-hstack gap="1" class="flex-wrap">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="flat-button" color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>menu-app</cute-icon>
-          {{proper(size)}}
-        </button>
-      }
-    </cute-hstack>
+      <h6>Button group</h6>
+      <cute-hstack gap="3" class="align-items-start flex-wrap">
+        <cute-button-group color="primary" vertical [disabled]="applyDisabled" [gradientFill]="applyGradient" aria-label="Font Style">
+          <button cute-button color="danger-emphasis">Bold</button>
+          <button cute-button>Italic</button>
+          <button cute-button>Underline</button>
+          <button cute-button>Strikethrough</button>
+        </cute-button-group>
 
-    <cute-hstack gap="1" class="flex-wrap mt-2">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="outlined" color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>android2</cute-icon>
-          {{proper(size)}}
-        </button>
-      }
-    </cute-hstack>
+        <cute-button-group color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" aria-label="Horizontal button group">
+          <button cuteButton="flat-button">Button 1</button>
+          <button cuteButton="flat-button">Button 2</button>
+        </cute-button-group>
+      </cute-hstack>
 
-    <cute-hstack gap="1" class="flex-wrap mt-2">
-      @for (size of reversedSizes; track size) {
-        <button cuteButton="pill-button" color="warning-emphasis" [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="size">
-          <cute-icon>house-fill</cute-icon>
-          {{proper(size)}}
-        </button>
-      }
-    </cute-hstack>
-
-  </cute-tab>
-
-  <cute-tab label="Spinners">
-    <cute-hstack gap="1" class="overflow-y-hidden">
-      <button cuteButton="outline-button" color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabled>
-        <cute-progress-spinner magnitude="small"></cute-progress-spinner>
-      </button>
-      <button cuteButton="flat-button" color="danger" [disabled]="applyDisabled" [gradientFill]="applyGradient" disabled>
-        <cute-progress-spinner growing="true" magnitude="small"></cute-progress-spinner>
-        Loading...
-      </button>
-    </cute-hstack>
-  </cute-tab>
-
-  <cute-tab label="Button groups">
-
-    <h6>Button group</h6>
-    <cute-hstack gap="3" class="align-items-start flex-wrap">
-      <cute-button-group color="primary" vertical [disabled]="applyDisabled" [gradientFill]="applyGradient" aria-label="Font Style">
-        <button cute-button color="danger-emphasis">Bold</button>
-        <button cute-button>Italic</button>
-        <button cute-button>Underline</button>
-        <button cute-button>Strikethrough</button>
-      </cute-button-group>
-
-      <cute-button-group color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" aria-label="Horizontal button group">
-        <button cuteButton="flat-button">Button 1</button>
-        <button cuteButton="flat-button">Button 2</button>
-      </cute-button-group>
-    </cute-hstack>
-
-    <h6 class="mt-3">Button toolbar</h6>
-    <cute-button-toolbar color="danger" aria-label="Font Style" gap="2" >
-      <cute-button-group color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient">
-        <button cute-button>1</button>
-        <button cute-button>2</button>
-        <button cute-button>3</button>
-        <button cute-button>4</button>
-        <button cute-button>5</button>
-      </cute-button-group>
-      <cute-button-group color="secondary" magnitude="smaller" [disabled]="applyDisabled" [gradientFill]="applyGradient">
-        <button cute-button>6</button>
-        <button cute-button>7</button>
-        <button cute-button>8</button>
-        <button cute-button>9</button>
-      </cute-button-group>
-    </cute-button-toolbar>
+      <h6 class="mt-3">Button toolbar</h6>
+      <cute-button-toolbar color="danger" aria-label="Font Style" gap="2" >
+        <cute-button-group color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient">
+          <button cute-button>1</button>
+          <button cute-button>2</button>
+          <button cute-button>3</button>
+          <button cute-button>4</button>
+          <button cute-button>5</button>
+        </cute-button-group>
+        <cute-button-group color="secondary" magnitude="smaller" [disabled]="applyDisabled" [gradientFill]="applyGradient">
+          <button cute-button>6</button>
+          <button cute-button>7</button>
+          <button cute-button>8</button>
+          <button cute-button>9</button>
+        </cute-button-group>
+      </cute-button-toolbar>
 
 
-  </cute-tab>
+    </cute-tab>
 
-</cute-tab-group>
+  </cute-tab-group>
+
+</ng-template>
+
 

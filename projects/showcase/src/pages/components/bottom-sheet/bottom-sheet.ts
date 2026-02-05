@@ -1,17 +1,17 @@
 import {Component, inject} from '@angular/core';
 import {CuteButton} from '@cute-widgets/base/button';
 import {CuteListModule} from '@cute-widgets/base/list';
-import {CuteBottomSheetModule, CuteBottomSheet, CuteBottomSheetRef} from '@cute-widgets/base/bottom-sheet';
+import {CuteBottomSheet, CuteBottomSheetRef} from '@cute-widgets/base/bottom-sheet';
 import {CuteIcon} from '@cute-widgets/base/icon';
-import {ComponentHeader} from '../../../shared/utils/component-header';
 import {AbstractPage} from '../abstract/abstract-page';
+import {ComponentViewer} from '../../component-viewer/component-viewer';
 
 @Component({
   selector: 'app-bottom-sheet',
   imports: [
     CuteButton,
     CuteIcon,
-    ComponentHeader
+    ComponentViewer,
   ],
   templateUrl: './bottom-sheet.html',
   styleUrl: './bottom-sheet.scss',

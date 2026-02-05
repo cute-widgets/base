@@ -1,16 +1,15 @@
 import {Component, inject, model, signal} from '@angular/core';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteButtonModule} from '@cute-widgets/base/button';
-import {CuteTooltipModule} from '@cute-widgets/base/tooltip';
 import {CuteDialog, CuteDialogConfig } from '@cute-widgets/base/dialog';
 import {DialogExampleComponent} from './dialog-example.component';
-import {ComponentHeader} from '../../../shared/utils/component-header';
 import {AbstractPage} from '../abstract/abstract-page';
 import {FormsModule} from '@angular/forms';
 import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {CuteInputModule} from '@cute-widgets/base/input';
 import {CuteDialogModule, CuteDialogRef, CUTE_DIALOG_DATA} from '@cute-widgets/base/dialog';
 import {CuteFocusInitial} from '@cute-widgets/base/core/directives';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
 
 export interface DialogData {
   animal: string;
@@ -19,22 +18,20 @@ export interface DialogData {
 
 @Component({
   selector: 'app-dialog',
-  imports: [
-    ComponentHeader,
-    CuteButtonModule,
-    CuteFormFieldModule,
-    CuteHStack,
-    CuteVStack,
-    FormsModule,
-    CuteInputModule,
-    //CuteTooltipModule
-  ],
+    imports: [
+        CuteButtonModule,
+        CuteFormFieldModule,
+        CuteHStack,
+        CuteVStack,
+        FormsModule,
+        CuteInputModule,
+        ComponentViewer,
+    ],
   templateUrl: './dialog.html',
   styleUrl: './dialog.scss',
 })
 export class DialogPage extends AbstractPage {
   private _dialog = inject(CuteDialog);
-
 
   readonly animal = signal('');
   readonly name = model('');

@@ -1,93 +1,99 @@
-<h5 componentHeader> Sidenav </h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="sidenavExamples">
+</app-component-viewer>
 
-<cute-vstack gap="3">
-  <cute-hstack gap="4">
-    <cute-vstack class="w-50">
-      <h6>Basic drawer</h6>
-      <cute-drawer-container class="example-container w-100">
-        <cute-drawer mode="side" opened>Drawer content</cute-drawer>
-        <cute-drawer-content class="example-drawer-background">Main content</cute-drawer-content>
-      </cute-drawer-container>
-    </cute-vstack>
-    <cute-vstack class="w-50">
-      <h6>Basic sidenav</h6>
-      <cute-sidenav-container class="example-container w-100">
-        <cute-sidenav mode="side" opened>Sidenav content</cute-sidenav>
-        <cute-sidenav-content class="example-drawer-background">Main content</cute-sidenav-content>
-      </cute-sidenav-container>
-    </cute-vstack>
-  </cute-hstack>
+<ng-template #sidenavExamples>
 
-  <cute-hstack gap="2">
-    <cute-vstack>
-      <h6>Implicit main content with two sidenavs</h6>
-      <cute-sidenav-container class="example-container w-100">
-        <cute-sidenav opened mode="side">Start content</cute-sidenav>
-        <cute-sidenav opened mode="side" position="end">End content</cute-sidenav>
-        <div class="example-drawer-background h-100">
-          Implicit main content
-        </div>
-      </cute-sidenav-container>
-    </cute-vstack>
+  <cute-vstack gap="3">
+    <cute-hstack gap="4">
+      <cute-vstack class="w-50">
+        <h6>Basic drawer</h6>
+        <cute-drawer-container class="example-container w-100">
+          <cute-drawer mode="side" opened>Drawer content</cute-drawer>
+          <cute-drawer-content class="example-drawer-background">Main content</cute-drawer-content>
+        </cute-drawer-container>
+      </cute-vstack>
+      <cute-vstack class="w-50">
+        <h6>Basic sidenav</h6>
+        <cute-sidenav-container class="example-container w-100">
+          <cute-sidenav mode="side" opened>Sidenav content</cute-sidenav>
+          <cute-sidenav-content class="example-drawer-background">Main content</cute-sidenav-content>
+        </cute-sidenav-container>
+      </cute-vstack>
+    </cute-hstack>
 
-  </cute-hstack>
+    <cute-hstack gap="2">
+      <cute-vstack>
+        <h6>Implicit main content with two sidenavs</h6>
+        <cute-sidenav-container class="example-container w-100">
+          <cute-sidenav opened mode="side">Start content</cute-sidenav>
+          <cute-sidenav opened mode="side" position="end">End content</cute-sidenav>
+          <div class="example-drawer-background h-100">
+            Implicit main content
+          </div>
+        </cute-sidenav-container>
+      </cute-vstack>
 
-  <div class="d-flex gap-3 flex-column flex-sm-row">
-    <!-- #1 -->
-    <cute-vstack>
-      <h6>Autosize sidenav</h6>
-      <cute-drawer-container class="example-container" autosize>
-        <cute-drawer #drawer class="example-sidebar" mode="side">
-          <p>Auto-resizing sidenav</p>
-          @if (showFiller) {
-            <p>Lorem, ipsum dolor sit amet consectetur.</p>
-          }
-          <button cuteButton="raised-button" class="mx-2" (click)="showFiller = !showFiller">
-            Toggle extra text
-          </button>
-        </cute-drawer>
+    </cute-hstack>
 
-        <div class="example-sidebar-content">
-          <button cuteButton="flat-button" color="primary" (click)="drawer.toggle()">
-            Toggle sidenav
-          </button>
-        </div>
-      </cute-drawer-container>
-    </cute-vstack>
+    <div class="d-flex gap-3 flex-column flex-sm-row">
+      <!-- #1 -->
+      <cute-vstack>
+        <h6>Autosize sidenav</h6>
+        <cute-drawer-container class="example-container" autosize>
+          <cute-drawer #drawer class="example-sidebar" mode="side">
+            <p>Auto-resizing sidenav</p>
+            @if (showFiller) {
+              <p>Lorem, ipsum dolor sit amet consectetur.</p>
+            }
+            <button cuteButton="raised-button" class="mx-2" (click)="showFiller = !showFiller">
+              Toggle extra text
+            </button>
+          </cute-drawer>
 
-    <!-- #2 -->
-    <cute-vstack>
-      <h6>Drawer with explicit backdrop setting</h6>
-      <cute-drawer-container class="example-container" [hasBackdrop]="hasBackdrop.value">
-        <cute-drawer #drawer2 [mode]="mode.value">I'm a drawer</cute-drawer>
-        <cute-drawer-content id="example-drawer-content" class="p-1">
-          <cute-form-field>
-            <cute-label>Sidenav mode</cute-label>
-            <cute-select #mode value="side"> <!--[(ngModel)]="drawerMode" -->
-              <cute-option value="side">Side</cute-option>
-              <cute-option value="over">Over</cute-option>
-              <cute-option value="push">Push</cute-option>
-            </cute-select>
-          </cute-form-field>
-          <cute-form-field>
-            <cute-label>Has backdrop</cute-label>
-            <cute-select  #hasBackdrop> <!-- ="ngModel" [(ngModel)]="drawerHasBackdrop" -->
-              <cute-option>Unset</cute-option>
-              <cute-option [value]="true">True</cute-option>
-              <cute-option [value]="false">False</cute-option>
-            </cute-select>
-          </cute-form-field>
+          <div class="example-sidebar-content">
+            <button cuteButton="flat-button" color="primary" (click)="drawer.toggle()">
+              Toggle sidenav
+            </button>
+          </div>
+        </cute-drawer-container>
+      </cute-vstack>
 
-          <button cuteButton="raised-button" (click)="drawer2.toggle()" class="mt-3">Toggle drawer</button>
+      <!-- #2 -->
+      <cute-vstack>
+        <h6>Drawer with explicit backdrop setting</h6>
+        <cute-drawer-container class="example-container" [hasBackdrop]="hasBackdrop.value">
+          <cute-drawer #drawer2 [mode]="mode.value">I'm a drawer</cute-drawer>
+          <cute-drawer-content id="example-drawer-content" class="p-1">
+            <cute-form-field>
+              <cute-label>Sidenav mode</cute-label>
+              <cute-select #mode value="side"> <!--[(ngModel)]="drawerMode" -->
+                <cute-option value="side">Side</cute-option>
+                <cute-option value="over">Over</cute-option>
+                <cute-option value="push">Push</cute-option>
+              </cute-select>
+            </cute-form-field>
+            <cute-form-field>
+              <cute-label>Has backdrop</cute-label>
+              <cute-select  #hasBackdrop> <!-- ="ngModel" [(ngModel)]="drawerHasBackdrop" -->
+                <cute-option>Unset</cute-option>
+                <cute-option [value]="true">True</cute-option>
+                <cute-option [value]="false">False</cute-option>
+              </cute-select>
+            </cute-form-field>
 
-          <!--        TODO: remove this: mode={{mode.value}}, hasBackdrop={{hasBackdrop.value}}-->
+            <button cuteButton="raised-button" (click)="drawer2.toggle()" class="mt-3">Toggle drawer</button>
 
-        </cute-drawer-content>
-      </cute-drawer-container>
+            <!--        TODO: remove this: mode={{mode.value}}, hasBackdrop={{hasBackdrop.value}}-->
 
-    </cute-vstack>
+          </cute-drawer-content>
+        </cute-drawer-container>
 
-  </div>
+      </cute-vstack>
 
-</cute-vstack>
+    </div>
 
+  </cute-vstack>
+
+</ng-template>

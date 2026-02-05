@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {CuteIcon, CuteIconRegistry} from '@cute-widgets/base/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from '../../component-viewer/component-viewer';
+import {AbstractPage} from '../abstract/abstract-page';
 
 const THUMBUP_ICON = `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
@@ -19,14 +20,16 @@ const THUMBUP_ICON = `
     CuteIcon,
     CuteHStack,
     CuteVStack,
-    ComponentHeader
+    ComponentViewer
   ],
   templateUrl: './icon.html',
   styleUrl: './icon.scss',
 })
-export class IconPage {
+export class IconPage extends AbstractPage {
   constructor(iconRegistry: CuteIconRegistry,
-              sanitizer: DomSanitizer) {
+              sanitizer: DomSanitizer)
+  {
+    super();
     iconRegistry.addSvgIconLiteral('thumbs-up', sanitizer.bypassSecurityTrustHtml(THUMBUP_ICON));
   }
 }

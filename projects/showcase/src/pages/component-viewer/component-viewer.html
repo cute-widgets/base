@@ -1,0 +1,21 @@
+@let docName = docItem()?.name || '???';
+
+<h5 componentHeader>{{docName}}</h5>
+
+<cute-tab-group>
+  <cute-tab label="Overview">
+    @let path = _docOverviewPath();
+    @if (path) {
+      <markdown clipboard [src]="path"></markdown>
+    } @else {
+      <p>Component's "Overview" path is undefined!</p>
+    }
+  </cute-tab>
+
+  <cute-tab label="Examples">
+
+    <ng-container *ngTemplateOutlet="examplesTemplate"></ng-container>
+
+  </cute-tab>
+</cute-tab-group>
+

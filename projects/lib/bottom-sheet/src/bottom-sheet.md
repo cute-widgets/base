@@ -1,4 +1,4 @@
-The `CuteBottomSheet` service can be used to open Material Design panels to the bottom of the screen.
+The `CuteBottomSheet` service can be used to open CuteWidgets' panels to the bottom of the screen.
 These panels are intended primarily as an interaction on mobile devices where they can be used as an
 alternative to dialogs and menus.
 

@@ -1,28 +1,35 @@
-<h5 componentHeader>Autocomplete</h5>
-<cute-vstack gap="3">
-  <cute-checkbox [(ngModel)]="requiredSelection" (change)="requiredSelectionChanged()"> Selection required </cute-checkbox>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="autocompleteExamples">
+</app-component-viewer>
 
-  <form class="example-form">
-    <cute-form-field class="example-full-width">
-      <cute-label>Number</cute-label>
-      <input #input
-             type="text"
-             placeholder="Pick one"
-             aria-label="Number"
-             cuteInput
-             [formControl]="myControl"
-             [cuteAutocomplete]="auto"
-             (input)="filterInput()"
-             (focus)="filterInput()">
-      <cute-autocomplete [requireSelection]="requiredSelection" #auto="cuteAutocomplete">
-        @for (option of filteredOptions | async; track option) {
-          <cute-option [value]="option">{{option}}</cute-option>
-        }
-      </cute-autocomplete>
-    </cute-form-field>
-  </form>
+<ng-template #autocompleteExamples>
 
-  Control value: {{myControl.value || 'empty'}}
+  <cute-vstack gap="3">
+    <cute-checkbox [(ngModel)]="requiredSelection" (change)="requiredSelectionChanged()"> Selection required </cute-checkbox>
 
-</cute-vstack>
+    <form class="example-form">
+      <cute-form-field class="example-full-width">
+        <cute-label>Number</cute-label>
+        <input #input
+               type="text"
+               placeholder="Pick one"
+               aria-label="Number"
+               cuteInput
+               [formControl]="myControl"
+               [cuteAutocomplete]="auto"
+               (input)="filterInput()"
+               (focus)="filterInput()">
+        <cute-autocomplete [requireSelection]="requiredSelection" #auto="cuteAutocomplete">
+          @for (option of filteredOptions | async; track option) {
+            <cute-option [value]="option">{{option}}</cute-option>
+          }
+        </cute-autocomplete>
+      </cute-form-field>
+    </form>
 
+    Control value: {{myControl.value || 'empty'}}
+
+  </cute-vstack>
+
+</ng-template>

@@ -1,32 +1,39 @@
-<h5 componentHeader>Divider</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="dividerExamples">
+</app-component-viewer>
 
-<cute-hstack gap="3">
-  <cute-vstack>
-    <h6>Vertical</h6>
-    <cute-hstack gap="3" class="h-100">
-      <cute-divider vertical="true"></cute-divider>
-      <cute-divider vertical="true" lineStyle="dotted"></cute-divider>
-      <cute-divider vertical="true" lineStyle="dashed"></cute-divider>
-      <cute-divider vertical="true" lineStyle="double"></cute-divider>
-      <cute-divider vertical="true" lineStyle="washed"></cute-divider>
-      <cute-divider vertical="true" lineStyle="blurry"></cute-divider>
-      <cute-divider vertical="true" lineStyle="gradient"></cute-divider>
-      <cute-divider vertical="true" lineStyle="shelf"></cute-divider>
-    </cute-hstack>
-  </cute-vstack>
+<ng-template #dividerExamples>
 
-  <cute-vstack style="width: 50%; overflow: auto">
-    <h6>Horizontal</h6>
-    <hr/>
-    <cute-divider></cute-divider>
-    <cute-divider lineStyle="dotted"></cute-divider>
-    <cute-divider lineStyle="dashed"></cute-divider>
-    <cute-divider vertical="false" lineStyle="double"></cute-divider>
-    <cute-divider vertical="false" lineStyle="washed"></cute-divider>
-    <cute-divider vertical="false" lineStyle="blurry"></cute-divider>
-    <cute-divider vertical="false" lineStyle="gradient"></cute-divider>
-    <cute-divider vertical="false" lineStyle="shelf"></cute-divider>
-    <cute-divider vertical="false" inset="true"></cute-divider>
-  </cute-vstack>
-</cute-hstack>
+  <cute-hstack gap="3">
+    <cute-vstack>
+      <h6>Vertical</h6>
+      <cute-hstack gap="3" class="h-100">
+        <cute-divider vertical="true"></cute-divider>
+        <cute-divider vertical="true" lineStyle="dotted"></cute-divider>
+        <cute-divider vertical="true" lineStyle="dashed"></cute-divider>
+        <cute-divider vertical="true" lineStyle="double"></cute-divider>
+        <cute-divider vertical="true" lineStyle="washed"></cute-divider>
+        <cute-divider vertical="true" lineStyle="blurry"></cute-divider>
+        <cute-divider vertical="true" lineStyle="gradient"></cute-divider>
+        <cute-divider vertical="true" lineStyle="shelf"></cute-divider>
+      </cute-hstack>
+    </cute-vstack>
+
+    <cute-vstack style="width: 50%; overflow: auto">
+      <h6>Horizontal</h6>
+      <hr/>
+      <cute-divider></cute-divider>
+      <cute-divider lineStyle="dotted"></cute-divider>
+      <cute-divider lineStyle="dashed"></cute-divider>
+      <cute-divider vertical="false" lineStyle="double"></cute-divider>
+      <cute-divider vertical="false" lineStyle="washed"></cute-divider>
+      <cute-divider vertical="false" lineStyle="blurry"></cute-divider>
+      <cute-divider vertical="false" lineStyle="gradient"></cute-divider>
+      <cute-divider vertical="false" lineStyle="shelf"></cute-divider>
+      <cute-divider vertical="false" inset="true"></cute-divider>
+    </cute-vstack>
+  </cute-hstack>
+
+</ng-template>
 

@@ -1,20 +1,27 @@
-<h5 componentHeader>Radio Button</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="radioExamples">
+</app-component-viewer>
 
-<cute-card class="example-radio-card mb-2">
-  <cute-radio-group #radiogr="cuteRadioGroup">
-    <cute-vstack gap="2">
-      <cute-radio-button value="option-1" checked id="rb1">
-        Option 1
-      </cute-radio-button>
-      <cute-radio-button value="option-2" disabled id="rb2" disabledInteractive cuteTooltip="About Option 2 hint">
-        Option 2
-      </cute-radio-button>
-      <cute-radio-button value="option-3" id="rb3">
-        Option 3
-      </cute-radio-button>
-    </cute-vstack>
-  </cute-radio-group>
-</cute-card>
+<ng-template #radioExamples>
 
-Radio group value: {{radiogr.value}}
+  <cute-card class="example-radio-card mb-2">
+    <cute-radio-group #radiogr="cuteRadioGroup">
+      <cute-vstack gap="2">
+        <cute-radio-button value="option-1" checked id="rb1">
+          Option 1
+        </cute-radio-button>
+        <cute-radio-button value="option-2" disabled id="rb2" disabledInteractive cuteTooltip="About Option 2 hint">
+          Option 2
+        </cute-radio-button>
+        <cute-radio-button value="option-3" id="rb3">
+          Option 3
+        </cute-radio-button>
+      </cute-vstack>
+    </cute-radio-group>
+  </cute-card>
+
+  Radio group value: {{radiogr.value}}
+
+</ng-template>
 

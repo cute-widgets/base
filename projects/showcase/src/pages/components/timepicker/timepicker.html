@@ -1,8 +1,15 @@
-<h5 componentHeader>Timepicker</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="timepickerExamples">
+</app-component-viewer>
 
-<cute-form-field>
-  <cute-label>Pick a time</cute-label>
-  <input cuteInput [cuteTimepicker]="picker">
-  <cute-timepicker-toggle cuteIconSuffix [for]="picker"/>
-  <cute-timepicker #picker/>
-</cute-form-field>
+<ng-template #timepickerExamples>
+
+  <cute-form-field>
+    <cute-label>Pick a time</cute-label>
+    <input cuteInput [cuteTimepicker]="picker" autocomplete="off">
+    <cute-timepicker-toggle cuteIconSuffix [for]="picker"/>
+    <cute-timepicker #picker/>
+  </cute-form-field>
+
+</ng-template>

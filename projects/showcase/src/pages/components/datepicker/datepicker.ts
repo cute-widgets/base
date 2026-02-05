@@ -7,8 +7,8 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteInputModule} from '@cute-widgets/base/input';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {CuteCardModule} from '@cute-widgets/base/card';
-import {ComponentHeader} from '../../../shared/utils/component-header';
 import {AbstractPage} from '../abstract/abstract-page';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
 
 const today = new Date();
 const month = today.getMonth();
@@ -16,19 +16,19 @@ const year = today.getFullYear();
 
 @Component({
   selector: 'app-datepicker',
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CuteVStack,
-    CuteHStack,
-    CuteFormFieldModule,
-    CuteInputModule,
-    CuteButtonModule,
-    CuteIconModule,
-    CuteCardModule,
-    CuteDatepickerModule,
-    ComponentHeader,
-  ],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CuteVStack,
+        CuteHStack,
+        CuteFormFieldModule,
+        CuteInputModule,
+        CuteButtonModule,
+        CuteIconModule,
+        CuteCardModule,
+        CuteDatepickerModule,
+        ComponentViewer,
+    ],
   templateUrl: './datepicker.html',
   styleUrl: './datepicker.scss',
 })

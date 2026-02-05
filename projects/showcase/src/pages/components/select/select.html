@@ -1,150 +1,156 @@
-<h5 componentHeader>Select</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="selectExamples">
+</app-component-viewer>
 
-<cute-vstack gap="3">
+<ng-template #selectExamples>
 
-  <cute-hstack gap="3" class="align-items-end">
-    <cute-form-field subscriptSizing="dynamic">
-      <cute-label>Location</cute-label>
-      <cute-select id="selectEx"
-                   style="width: 350px"
-                   placeholder="Pick Your Holiday Destination"
-                   value="4"
-      >
-        <cute-option value="1">Paris</cute-option>
-        <cute-option value="2">Mauritius</cute-option>
-        <cute-option value="3" disabled >Singapore</cute-option>
-        <cute-option value="4">Malaysia</cute-option>
-        <cute-option value="5">Goa</cute-option>
-        <cute-option value="6">Thailand</cute-option>
-      </cute-select>
-    </cute-form-field>
+  <cute-vstack gap="3">
 
-    <cute-form-field style="width: 350px" subscriptSizing="dynamic">
-      <cute-label>Toppings</cute-label>
-      <cute-select [formControl]="toppings" multiple>
-        <cute-select-trigger>
-          {{toppings.value?.[0] || ''}}
-          @if ((toppings.value?.length || 0) > 1) {
-            <span class="example-additional-selection">
+    <cute-hstack gap="3" class="align-items-end">
+      <cute-form-field subscriptSizing="dynamic">
+        <cute-label>Location</cute-label>
+        <cute-select id="selectEx"
+                     style="width: 350px"
+                     placeholder="Pick Your Holiday Destination"
+                     value="4"
+        >
+          <cute-option value="1">Paris</cute-option>
+          <cute-option value="2">Mauritius</cute-option>
+          <cute-option value="3" disabled >Singapore</cute-option>
+          <cute-option value="4">Malaysia</cute-option>
+          <cute-option value="5">Goa</cute-option>
+          <cute-option value="6">Thailand</cute-option>
+        </cute-select>
+      </cute-form-field>
+
+      <cute-form-field style="width: 350px" subscriptSizing="dynamic">
+        <cute-label>Toppings</cute-label>
+        <cute-select [formControl]="toppings" multiple>
+          <cute-select-trigger>
+            {{toppings.value?.[0] || ''}}
+            @if ((toppings.value?.length || 0) > 1) {
+              <span class="example-additional-selection">
               (+{{(toppings.value?.length || 0) - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
             </span>
-          }
-        </cute-select-trigger>
-        @for (topping of toppingList; track topping) {
-          <cute-option [value]="topping">{{topping}}</cute-option>
-        }
-      </cute-select>
-    </cute-form-field>
-
-  </cute-hstack>
-
-  <cute-hstack gap="3" class="align-items-end">
-    <div>
-      <p>
-        <cute-checkbox [formControl]="disableSelect">Disable select</cute-checkbox>
-      </p>
-
-      <h6>cute-select</h6>
-      <cute-form-field>
-        <cute-label>Choose an option</cute-label>
-        <cute-select [disabled]="disableSelect.value" placeholder="Select something...">
-          <cute-option value="option1">Option 1</cute-option>
-          <cute-option value="option2" disabled>Option 2 (disabled)</cute-option>
-          <cute-option value="option3">Option 3</cute-option>
-        </cute-select>
-      </cute-form-field>
-    </div>
-    <div class="w-50">
-      <h6>native select</h6>
-      <cute-form-field class="w-100">
-        <cute-label>Choose an option</cute-label>
-        <select cuteNativeControl [disabled]="disableSelect.value||false" placeholder="Choose your auto...">
-          <option value="" selected></option>
-          <option value="volvo">Volvo</option>
-          <option value="saab" disabled>Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
-        </select>
-      </cute-form-field>
-
-    </div>
-
-  </cute-hstack>
-
-  <h6>Select with reset option</h6>
-  <cute-hstack gap="3">
-    <div>
-      <h6>cute-select</h6>
-      <cute-form-field>
-        <cute-label>State</cute-label>
-        <cute-select>
-          <cute-option>None</cute-option>
-          @for (state of states; track state) {
-            <cute-option [value]="state">{{state}}</cute-option>
+            }
+          </cute-select-trigger>
+          @for (topping of toppingList; track topping) {
+            <cute-option [value]="topping">{{topping}}</cute-option>
           }
         </cute-select>
       </cute-form-field>
 
-    </div>
-    <div>
-      <h6>native select</h6>
-      <cute-form-field>
-        <cute-label>Select your car</cute-label>
-        <select cuteNativeControl id="mySelectId">
-          <option value="" selected></option>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
-        </select>
-      </cute-form-field>
+    </cute-hstack>
 
-    </div>
-  </cute-hstack>
+    <cute-hstack gap="3" class="align-items-end">
+      <div>
+        <p>
+          <cute-checkbox [formControl]="disableSelect">Disable select</cute-checkbox>
+        </p>
 
-  <cute-vstack gap="3" style="width: 350px">
-    <cute-vstack>
-      <h6>Selection of nullable options</h6>
-      <cute-form-field>
-        <cute-label>State</cute-label>
-        <cute-select [(ngModel)]="value" canSelectNullableOptions>
-          @for (option of options; track option) {
-            <cute-option [value]="option.value">{{option.label}}</cute-option>
-          }
-        </cute-select>
-      </cute-form-field>
-    </cute-vstack>
+        <h6>cute-select</h6>
+        <cute-form-field>
+          <cute-label>Choose an option</cute-label>
+          <cute-select [disabled]="disableSelect.value" placeholder="Select something...">
+            <cute-option value="option1">Option 1</cute-option>
+            <cute-option value="option2" disabled>Option 2 (disabled)</cute-option>
+            <cute-option value="option3">Option 3</cute-option>
+          </cute-select>
+        </cute-form-field>
+      </div>
+      <div class="w-50">
+        <h6>native select</h6>
+        <cute-form-field class="w-100">
+          <cute-label>Choose an option</cute-label>
+          <select cuteNativeControl [disabled]="disableSelect.value||false" placeholder="Choose your auto...">
+            <option value="" selected></option>
+            <option value="volvo">Volvo</option>
+            <option value="saab" disabled>Saab</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+          </select>
+        </cute-form-field>
 
-    <cute-vstack>
-      <h6>Selection with default configuration</h6>
-      <cute-form-field>
-        <cute-label>State</cute-label>
-        <cute-select [(ngModel)]="value">
-          @for (option of options; track option) {
-            <cute-option [value]="option.value">{{option.label}}</cute-option>
-          }
-        </cute-select>
-      </cute-form-field>
-    </cute-vstack>
-    <cute-vstack>
-      <h6>Selection with option groups</h6>
-      <cute-form-field>
-        <cute-label>Pokemon</cute-label>
-        <cute-select [formControl]="pokemonControl">
-          <cute-option>-- None --</cute-option>
-          @for (group of pokemonGroups; track group) {
-            <cute-optgroup [label]="group.name"
-                           [disabled]="group.disabled">
-              @for (pokemon of group.pokemon; track pokemon) {
-                <cute-option [value]="pokemon.value">{{pokemon.viewValue}}</cute-option>
-              }
-            </cute-optgroup>
-          }
-        </cute-select>
-      </cute-form-field>
+      </div>
+
+    </cute-hstack>
+
+    <h6>Select with reset option</h6>
+    <cute-hstack gap="3">
+      <div>
+        <h6>cute-select</h6>
+        <cute-form-field>
+          <cute-label>State</cute-label>
+          <cute-select>
+            <cute-option>None</cute-option>
+            @for (state of states; track state) {
+              <cute-option [value]="state">{{state}}</cute-option>
+            }
+          </cute-select>
+        </cute-form-field>
+
+      </div>
+      <div>
+        <h6>native select</h6>
+        <cute-form-field>
+          <cute-label>Select your car</cute-label>
+          <select cuteNativeControl id="mySelectId">
+            <option value="" selected></option>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+          </select>
+        </cute-form-field>
+
+      </div>
+    </cute-hstack>
+
+    <cute-vstack gap="3" style="width: 350px">
+      <cute-vstack>
+        <h6>Selection of nullable options</h6>
+        <cute-form-field>
+          <cute-label>State</cute-label>
+          <cute-select [(ngModel)]="value" canSelectNullableOptions>
+            @for (option of options; track option) {
+              <cute-option [value]="option.value">{{option.label}}</cute-option>
+            }
+          </cute-select>
+        </cute-form-field>
+      </cute-vstack>
+
+      <cute-vstack>
+        <h6>Selection with default configuration</h6>
+        <cute-form-field>
+          <cute-label>State</cute-label>
+          <cute-select [(ngModel)]="value">
+            @for (option of options; track option) {
+              <cute-option [value]="option.value">{{option.label}}</cute-option>
+            }
+          </cute-select>
+        </cute-form-field>
+      </cute-vstack>
+      <cute-vstack>
+        <h6>Selection with option groups</h6>
+        <cute-form-field>
+          <cute-label>Pokemon</cute-label>
+          <cute-select [formControl]="pokemonControl">
+            <cute-option>-- None --</cute-option>
+            @for (group of pokemonGroups; track group) {
+              <cute-optgroup [label]="group.name"
+                             [disabled]="group.disabled">
+                @for (pokemon of group.pokemon; track pokemon) {
+                  <cute-option [value]="pokemon.value">{{pokemon.viewValue}}</cute-option>
+                }
+              </cute-optgroup>
+            }
+          </cute-select>
+        </cute-form-field>
+      </cute-vstack>
+
     </cute-vstack>
 
   </cute-vstack>
 
-</cute-vstack>
-
+</ng-template>

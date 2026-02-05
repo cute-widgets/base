@@ -1,92 +1,99 @@
-<h5 componentHeader>List</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="listExamples">
+</app-component-viewer>
 
-<cute-hstack class="mb-4" gap="3">
-  <cute-vstack>
-    <h6>Basic list</h6>
-    <cute-list role="list">
-      <cute-list-item role="listitem">An item</cute-list-item>
-      <cute-list-item role="listitem">A second item</cute-list-item>
-      <cute-list-item role="listitem">A third item</cute-list-item>
-      <cute-list-item role="listitem">A fourth item</cute-list-item>
-      <cute-list-item role="listitem" disabled>Disabled item</cute-list-item>
-      <cute-list-item role="listitem">And a fifth one</cute-list-item>
-    </cute-list>
-  </cute-vstack>
+<ng-template #listExamples>
 
-  <cute-vstack>
-    <h6>Basic Listbox</h6>
-    <cute-listbox multiple="false">
-      <cute-listbox-option value="1">An item</cute-listbox-option>
-      <cute-listbox-option value="2">A second item</cute-listbox-option>
-      <cute-listbox-option value="3">A third item</cute-listbox-option>
-      <cute-listbox-option value="4">A fourth item</cute-listbox-option>
-      <cute-listbox-option value="5" disabled="true">Disabled item</cute-listbox-option>
-      <cute-listbox-option value="6">And a fifth one</cute-listbox-option>
-    </cute-listbox>
-  </cute-vstack>
+  <cute-hstack class="mb-4" gap="3">
+    <cute-vstack>
+      <h6>Basic list</h6>
+      <cute-list role="list">
+        <cute-list-item role="listitem">An item</cute-list-item>
+        <cute-list-item role="listitem">A second item</cute-list-item>
+        <cute-list-item role="listitem">A third item</cute-list-item>
+        <cute-list-item role="listitem">A fourth item</cute-list-item>
+        <cute-list-item role="listitem" disabled>Disabled item</cute-list-item>
+        <cute-list-item role="listitem">And a fifth one</cute-list-item>
+      </cute-list>
+    </cute-vstack>
 
-</cute-hstack>
+    <cute-vstack>
+      <h6>Basic Listbox</h6>
+      <cute-listbox multiple="false">
+        <cute-listbox-option value="1">An item</cute-listbox-option>
+        <cute-listbox-option value="2">A second item</cute-listbox-option>
+        <cute-listbox-option value="3">A third item</cute-listbox-option>
+        <cute-listbox-option value="4">A fourth item</cute-listbox-option>
+        <cute-listbox-option value="5" disabled="true">Disabled item</cute-listbox-option>
+        <cute-listbox-option value="6">And a fifth one</cute-listbox-option>
+      </cute-listbox>
+    </cute-vstack>
 
-<cute-hstack gap="3" class="mb-3 align-items-start">
-  <cute-vstack class="w-50">
-    <h6>List with multiple selection</h6>
-    <cute-selection-list #shoesList1 [multiple]="true">
-      @for (shoe of typesOfShoes; track shoe) {
-        <cute-list-option togglePosition="after">{{shoe}}</cute-list-option>
-      }
-    </cute-selection-list>
-    <p>
-      Options selected: {{shoesList1.selectedOptions.selected.length}}
-    </p>
-  </cute-vstack>
-  <cute-vstack class="w-50">
-    <h6>Numbered list with single selection</h6>
-    <form [formGroup]="form">
-      <cute-selection-list #shoesList2 [formControl]="shoesControl" [multiple]="false" [numbered]="true">
-        @for (shoe of shoes; track shoe) {
-          <cute-list-option [value]="shoe.value">
-            <div cuteListItemTitle>{{shoe.name}}</div>
-            <div cuteListItemLine>Content for list item</div>
-          </cute-list-option>
+  </cute-hstack>
+
+  <cute-hstack gap="3" class="mb-3 align-items-start">
+    <cute-vstack class="w-50">
+      <h6>List with multiple selection</h6>
+      <cute-selection-list #shoesList1 [multiple]="true">
+        @for (shoe of typesOfShoes; track shoe) {
+          <cute-list-option togglePosition="after">{{shoe}}</cute-list-option>
         }
       </cute-selection-list>
       <p>
-        Option selected: {{shoesControl.value ? shoesControl.value[0] : 'None'}}
+        Options selected: {{shoesList1.selectedOptions.selected.length}}
       </p>
-    </form>
-  </cute-vstack>
-</cute-hstack>
+    </cute-vstack>
+    <cute-vstack class="w-50">
+      <h6>Numbered list with single selection</h6>
+      <form [formGroup]="form">
+        <cute-selection-list #shoesList2 [formControl]="shoesControl" [multiple]="false" [numbered]="true">
+          @for (shoe of shoes; track shoe) {
+            <cute-list-option [value]="shoe.value">
+              <div cuteListItemTitle>{{shoe.name}}</div>
+              <div cuteListItemLine>Content for list item</div>
+            </cute-list-option>
+          }
+        </cute-selection-list>
+        <p>
+          Option selected: {{shoesControl.value ? shoesControl.value[0] : 'None'}}
+        </p>
+      </form>
+    </cute-vstack>
+  </cute-hstack>
 
-<cute-hstack gap="3">
-  <cute-vstack>
-    <h6>Action list</h6>
-    <cute-action-list>
-      <button cute-list-item (click)="openSnackBar()">Open Snackbar</button>
-      <button cute-list-item (click)="openPizzaSnackBar()">Open Pizza Snackbar</button>
-    </cute-action-list>
-  </cute-vstack>
+  <cute-hstack gap="3">
+    <cute-vstack>
+      <h6>Action list</h6>
+      <cute-action-list>
+        <button cute-list-item (click)="openSnackBar()">Open Snackbar</button>
+        <button cute-list-item (click)="openPizzaSnackBar()">Open Pizza Snackbar</button>
+      </cute-action-list>
+    </cute-vstack>
 
-  <cute-vstack>
-    <h6>List with sections</h6>
-    <cute-list flushBorders="full">
-      <div cute-subheader>Folders</div>
-      @for (folder of folders; track folder) {
-        <cute-list-item>
-          <cute-icon cuteListItemIcon>folder-fill</cute-icon>
-          <div cuteListItemTitle>{{folder.name}}</div>
-          <div cuteListItemLine>{{folder.updated | date}}</div>
-        </cute-list-item>
-      }
-      <cute-divider></cute-divider>
-      <div cute-subheader>Notes</div>
-      @for (note of notes; track note) {
-        <cute-list-item>
-          <cute-icon cuteListItemIcon color="primary">file-earmark-fill</cute-icon>
-          <div cuteListItemTitle>{{note.name}}</div>
-          <div cuteListItemLine>{{note.updated | date}}</div>
-        </cute-list-item>
-      }
-    </cute-list>
-  </cute-vstack>
-</cute-hstack>
+    <cute-vstack>
+      <h6>List with sections</h6>
+      <cute-list flushBorders="full">
+        <div cute-subheader>Folders</div>
+        @for (folder of folders; track folder) {
+          <cute-list-item>
+            <cute-icon cuteListItemIcon>folder-fill</cute-icon>
+            <div cuteListItemTitle>{{folder.name}}</div>
+            <div cuteListItemLine>{{folder.updated | date}}</div>
+          </cute-list-item>
+        }
+        <cute-divider></cute-divider>
+        <div cute-subheader>Notes</div>
+        @for (note of notes; track note) {
+          <cute-list-item>
+            <cute-icon cuteListItemIcon color="primary">file-earmark-fill</cute-icon>
+            <div cuteListItemTitle>{{note.name}}</div>
+            <div cuteListItemLine>{{note.updated | date}}</div>
+          </cute-list-item>
+        }
+      </cute-list>
+    </cute-vstack>
+  </cute-hstack>
+
+</ng-template>
 

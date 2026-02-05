@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {CuteHStack} from '@cute-widgets/base/layout';
 import {CuteSortModule, Sort} from '@cute-widgets/base/sort';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from '../../component-viewer/component-viewer';
+import {AbstractPage} from '../abstract/abstract-page';
 
 export interface Dessert {
   calories: number;
@@ -16,12 +17,12 @@ export interface Dessert {
   imports: [
     CuteHStack,
     CuteSortModule,
-    ComponentHeader,
+    ComponentViewer,
   ],
   templateUrl: './sort.html',
   styleUrl: './sort.scss',
 })
-export class SortPage {
+export class SortPage extends AbstractPage {
   desserts: Dessert[] = [
     {name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4},
     {name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4},
@@ -33,6 +34,7 @@ export class SortPage {
   sortedData: Dessert[];
 
   constructor() {
+    super();
     this.sortedData = this.desserts.slice();
   }
 

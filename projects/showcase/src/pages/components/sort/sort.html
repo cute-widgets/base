@@ -1,24 +1,30 @@
-<h5 componentHeader>Sort header</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="sortExamples">
+</app-component-viewer>
 
-<cute-hstack class="mb-3">
-  <table cuteSort (cuteSortChange)="sortData($event)">
-    <tr>
-      <th cute-sort-header="name">Dessert (100g)</th>
-      <th cute-sort-header="calories">Calories</th>
-      <th cute-sort-header="fat">Fat (g)</th>
-      <th cute-sort-header="carbs">Carbs (g)</th>
-      <th cute-sort-header="protein">Protein (g)</th>
-    </tr>
+<ng-template #sortExamples>
 
-    @for (dessert of sortedData; track dessert) {
+  <cute-hstack class="mb-3">
+    <table cuteSort (cuteSortChange)="sortData($event)">
       <tr>
-        <td>{{dessert.name}}</td>
-        <td>{{dessert.calories}}</td>
-        <td>{{dessert.fat}}</td>
-        <td>{{dessert.carbs}}</td>
-        <td>{{dessert.protein}}</td>
+        <th cute-sort-header="name">Dessert (100g)</th>
+        <th cute-sort-header="calories">Calories</th>
+        <th cute-sort-header="fat">Fat (g)</th>
+        <th cute-sort-header="carbs">Carbs (g)</th>
+        <th cute-sort-header="protein">Protein (g)</th>
       </tr>
-    }
-  </table>
-</cute-hstack>
 
+      @for (dessert of sortedData; track dessert) {
+        <tr>
+          <td>{{dessert.name}}</td>
+          <td>{{dessert.calories}}</td>
+          <td>{{dessert.fat}}</td>
+          <td>{{dessert.carbs}}</td>
+          <td>{{dessert.protein}}</td>
+        </tr>
+      }
+    </table>
+  </cute-hstack>
+
+</ng-template>

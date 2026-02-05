@@ -5,7 +5,8 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {CuteDivider} from '@cute-widgets/base/divider';
 import {CuteIcon} from '@cute-widgets/base/icon';
 import {DatePipe} from '@angular/common';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 interface Shoes {
   value: string;
@@ -19,21 +20,20 @@ export interface Section {
 
 @Component({
   selector: 'app-list',
-  imports: [
-    ReactiveFormsModule,
-    CuteListModule,
-    CuteVStack,
-    CuteHStack,
-    CuteDivider,
-    CuteIcon,
-    DatePipe,
-    ComponentHeader,
-    //CuteButton
-  ],
+    imports: [
+        ReactiveFormsModule,
+        CuteListModule,
+        CuteVStack,
+        CuteHStack,
+        CuteDivider,
+        CuteIcon,
+        DatePipe,
+        ComponentViewer,
+    ],
   templateUrl: './list.html',
   styleUrl: './list.scss',
 })
-export class ListPage {
+export class ListPage extends AbstractPage {
 
   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
 
@@ -74,6 +74,7 @@ export class ListPage {
 
 
   constructor() {
+    super();
     this.form = new FormGroup({
       clothes: this.shoesControl,
     });

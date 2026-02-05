@@ -1,4 +1,4 @@
-import {Directive, inject, signal} from "@angular/core";
+import {computed, Directive, effect, inject, signal} from "@angular/core";
 import {ActivatedRoute} from '@angular/router';
 import {BASE_WIDGETS, DocItem, DocItems} from '../../../shared/documentation-items/doc-items';
 
@@ -9,6 +9,14 @@ export abstract class AbstractPage /* extends ... */ {
   protected _activatedRoute = inject(ActivatedRoute);
   private _docItems = inject(DocItems);
   protected _docItem = signal<DocItem | undefined>(undefined);
+
+  protected _docOverviewPath = computed(() => {
+    const docItem = this._docItem();
+    if (docItem) {
+      return this._docItems.getOverviewPath(docItem);
+    }
+    return undefined;
+  });
 
   protected constructor() {
     const path = this._activatedRoute.snapshot.url[0].path ?? "";

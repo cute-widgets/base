@@ -31,6 +31,8 @@ export interface DocItem {
   summary?: string;
   /** Package which contains the doc item. */
   packageName?: string;
+  /** Project's folder. */
+  projectName?: string;
   /** Specifications for which examples to be load. */
   exampleSpecs: ExampleSpecs;
   /** List of examples. */
@@ -67,6 +69,8 @@ export const SECTIONS: {[key: string]: DocSection} = {
       'The <b>PRO Components</b> is a set of advanced UI components for building powerful, extensible and featured frontend interface',
   },
 };
+
+const rawPath = "https://raw.githubusercontent.com/cute-widgets/base/refs/heads/main/projects/lib";
 
 const DOCS: {[key: string]: DocItem[]} = {
   [BASE_WIDGETS]: [
@@ -272,6 +276,7 @@ const DOCS: {[key: string]: DocItem[]} = {
     {
       id: 'progress-bar',
       name: 'Progress Bar',
+      projectName: 'progress',
       summary: 'A linear progress indicator.',
       exampleSpecs: {
         prefix: 'progress-bar-',
@@ -281,6 +286,7 @@ const DOCS: {[key: string]: DocItem[]} = {
     {
       id: 'progress-spinner',
       name: 'Progress Spinner',
+      projectName: 'spinner',
       summary: 'A circular progress indicator.',
       exampleSpecs: {
         prefix: 'progress-spinner-',
@@ -329,6 +335,7 @@ const DOCS: {[key: string]: DocItem[]} = {
     {
       id: 'slide-toggle',
       name: 'Slide Toggle',
+      projectName: 'checkbox',
       summary: 'Captures boolean values as a clickable and draggable switch.',
       exampleSpecs: {
         prefix: 'slide-toggle-',
@@ -692,6 +699,13 @@ export class DocItems {
     }
 
     return this._cachedData;
+  }
+
+  getOverviewPath(doc: DocItem): string | undefined {
+    if (doc.overviewPath) {
+      return doc.overviewPath;
+    }
+    return `${rawPath}/${doc.projectName ?? doc.id}/src/${doc.id}.md`;
   }
 
   private _processDocs(packageName: string, exampleNames: string[], docs: DocItem[]): DocItem[] {

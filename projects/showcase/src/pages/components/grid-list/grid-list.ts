@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {CuteVStack} from '@cute-widgets/base/layout';
 import {CuteGridListModule} from '@cute-widgets/base/grid-list';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 export interface Tile {
   color: string;
@@ -12,15 +13,15 @@ export interface Tile {
 
 @Component({
   selector: 'app-grid-list',
-  imports: [
-    CuteVStack,
-    CuteGridListModule,
-    ComponentHeader
-  ],
+    imports: [
+        CuteVStack,
+        CuteGridListModule,
+        ComponentViewer
+    ],
   templateUrl: './grid-list.html',
   styleUrl: './grid-list.scss',
 })
-export class GridListPage {
+export class GridListPage extends AbstractPage {
   tiles: Tile[] = [
     {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
     {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},

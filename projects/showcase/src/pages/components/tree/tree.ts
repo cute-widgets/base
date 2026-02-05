@@ -4,7 +4,8 @@ import {CuteTreeModule} from '@cute-widgets/base/tree';
 import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {TreeDynamicExample} from './dynamic/tree-dynamic-example';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 /**
  * Food data with nested structure.
@@ -38,19 +39,19 @@ const TREE_DATA: FoodNode[] = [
 
 @Component({
   selector: 'app-tree',
-  imports: [
-    CuteHStack,
-    CuteTreeModule,
-    CuteButtonModule,
-    CuteIconModule,
-    CuteVStack,
-    TreeDynamicExample,
-    ComponentHeader,
-  ],
+    imports: [
+        CuteHStack,
+        CuteTreeModule,
+        CuteButtonModule,
+        CuteIconModule,
+        CuteVStack,
+        TreeDynamicExample,
+        ComponentViewer,
+    ],
   templateUrl: './tree.html',
   styleUrl: './tree.scss',
 })
-export class TreePage {
+export class TreePage extends AbstractPage {
   dataSource = TREE_DATA;
   childrenAccessor = (node: FoodNode) => node.children ?? [];
   hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;

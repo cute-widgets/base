@@ -1,20 +1,25 @@
-<h5 componentHeader>Alert</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="alertExamples">
+</app-component-viewer>
 
-<!--@if (holyMessage) {-->
+
+<ng-template #alertExamples>
+  <!--@if (holyMessage) {-->
   <cute-alert color="warning" dismissible="true" (dismissed)="holyMessage=false">
-      <cute-icon class="me-2"> exclamation-triangle-fill </cute-icon>
-      <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+    <cute-icon class="me-2"> exclamation-triangle-fill </cute-icon>
+    <strong>Holy guacamole!</strong> You should check in on some of those fields below.
   </cute-alert>
-<!--}-->
+  <!--}-->
 
-@if (successAlertShow) {
-<!--  successAlertShow: {{successAlertShow}}-->
+  @if (successAlertShow) {
+    <!--  successAlertShow: {{successAlertShow}}-->
 
-  <cute-alert #alert id="myAlert-1" duration="-1" (dismissed)="log('Alert ['+alert.id+'] was closed!'); successAlertShow=false">
-    <h4 cuteAlertHeading>Well done!</h4>
-    <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-    <hr>
-    <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
-  </cute-alert>
-
-}
+    <cute-alert #alert id="myAlert-1" duration="-1" (dismissed)="log('Alert ['+alert.id+'] was closed!'); successAlertShow=false">
+      <h4 cuteAlertHeading>Well done!</h4>
+      <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+      <hr>
+      <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+    </cute-alert>
+  }
+</ng-template>

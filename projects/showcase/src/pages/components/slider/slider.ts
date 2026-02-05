@@ -4,7 +4,8 @@ import {CuteInputModule} from '@cute-widgets/base/input';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CuteSliderModule} from '@cute-widgets/base/slider';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from '../../component-viewer/component-viewer';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-slider',
@@ -15,12 +16,12 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
     CuteSliderModule,
     FormsModule,
     CuteCheckbox,
-    ComponentHeader
+    ComponentViewer
   ],
   templateUrl: './slider.html',
   styleUrl: './slider.scss',
 })
-export class SliderPage {
+export class SliderPage extends AbstractPage {
 
   rangeValue: number = 3;
   rangeControl = new FormControl({ min: 20, max: 80 });

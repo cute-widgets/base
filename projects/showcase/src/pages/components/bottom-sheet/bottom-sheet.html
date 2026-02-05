@@ -1,9 +1,16 @@
-<h5 componentHeader>Bottom sheet</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="bottomsheetExamples">
+</app-component-viewer>
 
-<p>You have received a file called "cat-picture.jpeg".</p>
+<ng-template #bottomsheetExamples>
 
-<button cuteButton="raised-button" color="secondary" (click)="openBottomSheet()">
-  Open file
-  <cute-icon iconPositionEnd fontIcon="bi-share" color="warning"></cute-icon>
-</button>
+  <p>You have received a file called "cat-picture.jpeg".</p>
+
+  <button cuteButton="raised-button" color="secondary" (click)="openBottomSheet()">
+    Open file
+    <cute-icon iconPositionEnd fontIcon="bi-share" color="warning"></cute-icon>
+  </button>
+
+</ng-template>
 

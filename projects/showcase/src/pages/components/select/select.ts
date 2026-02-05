@@ -5,7 +5,8 @@ import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CuteCheckboxModule} from '@cute-widgets/base/checkbox';
 import {CuteInputModule} from '@cute-widgets/base/input';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 interface Pokemon {
   value: string;
@@ -20,21 +21,21 @@ interface PokemonGroup {
 
 @Component({
   selector: 'app-select',
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CuteCheckboxModule,
-    CuteInputModule,
-    CuteHStack,
-    CuteVStack,
-    CuteSelectModule,
-    CuteFormFieldModule,
-    ComponentHeader,
-  ],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CuteCheckboxModule,
+        CuteInputModule,
+        CuteHStack,
+        CuteVStack,
+        CuteSelectModule,
+        CuteFormFieldModule,
+        ComponentViewer,
+    ],
   templateUrl: './select.html',
   styleUrl: './select.scss',
 })
-export class SelectPage {
+export class SelectPage extends AbstractPage {
 
   disableSelect = new FormControl(false);
   toppings = new FormControl('');

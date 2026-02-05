@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {CuteProgressSpinner} from '@cute-widgets/base/spinner';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from '../../component-viewer/component-viewer';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-progress-spinner',
@@ -9,11 +10,9 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
     CuteProgressSpinner,
     CuteHStack,
     CuteVStack,
-    ComponentHeader
+    ComponentViewer
   ],
   templateUrl: './progress-spinner.html',
   styleUrl: './progress-spinner.scss',
 })
-export class ProgressSpinnerPage {
-
-}
+export class ProgressSpinnerPage extends AbstractPage {}

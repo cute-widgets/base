@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
+import {CuteVStack} from '@cute-widgets/base/layout';
 import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {CuteInputModule} from '@cute-widgets/base/input';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -9,24 +9,23 @@ import {Observable, of} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {map, startWith} from 'rxjs/operators';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
-import {ComponentHeader} from '../../../shared/utils/component-header';
 import {AbstractPage} from '../abstract/abstract-page';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
 
 @Component({
   selector: 'app-autocomplete',
-  imports: [
-    // CuteHStack,
-    CuteFormFieldModule,
-    CuteInputModule,
-    CuteAutocompleteModule,
-    CuteOption,
-    ReactiveFormsModule,
-    AsyncPipe,
-    CuteVStack,
-    CuteCheckbox,
-    FormsModule,
-    ComponentHeader
-  ],
+    imports: [
+        CuteFormFieldModule,
+        CuteInputModule,
+        CuteAutocompleteModule,
+        CuteOption,
+        ReactiveFormsModule,
+        AsyncPipe,
+        CuteVStack,
+        CuteCheckbox,
+        FormsModule,
+        ComponentViewer
+    ],
   templateUrl: './autocomplete.html',
   styleUrl: './autocomplete.scss',
 })

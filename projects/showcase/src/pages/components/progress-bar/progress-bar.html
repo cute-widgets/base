@@ -1,33 +1,40 @@
-<h5 componentHeader>Progress bar</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="progressbarExamples">
+</app-component-viewer>
 
-<cute-vstack gap="3" class="mb-3">
-  <h6>Horizontal</h6>
-  <cute-progress-bar mode="indeterminate" color="danger"></cute-progress-bar>
-  <cute-progress-bar #pbar_1 step="1" autoReset showLabel stripedAnimated
-                     [messages]="processingMessages" [messageColors]="processingColors"></cute-progress-bar>
-  <cute-progress-bar value="25" showLabel="true" color="warning"></cute-progress-bar>
-  <cute-progress-bar value="45" thickness="3px"></cute-progress-bar>
+<ng-template #progressbarExamples>
 
-  <cute-progress-stacked thickness="2rem">
-    <cute-progress-bar value="15" showLabel></cute-progress-bar>
-    <cute-progress-bar value="30" color="success" showLabel></cute-progress-bar>
-    <cute-progress-bar value="20" color="info" showLabel></cute-progress-bar>
-  </cute-progress-stacked>
-
-  <h6>Vertical</h6>
-  <cute-hstack style="height: 250px;" gap="3">
-    <cute-progress-bar mode="indeterminate" color="warning" vertical></cute-progress-bar>
-    <cute-progress-bar #pbar_2 step="5" autoReset showLabel vertical stripedAnimated
+  <cute-vstack gap="3" class="mb-3">
+    <h6>Horizontal</h6>
+    <cute-progress-bar mode="indeterminate" color="danger"></cute-progress-bar>
+    <cute-progress-bar #pbar_1 step="1" autoReset showLabel stripedAnimated
                        [messages]="processingMessages" [messageColors]="processingColors"></cute-progress-bar>
-    <cute-progress-bar value="25" showLabel vertical color="warning"></cute-progress-bar>
-    <cute-progress-bar value="45" thickness="3px" vertical></cute-progress-bar>
+    <cute-progress-bar value="25" showLabel="true" color="warning"></cute-progress-bar>
+    <cute-progress-bar value="45" thickness="3px"></cute-progress-bar>
 
-    <cute-progress-stacked vertical thickness="40px">
+    <cute-progress-stacked thickness="2rem">
       <cute-progress-bar value="15" showLabel></cute-progress-bar>
       <cute-progress-bar value="30" color="success" showLabel></cute-progress-bar>
       <cute-progress-bar value="20" color="info" showLabel></cute-progress-bar>
     </cute-progress-stacked>
 
-  </cute-hstack>
-</cute-vstack>
+    <h6>Vertical</h6>
+    <cute-hstack style="height: 250px;" gap="3">
+      <cute-progress-bar mode="indeterminate" color="warning" vertical></cute-progress-bar>
+      <cute-progress-bar #pbar_2 step="5" autoReset showLabel vertical stripedAnimated
+                         [messages]="processingMessages" [messageColors]="processingColors"></cute-progress-bar>
+      <cute-progress-bar value="25" showLabel vertical color="warning"></cute-progress-bar>
+      <cute-progress-bar value="45" thickness="3px" vertical></cute-progress-bar>
+
+      <cute-progress-stacked vertical thickness="40px">
+        <cute-progress-bar value="15" showLabel></cute-progress-bar>
+        <cute-progress-bar value="30" color="success" showLabel></cute-progress-bar>
+        <cute-progress-bar value="20" color="info" showLabel></cute-progress-bar>
+      </cute-progress-stacked>
+
+    </cute-hstack>
+  </cute-vstack>
+
+</ng-template>
 

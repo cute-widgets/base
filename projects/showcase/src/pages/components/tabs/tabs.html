@@ -1,3 +1,10 @@
-<h5 componentHeader> Tabs </h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="tabsExamples">
+</app-component-viewer>
 
-<tabs-example></tabs-example>
+<ng-template #tabsExamples>
+
+  <tabs-example></tabs-example>
+
+</ng-template>

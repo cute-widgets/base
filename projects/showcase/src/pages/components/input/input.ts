@@ -5,7 +5,8 @@ import {FormsModule} from '@angular/forms';
 import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {CuteButtonModule} from '@cute-widgets/base/button';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from '../../component-viewer/component-viewer';
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-input',
@@ -17,11 +18,11 @@ import {ComponentHeader} from '../../../shared/utils/component-header';
     CuteButtonModule,
     CuteVStack,
     CuteHStack,
-    ComponentHeader
+    ComponentViewer
   ],
   templateUrl: './input.html',
   styleUrl: './input.scss',
 })
-export class InputPage {
+export class InputPage extends AbstractPage {
   value = 'Clear me';
 }

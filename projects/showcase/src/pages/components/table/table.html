@@ -1,179 +1,185 @@
-<h5 componentHeader>Table</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="tableExamples">
+</app-component-viewer>
 
-<cute-vstack gap="2" class="my-3">
-  <cute-vstack gap="3">
+<ng-template #tableExamples>
 
-    <cute-expansion-panel style="width: 350px;">
-      <cute-expansion-panel-header>
-        Table inputs
-      </cute-expansion-panel-header>
+  <cute-vstack gap="2" class="my-3">
+    <cute-vstack gap="3">
 
-      <cute-form-field subscriptSizing="dynamic" class="w-100">
-        <cute-label>Color</cute-label>
-        <cute-select [(ngModel)]="color">
-          <cute-option>None</cute-option>
-          <cute-option value="primary">primary</cute-option>
-          <cute-option value="secondary">secondary</cute-option>
-          <cute-option value="danger">danger</cute-option>
-          <cute-option value="warning">warning</cute-option>
-          <cute-option value="success">success</cute-option>
-          <cute-option value="info">info</cute-option>
-        </cute-select>
+      <cute-expansion-panel style="width: 350px;">
+        <cute-expansion-panel-header>
+          Table parameters
+        </cute-expansion-panel-header>
+
+        <cute-form-field subscriptSizing="dynamic" class="w-100">
+          <cute-label>Color</cute-label>
+          <cute-select [(ngModel)]="color">
+            <cute-option>None</cute-option>
+            <cute-option value="primary">primary</cute-option>
+            <cute-option value="secondary">secondary</cute-option>
+            <cute-option value="danger">danger</cute-option>
+            <cute-option value="warning">warning</cute-option>
+            <cute-option value="success">success</cute-option>
+            <cute-option value="info">info</cute-option>
+          </cute-select>
+        </cute-form-field>
+
+        <cute-form-field subscriptSizing="dynamic" class="w-100">
+          <cute-label>Border color</cute-label>
+          <cute-select [(ngModel)]="borderColor">
+            <cute-option>None</cute-option>
+            <cute-option value="primary">primary</cute-option>
+            <cute-option value="secondary">secondary</cute-option>
+            <cute-option value="danger">danger</cute-option>
+            <cute-option value="warning">warning</cute-option>
+            <cute-option value="success">success</cute-option>
+            <cute-option value="info">info</cute-option>
+          </cute-select>
+        </cute-form-field>
+
+        <cute-hstack gap="5" class="mt-3">
+          <cute-vstack class="flex-grow-0">
+            <cute-checkbox #cbxStripeRows>Stripe rows</cute-checkbox>
+            <cute-checkbox #cbxStripeCols>Stripe cols</cute-checkbox>
+            <cute-checkbox #cbxCompact>Compact</cute-checkbox>
+            <cute-checkbox #cbxHover>Hover</cute-checkbox>
+            <cute-checkbox #cbxBordered>Bordered</cute-checkbox>
+            <cute-checkbox #cbxDragged>Dragged</cute-checkbox>
+          </cute-vstack>
+          <cute-vstack>
+            <cute-checkbox #cbxStickStart>Stick start column</cute-checkbox>
+            <cute-checkbox #cbxStickEnd>Stick end column</cute-checkbox>
+            <cute-checkbox #cbxStickHead>Stick head</cute-checkbox>
+            <cute-checkbox #cbxStickFoot>Stick foot</cute-checkbox>
+            <cute-checkbox #cbxDivideGroups>Divide groups</cute-checkbox>
+            <cute-checkbox #cbxVertHead>Vertical heads</cute-checkbox>
+          </cute-vstack>
+        </cute-hstack>
+      </cute-expansion-panel>
+
+    </cute-vstack>
+
+    <cute-hstack gap="3" class="align-items-end">
+      <cute-form-field subscriptSizing="dynamic" style="min-width: 100px;">
+        <cute-label>Filter</cute-label>
+        <input cuteInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
       </cute-form-field>
+      <button cute-button wrapText (click)="exportToExcel('table1',{filename:'export.xls'})">Export to Excel</button>
+      <button cute-button wrapText (click)="exportToCSV('table1',{filename:'data', delimiter: ';', columns: ['name', 'symbol']})">Export to CSV</button>
+    </cute-hstack>
 
-      <cute-form-field subscriptSizing="dynamic" class="w-100">
-        <cute-label>Border color</cute-label>
-        <cute-select [(ngModel)]="borderColor">
-          <cute-option>None</cute-option>
-          <cute-option value="primary">primary</cute-option>
-          <cute-option value="secondary">secondary</cute-option>
-          <cute-option value="danger">danger</cute-option>
-          <cute-option value="warning">warning</cute-option>
-          <cute-option value="success">success</cute-option>
-          <cute-option value="info">info</cute-option>
-        </cute-select>
-      </cute-form-field>
+    <section class="example-container shadow">
 
-      <cute-hstack gap="5" class="mt-3">
-        <cute-vstack class="flex-grow-0">
-          <cute-checkbox #cbxStripeRows>Stripe rows</cute-checkbox>
-          <cute-checkbox #cbxStripeCols>Stripe cols</cute-checkbox>
-          <cute-checkbox #cbxCompact>Compact</cute-checkbox>
-          <cute-checkbox #cbxHover>Hover</cute-checkbox>
-          <cute-checkbox #cbxBordered>Bordered</cute-checkbox>
-          <cute-checkbox #cbxDragged>Dragged</cute-checkbox>
-        </cute-vstack>
-        <cute-vstack>
-          <cute-checkbox #cbxStickStart>Stick start column</cute-checkbox>
-          <cute-checkbox #cbxStickEnd>Stick end column</cute-checkbox>
-          <cute-checkbox #cbxStickHead>Stick head</cute-checkbox>
-          <cute-checkbox #cbxStickFoot>Stick foot</cute-checkbox>
-          <cute-checkbox #cbxDivideGroups>Divide groups</cute-checkbox>
-          <cute-checkbox #cbxVertHead>Vertical heads</cute-checkbox>
-        </cute-vstack>
-      </cute-hstack>
-    </cute-expansion-panel>
+      <table id="table1" #table1 cute-table [dataSource]="periodicElementsDS"
+             [stripedColumns]="cbxStripeCols.checked"
+             [stripedRows]="cbxStripeRows.checked"
+             [hoveredRows]="cbxHover.checked"
+             [borderColor]="borderColor"
+             [displayBorders]="cbxBordered.checked ? 'all' : 'rows'"
+             [compact]="cbxCompact.checked"
+             [divideGroups]="cbxDivideGroups.checked"
+             [color]="color"
+             [verticalHeads]="cbxVertHead.checked"
+             class="caption-top mb-3"
+             fixedLayout="false"
+             cuteSort
+             cdkDropList
+             cdkDropListOrientation="horizontal"
+             (cdkDropListDropped)="drop($event)"
+      >
+        <!--<caption>Mendeleev element's table</caption>-->
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Checkbox Column -->
+
+        <ng-container cuteColumnDef="select" [sticky]="cbxStickStart.checked">
+          <th cute-header-cell *cuteHeaderCellDef [class.shadow]="cbxStickStart.checked">
+            <cute-checkbox (change)="$event ? toggleAllRows() : null"
+                           [checked]="selection.hasValue() && isAllSelected()"
+                           [indeterminate]="selection.hasValue() && !isAllSelected()"
+                           [aria-label]="checkboxLabel()">
+            </cute-checkbox>
+          </th>
+          <td cute-cell *cuteCellDef="let row">
+            <cute-checkbox (click)="$event.stopPropagation()"
+                           (change)="$event ? selection.toggle(row) : null"
+                           [checked]="selection.isSelected(row)"
+                           [aria-label]="checkboxLabel(row)">
+            </cute-checkbox>
+          </td>
+          <td cute-footer-cell *cuteFooterCellDef>  </td>
+        </ng-container>
+
+
+        <!-- Name Column |  -->
+        <ng-container cuteColumnDef="name" [sticky]="cbxStickStart.checked">
+          <th cute-header-cell cute-sort-header cdkDrag [cdkDragDisabled]="!cbxDragged.checked" cdkDragLockAxis="x" *cuteHeaderCellDef [class.shadow]="cbxStickStart.checked"> Name </th>
+          <td cute-cell *cuteCellDef="let element"> {{element.name}} </td>
+          <td cute-footer-cell *cuteFooterCellDef> Total </td>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container cuteColumnDef="position">
+          <th cute-header-cell cdkDrag [cdkDragDisabled]="!cbxDragged.checked" cdkDragLockAxis="x" *cuteHeaderCellDef> No. </th>
+          <td cute-cell *cuteCellDef="let element"> {{element.position}} </td>
+          <td cute-footer-cell *cuteFooterCellDef>  </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container cuteColumnDef="weight">
+          <th cute-header-cell *cuteHeaderCellDef> Weight </th>
+          <td cute-cell *cuteCellDef="let element"> {{element.weight}} </td>
+          <td cute-footer-cell *cuteFooterCellDef>  </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container cuteColumnDef="symbol">
+          <th cute-header-cell *cuteHeaderCellDef> Symbol </th>
+          <td cute-cell *cuteCellDef="let element" [active]="element.symbol=='Be'"> {{element.symbol}} </td>
+          <td cute-footer-cell *cuteFooterCellDef>  </td>
+        </ng-container>
+
+        <!-- Star Column -->
+        <ng-container cuteColumnDef="star" [stickyEnd]="cbxStickEnd.checked">
+          <th cute-header-cell *cuteHeaderCellDef [class.shadow]="cbxStickEnd.checked" aria-label="row actions">&nbsp;</th>
+          <td cute-cell *cuteCellDef="let element">
+            <cute-icon>three-dots-vertical</cute-icon>
+          </td>
+          <td cute-footer-cell *cuteFooterCellDef>  </td>
+        </ng-container>
+
+        <tr cute-header-row *cuteHeaderRowDef="displayedColumns; sticky: cbxStickHead.checked" color="secondary"></tr>
+        <tr cute-row *cuteRowDef="let row; columns: displayedColumns;"
+            (click)="selection.toggle(row)"
+            [class.demo-row-is-clicked]="clickedRows.has(row)"></tr>
+        <tr cute-footer-row *cuteFooterRowDef="displayedColumns; sticky: cbxStickFoot.checked"></tr> <!-- color="secondary" -->
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="cute-row" *cuteNoDataRow>
+          <td class="cute-cell" colspan="5">No data matching the filter "{{input.value}}"</td>
+        </tr>
+
+      </table>
+
+    </section>
+
+    <cute-paginator #tablePgntr [pageSizeOptions]="[5, 10, 20]" pageSize="10"
+                    showFirstLastButtons="true"
+                    showPrevNextLabels="true"
+                    hideBorders="false"
+                    hidePageSize="false"
+                    middleSectionStyle="range"
+                    [color]="color"
+                    magnitude="small"
+                    style="max-width: 600px"
+                    class="justify-content-sm-between"
+                    aria-label="Select page of periodic elements">
+    </cute-paginator>
 
   </cute-vstack>
 
-  <cute-hstack gap="3" class="align-items-end">
-    <cute-form-field subscriptSizing="dynamic" style="min-width: 100px;">
-      <cute-label>Filter</cute-label>
-      <input cuteInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-    </cute-form-field>
-    <button cute-button wrapText (click)="exportToExcel('table1',{filename:'export.xls'})">Export to Excel</button>
-    <button cute-button wrapText (click)="exportToCSV('table1',{filename:'data', delimiter: ';', columns: ['name', 'symbol']})">Export to CSV</button>
-  </cute-hstack>
-
-  <section class="example-container shadow">
-
-    <table id="table1" #table1 cute-table [dataSource]="periodicElementsDS"
-           [stripedColumns]="cbxStripeCols.checked"
-           [stripedRows]="cbxStripeRows.checked"
-           [hoveredRows]="cbxHover.checked"
-           [borderColor]="borderColor"
-           [displayBorders]="cbxBordered.checked ? 'all' : 'rows'"
-           [compact]="cbxCompact.checked"
-           [divideGroups]="cbxDivideGroups.checked"
-           [color]="color"
-           [verticalHeads]="cbxVertHead.checked"
-           class="caption-top mb-3"
-           fixedLayout="false"
-           cuteSort
-           cdkDropList
-           cdkDropListOrientation="horizontal"
-           (cdkDropListDropped)="drop($event)"
-    >
-      <!--<caption>Mendeleev element's table</caption>-->
-
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-
-      <!-- Checkbox Column -->
-
-      <ng-container cuteColumnDef="select" [sticky]="cbxStickStart.checked">
-        <th cute-header-cell *cuteHeaderCellDef [class.shadow]="cbxStickStart.checked">
-          <cute-checkbox (change)="$event ? toggleAllRows() : null"
-                         [checked]="selection.hasValue() && isAllSelected()"
-                         [indeterminate]="selection.hasValue() && !isAllSelected()"
-                         [aria-label]="checkboxLabel()">
-          </cute-checkbox>
-        </th>
-        <td cute-cell *cuteCellDef="let row">
-          <cute-checkbox (click)="$event.stopPropagation()"
-                         (change)="$event ? selection.toggle(row) : null"
-                         [checked]="selection.isSelected(row)"
-                         [aria-label]="checkboxLabel(row)">
-          </cute-checkbox>
-        </td>
-        <td cute-footer-cell *cuteFooterCellDef>  </td>
-      </ng-container>
-
-
-      <!-- Name Column |  -->
-      <ng-container cuteColumnDef="name" [sticky]="cbxStickStart.checked">
-        <th cute-header-cell cute-sort-header cdkDrag [cdkDragDisabled]="!cbxDragged.checked" cdkDragLockAxis="x" *cuteHeaderCellDef [class.shadow]="cbxStickStart.checked"> Name </th>
-        <td cute-cell *cuteCellDef="let element"> {{element.name}} </td>
-        <td cute-footer-cell *cuteFooterCellDef> Total </td>
-      </ng-container>
-
-      <!-- Position Column -->
-      <ng-container cuteColumnDef="position">
-        <th cute-header-cell cdkDrag [cdkDragDisabled]="!cbxDragged.checked" cdkDragLockAxis="x" *cuteHeaderCellDef> No. </th>
-        <td cute-cell *cuteCellDef="let element"> {{element.position}} </td>
-        <td cute-footer-cell *cuteFooterCellDef>  </td>
-      </ng-container>
-
-      <!-- Weight Column -->
-      <ng-container cuteColumnDef="weight">
-        <th cute-header-cell *cuteHeaderCellDef> Weight </th>
-        <td cute-cell *cuteCellDef="let element"> {{element.weight}} </td>
-        <td cute-footer-cell *cuteFooterCellDef>  </td>
-      </ng-container>
-
-      <!-- Symbol Column -->
-      <ng-container cuteColumnDef="symbol">
-        <th cute-header-cell *cuteHeaderCellDef> Symbol </th>
-        <td cute-cell *cuteCellDef="let element" [active]="element.symbol=='Be'"> {{element.symbol}} </td>
-        <td cute-footer-cell *cuteFooterCellDef>  </td>
-      </ng-container>
-
-      <!-- Star Column -->
-      <ng-container cuteColumnDef="star" [stickyEnd]="cbxStickEnd.checked">
-        <th cute-header-cell *cuteHeaderCellDef [class.shadow]="cbxStickEnd.checked" aria-label="row actions">&nbsp;</th>
-        <td cute-cell *cuteCellDef="let element">
-          <cute-icon>three-dots-vertical</cute-icon>
-        </td>
-        <td cute-footer-cell *cuteFooterCellDef>  </td>
-      </ng-container>
-
-      <tr cute-header-row *cuteHeaderRowDef="displayedColumns; sticky: cbxStickHead.checked" color="secondary"></tr>
-      <tr cute-row *cuteRowDef="let row; columns: displayedColumns;"
-          (click)="selection.toggle(row)"
-          [class.demo-row-is-clicked]="clickedRows.has(row)"></tr>
-      <tr cute-footer-row *cuteFooterRowDef="displayedColumns; sticky: cbxStickFoot.checked"></tr> <!-- color="secondary" -->
-
-      <!-- Row shown when there is no matching data. -->
-      <tr class="cute-row" *cuteNoDataRow>
-        <td class="cute-cell" colspan="5">No data matching the filter "{{input.value}}"</td>
-      </tr>
-
-    </table>
-
-  </section>
-
-  <cute-paginator #tablePgntr [pageSizeOptions]="[5, 10, 20]" pageSize="10"
-                  showFirstLastButtons="true"
-                  showPrevNextLabels="true"
-                  hideBorders="false"
-                  hidePageSize="false"
-                  middleSectionStyle="range"
-                  [color]="color"
-                  magnitude="small"
-                  style="max-width: 600px"
-                  class="justify-content-sm-between"
-                  aria-label="Select page of periodic elements">
-  </cute-paginator>
-
-</cute-vstack>
-
+</ng-template>

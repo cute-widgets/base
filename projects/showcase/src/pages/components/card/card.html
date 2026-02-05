@@ -1,6 +1,10 @@
-<h5 componentHeader>Card</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="cardExamples">
+</app-component-viewer>
 
-<!--<cute-hstack gap="3">-->
+<ng-template #cardExamples>
+
   <cute-vstack gap="3" class="mb-3">
     <cute-hstack gap="4" class="flex-wrap">
       <cute-checkbox #cbxImage (change)="!cbxImage.checked ? cbxBgImage.checked=false : null">With image</cute-checkbox>
@@ -42,8 +46,8 @@
 
         @let cardImageSource = "assets/images/unsplash-photo-2.jpg";
         @if (cbxImage.checked && !cbxBgImage.checked && cbxImageBottom.checked) {
-            <img cute-card-bottom-image [height]="200"
-                 [src]="cardImageSource" alt="Flowers">
+          <img cute-card-bottom-image [height]="200"
+               [src]="cardImageSource" alt="Flowers">
         }
         @if (cbxImage.checked && !cbxBgImage.checked && !cbxImageBottom.checked) {
           <img cute-card-image [height]="200"
@@ -74,6 +78,7 @@
     </div>
 
   </cute-vstack>
-<!--</cute-hstack>-->
+
+</ng-template>
 
 

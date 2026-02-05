@@ -14,9 +14,9 @@ import {exportToCSV, exportToExcel, ThemeColor} from "@cute-widgets/base/core";
 import {CuteOption} from '@cute-widgets/base/core/option';
 import {CuteSelect} from '@cute-widgets/base/select';
 import {FormsModule} from '@angular/forms';
-import {ComponentHeader} from '../../../shared/utils/component-header';
 import {CuteExpansionModule} from '@cute-widgets/base/expansion';
-
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 export interface PeriodicElement {
   name: string;
@@ -80,29 +80,29 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 @Component({
   selector: 'app-table',
-  imports: [
-    FormsModule,
-    CuteVStack,
-    CuteHStack,
-    CuteFormFieldModule,
-    CuteTableModule,
-    CutePaginatorModule,
-    CuteButtonModule,
-    CuteInputModule,
-    CuteSortModule,
-    CdkDrag,
-    CdkDropList,
-    CuteCheckboxModule,
-    CuteIconModule,
-    CuteOption,
-    CuteSelect,
-    ComponentHeader,
-    CuteExpansionModule,
-  ],
+    imports: [
+        FormsModule,
+        CuteVStack,
+        CuteHStack,
+        CuteFormFieldModule,
+        CuteTableModule,
+        CutePaginatorModule,
+        CuteButtonModule,
+        CuteInputModule,
+        CuteSortModule,
+        CdkDrag,
+        CdkDropList,
+        CuteCheckboxModule,
+        CuteIconModule,
+        CuteOption,
+        CuteSelect,
+        CuteExpansionModule,
+        ComponentViewer,
+    ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })
-export class TablePage implements AfterViewInit {
+export class TablePage extends AbstractPage implements AfterViewInit {
   displayedColumns: string[] = ['select', 'name', 'position', 'weight', 'symbol', 'position', 'weight', 'symbol', 'star'];
   periodicElementsDS = new CuteTableDataSource<PeriodicElement>(ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);

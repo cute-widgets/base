@@ -1,7 +1,14 @@
-<h5 componentHeader>Stepper</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="stepperExamples">
+</app-component-viewer>
 
-<cute-vstack gap="3">
-  <single-form-wizard orientation="vertical" labelPosition="bottom" class="mb-3"></single-form-wizard>
-  <stepper-vertical-example></stepper-vertical-example>
-  <stepper-with-error></stepper-with-error>
-</cute-vstack>
+<ng-template #stepperExamples>
+
+  <cute-vstack gap="3">
+    <single-form-wizard orientation="vertical" labelPosition="bottom" class="mb-3"></single-form-wizard>
+    <stepper-vertical-example></stepper-vertical-example>
+    <stepper-with-error></stepper-with-error>
+  </cute-vstack>
+
+</ng-template>

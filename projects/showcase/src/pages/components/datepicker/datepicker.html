@@ -1,160 +1,167 @@
-<h5 componentHeader>Datepicker</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="datepickerExamples">
+</app-component-viewer>
 
-<cute-vstack gap="2" class="mb-3">
+<ng-template #datepickerExamples>
 
-  <cute-hstack gap="3">
-    <cute-form-field>
+  <cute-vstack gap="2" class="mb-3">
+
+    <cute-hstack gap="3">
+      <cute-form-field>
+        <cute-label>Choose a date</cute-label>
+        <input cuteInput [cuteDatepicker]="picker1">
+        <cute-hint>MM/DD/YYYY</cute-hint>
+        <cute-datepicker-toggle cuteIconSuffix [for]="picker1"></cute-datepicker-toggle>
+        <cute-datepicker #picker1></cute-datepicker>
+      </cute-form-field>
+      <button cuteButton="raised-button" (click)="picker1.open()">Open</button>
+    </cute-hstack>
+
+    <cute-form-field class="example-full-width">
       <cute-label>Choose a date</cute-label>
-      <input cuteInput [cuteDatepicker]="picker1">
+      <input cuteInput [cuteDatepicker]="picker2">
       <cute-hint>MM/DD/YYYY</cute-hint>
-      <cute-datepicker-toggle cuteIconSuffix [for]="picker1"></cute-datepicker-toggle>
-      <cute-datepicker #picker1></cute-datepicker>
+      <cute-datepicker-toggle cuteIconSuffix [for]="picker2">
+        <cute-icon cuteDatepickerToggleIcon>caret-down-fill</cute-icon>
+      </cute-datepicker-toggle>
+      <cute-datepicker #picker2></cute-datepicker>
     </cute-form-field>
-    <button cuteButton="raised-button" (click)="picker1.open()">Open</button>
-  </cute-hstack>
 
-  <cute-form-field class="example-full-width">
-    <cute-label>Choose a date</cute-label>
-    <input cuteInput [cuteDatepicker]="picker2">
-    <cute-hint>MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="picker2">
-      <cute-icon cuteDatepickerToggleIcon>caret-down-fill</cute-icon>
-    </cute-datepicker-toggle>
-    <cute-datepicker #picker2></cute-datepicker>
-  </cute-form-field>
-
-  <cute-form-field>
-    <cute-label>Enter a date range</cute-label>
-    <cute-date-range-input [rangePicker]="picker3">
-      <input cuteStartDate placeholder="Start date">
-      <input cuteEndDate placeholder="End date">
-    </cute-date-range-input>
-    <cute-hint>MM/DD/YYYY – MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="picker3"></cute-datepicker-toggle>
-    <cute-date-range-picker #picker3></cute-date-range-picker>
-  </cute-form-field>
-
-  <cute-form-field color="warning">
-    <cute-label>Choose a date</cute-label>
-    <input cuteInput [cuteDatepicker]="picker4">
-    <cute-hint>MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="picker4"></cute-datepicker-toggle>
-    <cute-datepicker #picker4 startView="year" [startAt]="startDate" color="danger"></cute-datepicker>
-  </cute-form-field>
-
-  <cute-form-field class="example-full-width">
-    <cute-label>Choose a date (with a filter)</cute-label>
-    <input cuteInput [cuteDatepickerFilter]="myDateFilter" [cuteDatepicker]="picker5">
-    <cute-hint>MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="picker5"></cute-datepicker-toggle>
-    <cute-datepicker #picker5></cute-datepicker>
-  </cute-form-field>
-
-
-  <p>
     <cute-form-field>
-      <cute-label>Completely disabled</cute-label>
-      <input cuteInput [cuteDatepicker]="dp1" disabled>
-      <cute-hint>MM/DD/YYYY</cute-hint>
-      <cute-datepicker-toggle cuteIconSuffix [for]="dp1"></cute-datepicker-toggle>
-      <cute-datepicker #dp1></cute-datepicker>
-    </cute-form-field>
-  </p>
-
-  <p>
-    <cute-form-field>
-      <cute-label>Popup disabled</cute-label>
-      <input cuteInput [cuteDatepicker]="dp2" autocomplete="off">
-      <cute-hint>MM/DD/YYYY</cute-hint>
-      <cute-datepicker-toggle cuteIconSuffix [for]="dp2" disabled></cute-datepicker-toggle>
-      <cute-datepicker #dp2></cute-datepicker>
-    </cute-form-field>
-  </p>
-
-  <p>
-    <cute-form-field>
-      <cute-label>Input disabled</cute-label>
-      <input cuteInput [cuteDatepicker]="dp3" disabled>
-      <cute-hint>MM/DD/YYYY</cute-hint>
-      <cute-datepicker-toggle cuteIconSuffix [for]="dp3"></cute-datepicker-toggle>
-      <cute-datepicker #dp3 disabled="false"></cute-datepicker>
-    </cute-form-field>
-  </p>
-
-  <cute-form-field class="example-form-field">
-    <cute-label>Choose a date</cute-label>
-    <input cuteInput [cuteDatepicker]="datepicker">
-    <cute-hint>MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="datepicker"></cute-datepicker-toggle>
-    <cute-datepicker #datepicker>
-      <cute-datepicker-actions>
-        <button cute-button cuteDatepickerCancel>Cancel</button>
-        <button cuteButton="raised-button" color="primary" cuteDatepickerApply>Apply</button>
-      </cute-datepicker-actions>
-    </cute-datepicker>
-  </cute-form-field>
-
-  <cute-form-field class="example-form-field">
-    <cute-label>Enter a date range</cute-label>
-    <cute-date-range-input [rangePicker]="rangePicker">
-      <input cuteStartDate placeholder="Start date">
-      <input cuteEndDate placeholder="End date">
-    </cute-date-range-input>
-    <cute-hint>MM/DD/YYYY – MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="rangePicker"></cute-datepicker-toggle>
-    <cute-date-range-picker #rangePicker>
-      <cute-date-range-picker-actions>
-        <button cute-button cuteDateRangePickerCancel>Cancel</button>
-        <button cuteButton="raised-button" color="primary" cuteDateRangePickerApply>Apply</button>
-      </cute-date-range-picker-actions>
-    </cute-date-range-picker>
-  </cute-form-field>
-
-  <cute-hstack gap="3">
-
-    <cute-form-field class="example-form-field">
-      <cute-label>First campaign</cute-label>
-      <cute-date-range-input
-        [formGroup]="campaignOne"
-        [rangePicker]="campaignOnePicker"
-        [comparisonStart]="campaignTwo.value.start"
-        [comparisonEnd]="campaignTwo.value.end">
-        <input cuteStartDate placeholder="Start date" formControlName="start">
-        <input cuteEndDate placeholder="End date" formControlName="end">
+      <cute-label>Enter a date range</cute-label>
+      <cute-date-range-input [rangePicker]="picker3">
+        <input cuteStartDate placeholder="Start date">
+        <input cuteEndDate placeholder="End date">
       </cute-date-range-input>
       <cute-hint>MM/DD/YYYY – MM/DD/YYYY</cute-hint>
-      <cute-datepicker-toggle cuteIconSuffix [for]="campaignOnePicker"></cute-datepicker-toggle>
-      <cute-date-range-picker #campaignOnePicker></cute-date-range-picker>
+      <cute-datepicker-toggle cuteIconSuffix [for]="picker3"></cute-datepicker-toggle>
+      <cute-date-range-picker #picker3></cute-date-range-picker>
+    </cute-form-field>
+
+    <cute-form-field color="warning">
+      <cute-label>Choose a date</cute-label>
+      <input cuteInput [cuteDatepicker]="picker4">
+      <cute-hint>MM/DD/YYYY</cute-hint>
+      <cute-datepicker-toggle cuteIconSuffix [for]="picker4"></cute-datepicker-toggle>
+      <cute-datepicker #picker4 startView="year" [startAt]="startDate" color="danger"></cute-datepicker>
+    </cute-form-field>
+
+    <cute-form-field class="example-full-width">
+      <cute-label>Choose a date (with a filter)</cute-label>
+      <input cuteInput [cuteDatepickerFilter]="myDateFilter" [cuteDatepicker]="picker5">
+      <cute-hint>MM/DD/YYYY</cute-hint>
+      <cute-datepicker-toggle cuteIconSuffix [for]="picker5"></cute-datepicker-toggle>
+      <cute-datepicker #picker5></cute-datepicker>
+    </cute-form-field>
+
+
+    <p>
+      <cute-form-field>
+        <cute-label>Completely disabled</cute-label>
+        <input cuteInput [cuteDatepicker]="dp1" disabled>
+        <cute-hint>MM/DD/YYYY</cute-hint>
+        <cute-datepicker-toggle cuteIconSuffix [for]="dp1"></cute-datepicker-toggle>
+        <cute-datepicker #dp1></cute-datepicker>
+      </cute-form-field>
+    </p>
+
+    <p>
+      <cute-form-field>
+        <cute-label>Popup disabled</cute-label>
+        <input cuteInput [cuteDatepicker]="dp2" autocomplete="off">
+        <cute-hint>MM/DD/YYYY</cute-hint>
+        <cute-datepicker-toggle cuteIconSuffix [for]="dp2" disabled></cute-datepicker-toggle>
+        <cute-datepicker #dp2></cute-datepicker>
+      </cute-form-field>
+    </p>
+
+    <p>
+      <cute-form-field>
+        <cute-label>Input disabled</cute-label>
+        <input cuteInput [cuteDatepicker]="dp3" disabled>
+        <cute-hint>MM/DD/YYYY</cute-hint>
+        <cute-datepicker-toggle cuteIconSuffix [for]="dp3"></cute-datepicker-toggle>
+        <cute-datepicker #dp3 disabled="false"></cute-datepicker>
+      </cute-form-field>
+    </p>
+
+    <cute-form-field class="example-form-field">
+      <cute-label>Choose a date</cute-label>
+      <input cuteInput [cuteDatepicker]="datepicker">
+      <cute-hint>MM/DD/YYYY</cute-hint>
+      <cute-datepicker-toggle cuteIconSuffix [for]="datepicker"></cute-datepicker-toggle>
+      <cute-datepicker #datepicker>
+        <cute-datepicker-actions>
+          <button cute-button cuteDatepickerCancel>Cancel</button>
+          <button cuteButton="raised-button" color="primary" cuteDatepickerApply>Apply</button>
+        </cute-datepicker-actions>
+      </cute-datepicker>
     </cute-form-field>
 
     <cute-form-field class="example-form-field">
-      <cute-label>Second campaign</cute-label>
-      <cute-date-range-input
-        [formGroup]="campaignTwo"
-        [rangePicker]="campaignTwoPicker"
-        [comparisonStart]="campaignOne.value.start"
-        [comparisonEnd]="campaignOne.value.end">
-        <input cuteStartDate placeholder="Start date" formControlName="start">
-        <input cuteEndDate placeholder="End date" formControlName="end">
+      <cute-label>Enter a date range</cute-label>
+      <cute-date-range-input [rangePicker]="rangePicker">
+        <input cuteStartDate placeholder="Start date">
+        <input cuteEndDate placeholder="End date">
       </cute-date-range-input>
-      <cute-datepicker-toggle cuteIconSuffix [for]="campaignTwoPicker"></cute-datepicker-toggle>
       <cute-hint>MM/DD/YYYY – MM/DD/YYYY</cute-hint>
-      <cute-date-range-picker #campaignTwoPicker></cute-date-range-picker>
+      <cute-datepicker-toggle cuteIconSuffix [for]="rangePicker"></cute-datepicker-toggle>
+      <cute-date-range-picker #rangePicker>
+        <cute-date-range-picker-actions>
+          <button cute-button cuteDateRangePickerCancel>Cancel</button>
+          <button cuteButton="raised-button" color="primary" cuteDateRangePickerApply>Apply</button>
+        </cute-date-range-picker-actions>
+      </cute-date-range-picker>
     </cute-form-field>
 
-  </cute-hstack>
+    <cute-hstack gap="3">
 
-  <cute-form-field class="example-custom-dates">
-    <cute-label>Choose a date</cute-label>
-    <input cuteInput [cuteDatepicker]="picker999">
-    <cute-hint>MM/DD/YYYY</cute-hint>
-    <cute-datepicker-toggle cuteIconSuffix [for]="picker999"></cute-datepicker-toggle>
-    <cute-datepicker [dateClass]="dateClass" #picker999></cute-datepicker>
-  </cute-form-field>
+      <cute-form-field class="example-form-field">
+        <cute-label>First campaign</cute-label>
+        <cute-date-range-input
+          [formGroup]="campaignOne"
+          [rangePicker]="campaignOnePicker"
+          [comparisonStart]="campaignTwo.value.start"
+          [comparisonEnd]="campaignTwo.value.end">
+          <input cuteStartDate placeholder="Start date" formControlName="start">
+          <input cuteEndDate placeholder="End date" formControlName="end">
+        </cute-date-range-input>
+        <cute-hint>MM/DD/YYYY – MM/DD/YYYY</cute-hint>
+        <cute-datepicker-toggle cuteIconSuffix [for]="campaignOnePicker"></cute-datepicker-toggle>
+        <cute-date-range-picker #campaignOnePicker></cute-date-range-picker>
+      </cute-form-field>
 
-  <cute-card class="demo-inline-calendar-card">
-    <cute-calendar [(selected)]="selected"></cute-calendar>
-  </cute-card>
-  <p>Selected date: {{selected}}</p>
-</cute-vstack>
+      <cute-form-field class="example-form-field">
+        <cute-label>Second campaign</cute-label>
+        <cute-date-range-input
+          [formGroup]="campaignTwo"
+          [rangePicker]="campaignTwoPicker"
+          [comparisonStart]="campaignOne.value.start"
+          [comparisonEnd]="campaignOne.value.end">
+          <input cuteStartDate placeholder="Start date" formControlName="start">
+          <input cuteEndDate placeholder="End date" formControlName="end">
+        </cute-date-range-input>
+        <cute-datepicker-toggle cuteIconSuffix [for]="campaignTwoPicker"></cute-datepicker-toggle>
+        <cute-hint>MM/DD/YYYY – MM/DD/YYYY</cute-hint>
+        <cute-date-range-picker #campaignTwoPicker></cute-date-range-picker>
+      </cute-form-field>
+
+    </cute-hstack>
+
+    <cute-form-field class="example-custom-dates">
+      <cute-label>Choose a date</cute-label>
+      <input cuteInput [cuteDatepicker]="picker999">
+      <cute-hint>MM/DD/YYYY</cute-hint>
+      <cute-datepicker-toggle cuteIconSuffix [for]="picker999"></cute-datepicker-toggle>
+      <cute-datepicker [dateClass]="dateClass" #picker999></cute-datepicker>
+    </cute-form-field>
+
+    <cute-card class="demo-inline-calendar-card">
+      <cute-calendar [(selected)]="selected"></cute-calendar>
+    </cute-card>
+    <p>Selected date: {{selected}}</p>
+  </cute-vstack>
+
+</ng-template>
 

@@ -1,35 +1,41 @@
-<h5 componentHeader>Tree</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="treeExamples">
+</app-component-viewer>
 
-<cute-hstack class="mb-3" gap="3">
+<ng-template #treeExamples>
 
-  <cute-vstack class="w-50">
-    <h6>Flat tree</h6>
-    <cute-tree #tree [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
-      <!-- This is the tree node template for leaf nodes -->
-      <cute-tree-node *cuteTreeNodeDef="let node" cuteTreeNodePadding>
-        <!-- use a disabled button to provide padding for tree leaf -->
-        <button cuteButton="icon-button" disabled></button>
-        {{node.name}}
-      </cute-tree-node>
-      <!-- This is the tree node template for expandable nodes -->
-      <cute-tree-node *cuteTreeNodeDef="let node;when: hasChild" cuteTreeNodePadding cuteTreeNodeToggle
-                      [cdkTreeNodeTypeaheadLabel]="node.name">
-        <button cuteButton="icon-button" cuteTreeNodeToggle
-                [attr.aria-label]="'Toggle ' + node.name">
-          <cute-icon class="cute-icon-rtl-mirror"
-                     color="secondary"
-                     [fontIcon]="tree.isExpanded(node) ? 'chevron-down' : 'chevron-right'"
-          ></cute-icon>
-        </button>
-        {{node.name}}
-      </cute-tree-node>
-    </cute-tree>
-  </cute-vstack>
+  <cute-hstack class="mb-3" gap="3">
 
-  <cute-vstack class="w-50">
-    <h6>Tree with dynamic data</h6>
-    <tree-dynamic-example></tree-dynamic-example>
-  </cute-vstack>
+    <cute-vstack class="w-50">
+      <h6>Flat tree</h6>
+      <cute-tree #tree [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+        <!-- This is the tree node template for leaf nodes -->
+        <cute-tree-node *cuteTreeNodeDef="let node" cuteTreeNodePadding>
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button cuteButton="icon-button" disabled></button>
+          {{node.name}}
+        </cute-tree-node>
+        <!-- This is the tree node template for expandable nodes -->
+        <cute-tree-node *cuteTreeNodeDef="let node;when: hasChild" cuteTreeNodePadding cuteTreeNodeToggle
+                        [cdkTreeNodeTypeaheadLabel]="node.name">
+          <button cuteButton="icon-button" cuteTreeNodeToggle
+                  [attr.aria-label]="'Toggle ' + node.name">
+            <cute-icon class="cute-icon-rtl-mirror"
+                       color="secondary"
+                       [fontIcon]="tree.isExpanded(node) ? 'chevron-down' : 'chevron-right'"
+            ></cute-icon>
+          </button>
+          {{node.name}}
+        </cute-tree-node>
+      </cute-tree>
+    </cute-vstack>
 
-</cute-hstack>
+    <cute-vstack class="w-50">
+      <h6>Tree with dynamic data</h6>
+      <tree-dynamic-example></tree-dynamic-example>
+    </cute-vstack>
 
+  </cute-hstack>
+
+</ng-template>

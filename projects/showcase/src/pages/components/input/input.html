@@ -1,34 +1,41 @@
-<h5 componentHeader>Input</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="inputExamples">
+</app-component-viewer>
 
-<cute-vstack gap="3">
+<ng-template #inputExamples>
 
-  <cute-form-field class="example-form-field" hideValidStyle subscriptSizing="dynamic">
-    <cute-label>Clearable input</cute-label>
-    <input cuteInput type="text" [(ngModel)]="value">
-    <button cuteSuffix cuteButton="outline-button" color="secondary" (click)="value ? value='' : undefined">
-      @if (value) {
-        <cute-icon aria-label="Clear">x-lg</cute-icon>
-      } @else {
-        <cute-icon aria-label="Search" rotation="90">search</cute-icon>
-      }
-    </button>
-  </cute-form-field>
+  <cute-vstack gap="3">
+
+    <cute-form-field class="example-form-field" hideValidStyle subscriptSizing="dynamic">
+      <cute-label>Clearable input</cute-label>
+      <input cuteInput type="text" [(ngModel)]="value">
+      <button cuteSuffix cuteButton="outline-button" color="secondary" (click)="value ? value='' : undefined">
+        @if (value) {
+          <cute-icon aria-label="Clear">x-lg</cute-icon>
+        } @else {
+          <cute-icon aria-label="Search" rotation="90">search</cute-icon>
+        }
+      </button>
+    </cute-form-field>
 
 
-  <div>
-    <h6>File input</h6>
-    <cute-vstack gap="1">
-      <input #inpFile cuteInput type="file" class="example-file-input">
-      <span class="ms-3">File: {{inpFile.value}}</span>
-    </cute-vstack>
-  </div>
+    <div>
+      <h6>File input</h6>
+      <cute-vstack gap="1">
+        <input #inpFile cuteInput type="file" class="example-file-input">
+        <span class="ms-3">File: {{inpFile.value}}</span>
+      </cute-vstack>
+    </div>
 
-  <div>
-    <h6>Color input</h6>
-    <cute-hstack gap="3">
-      <input #inpColor cuteInput type="color" value="#563d7c" title="Choose your color">
-      <span>Color: <strong>{{inpColor.value}}</strong></span>
-    </cute-hstack>
-  </div>
+    <div>
+      <h6>Color input</h6>
+      <cute-hstack gap="3">
+        <input #inpColor cuteInput type="color" value="#563d7c" title="Choose your color">
+        <span>Color: <strong>{{inpColor.value}}</strong></span>
+      </cute-hstack>
+    </div>
 
-</cute-vstack>
+  </cute-vstack>
+
+</ng-template>

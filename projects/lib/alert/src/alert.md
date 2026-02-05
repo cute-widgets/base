@@ -5,7 +5,7 @@ milliseconds after which the alert message is automatically dismissed.
 
 ### Additional content
 Alerts can also contain additional HTML elements like headings, paragraphs and dividers.
-You can cse `cuteAlertHeading` directive for header styling and `cute-divider` component as
+You can use `cuteAlertHeading` directive for header styling and `cute-divider` component as
 a horizontal or vertical divider.
 
 ### Accessibility

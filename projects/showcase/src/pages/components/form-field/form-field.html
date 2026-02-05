@@ -1,6 +1,12 @@
-<h5 componentHeader>Form field</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="formfieldExamples">
+</app-component-viewer>
 
-<cute-vstack gap="3">
+
+<ng-template #formfieldExamples>
+
+  <cute-vstack gap="3">
 
     <cute-card class="p-3 col-xs-12 col-md-6">
       <cute-form-field class="w-100 mb-2">
@@ -160,5 +166,8 @@
       </cute-form-field>
     </div>
 
-</cute-vstack>
+  </cute-vstack>
+
+</ng-template>
+
 

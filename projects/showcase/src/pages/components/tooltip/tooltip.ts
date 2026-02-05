@@ -5,23 +5,24 @@ import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
 import {CuteSelectModule} from '@cute-widgets/base/select';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {CuteButtonModule} from '@cute-widgets/base/button';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-tooltip',
-  imports: [
-    ReactiveFormsModule,
-    CuteHStack,
-    CuteTooltipModule,
-    CuteFormFieldModule,
-    CuteSelectModule,
-    CuteButtonModule,
-    ComponentHeader,
-  ],
+    imports: [
+        ReactiveFormsModule,
+        CuteHStack,
+        CuteTooltipModule,
+        CuteFormFieldModule,
+        CuteSelectModule,
+        CuteButtonModule,
+        ComponentViewer,
+    ],
   templateUrl: './tooltip.html',
   styleUrl: './tooltip.scss',
 })
-export class TooltipPage {
+export class TooltipPage extends AbstractPage {
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
 }

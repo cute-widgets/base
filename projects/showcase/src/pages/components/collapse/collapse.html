@@ -1,46 +1,30 @@
-<h5 componentHeader>Collapse</h5>
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="collapseExamples">
+</app-component-viewer>
 
-<cute-hstack class="mb-2" gap="3">
-  <cute-vstack>
-    <cute-checkbox #cbxHor>Horizontal</cute-checkbox>
-    <div>
-      <button cuteButton withAriaExpandedIndicator [cuteCollapseTriggerFor]="collapseCard" color="info">Show collapsed</button>
-      <cute-collapse #collapseCard class="mt-2" [horizontal]="cbxHor.checked">
-        <cute-card style="width: 300px;">
-          <cute-card-header>
-            Card Header
-          </cute-card-header>
-          <cute-card-body>
-            <h5 cuteCardTitle>Card Title</h5>
-            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-          </cute-card-body>
-        </cute-card>
-      </cute-collapse>
-    </div>
-  </cute-vstack>
-  <div>
-    <!--
-    <button cuteButton cuteButtonToggle withAriaExpandedIndicator [cuteCollapseTriggerFor]="dashboardMenu" style="gap:0">
-      Dashboard
-    </button>
-    <cute-collapse #dashboardMenu>
-      <ul class="btn-toggle-nav fw-normal list-unstyled pb-1 small">
-        <li>
-          <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded"> Overview </a>
-        </li>
-        <li>
-          <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded"> Weekly </a>
-        </li>
-        <li>
-          <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded"> Monthly </a>
-        </li>
-        <li>
-          <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded"> Annually </a>
-        </li>
-      </ul>
-    </cute-collapse>
-    -->
-    <!--        <panel-menu-demo></panel-menu-demo>-->
-  </div>
-</cute-hstack>
+<ng-template #collapseExamples>
+
+  <cute-hstack class="mb-2" gap="3">
+    <cute-vstack>
+      <cute-checkbox #cbxHor>Horizontal</cute-checkbox>
+      <div>
+        <button cuteButton withAriaExpandedIndicator [cuteCollapseTriggerFor]="collapseCard" color="info">Show collapsed</button>
+        <cute-collapse #collapseCard class="mt-2" [horizontal]="cbxHor.checked">
+          <cute-card style="width: 300px;">
+            <cute-card-header>
+              Card Header
+            </cute-card-header>
+            <cute-card-body>
+              <h5 cuteCardTitle>Card Title</h5>
+              Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+            </cute-card-body>
+          </cute-card>
+        </cute-collapse>
+      </div>
+    </cute-vstack>
+
+  </cute-hstack>
+
+</ng-template>
 

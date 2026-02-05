@@ -2,20 +2,21 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteProgressBar, CuteProgressBarModule} from '@cute-widgets/base/progress';
 import {ThemeColor} from '@cute-widgets/base/core';
-import {ComponentHeader} from '../../../shared/utils/component-header';
+import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AbstractPage} from '../abstract/abstract-page';
 
 @Component({
   selector: 'app-progress-bar',
-  imports: [
-    CuteVStack,
-    CuteProgressBarModule,
-    CuteHStack,
-    ComponentHeader
-  ],
+    imports: [
+        CuteVStack,
+        CuteProgressBarModule,
+        CuteHStack,
+        ComponentViewer
+    ],
   templateUrl: './progress-bar.html',
   styleUrl: './progress-bar.scss',
 })
-export class ProgressBarPage implements OnInit {
+export class ProgressBarPage extends AbstractPage implements OnInit {
   @ViewChild("pbar_1", {static: true}) pbar1!: CuteProgressBar;
   @ViewChild("pbar_2", {static: true}) pbar2!: CuteProgressBar;
 
