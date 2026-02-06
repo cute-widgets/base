@@ -106,7 +106,7 @@ By default, chips are displayed horizontally. To stack chips vertically, apply t
 ### Specifying global configuration defaults
 Use the `CUTE_CHIPS_DEFAULT_OPTIONS` token to specify default options for the chips module.
 
-```html
+```ts
 @NgModule({
   providers: [
     {

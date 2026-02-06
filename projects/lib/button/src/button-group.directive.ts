@@ -14,7 +14,7 @@ import {
   Input, Output,
   QueryList
 } from "@angular/core";
-import {CuteFocusableControl} from "@cute-widgets/base/abstract";
+import {CuteFocusableControl, CuteLayoutControl} from "@cute-widgets/base/abstract";
 import {RelativeSize5} from "@cute-widgets/base/core/types";
 import {CUTE_BUTTON_BASE, CuteButtonBase, CuteButtonStyle} from "./button-base.directive";
 import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
@@ -53,7 +53,7 @@ export const CUTE_BUTTON_GROUP = new InjectionToken<CuteButtonGroup>(
   providers: [{provide: CUTE_BUTTON_GROUP, useExisting: CuteButtonGroup}],
   standalone: true
 })
-export class CuteButtonGroup extends CuteFocusableControl {
+export class CuteButtonGroup extends CuteLayoutControl {
 
   /** Whether to place the nested buttons in the vertical direction. */
   @Input({transform: booleanAttribute}) vertical: boolean = false;

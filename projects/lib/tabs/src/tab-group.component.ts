@@ -21,7 +21,6 @@ import {
   ChangeDetectionStrategy,
   ViewEncapsulation,
   InjectionToken,
-  forwardRef,
   numberAttribute,
   booleanAttribute, ViewContainerRef, ViewChild, ComponentRef, ElementRef, inject, DestroyRef
 } from '@angular/core';
@@ -37,8 +36,8 @@ import {
   CuteNavStretch
 } from "@cute-widgets/base/core/nav";
 import {FocusOrigin} from "@angular/cdk/a11y";
-import {ContentAlignment, ViewportEdge} from "@cute-widgets/base/core";
-import {CuteButton} from "@cute-widgets/base/button";
+import {ContentAlignment, Scheduler, ViewportEdge} from "@cute-widgets/base/core";
+import {CuteButtonModule} from "@cute-widgets/base/button";
 import {debounceTime, fromEvent} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CuteObserveVisibility} from "@cute-widgets/base/core/observers";
@@ -110,11 +109,11 @@ export class CuteTabChangeEvent extends Event {
     CdkDrag,
     NgTemplateOutlet,
     CuteNavModule,
-    CuteButton,
+    CuteButtonModule,
     CuteObserveVisibility,
   ],
   providers: [
-      {provide: CUTE_TAB_GROUP, useExisting: forwardRef(()=> CuteTabGroup)},
+      {provide: CUTE_TAB_GROUP, useExisting: CuteTabGroup},
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -206,10 +205,19 @@ export class CuteTabGroup extends CuteLayoutControl {
   dynamicHeight: boolean = false;
 
   /**
-   * Possible positions for the tab header.
+   * Possible position for the tab header.
    * @default top
    */
-  @Input() headerPosition: ViewportEdge = 'top';
+  @Input()
+  get headerPosition(): ViewportEdge {return this._headerPosition;}
+  set headerPosition(newPosition: ViewportEdge) {
+    if (newPosition !== this._headerPosition) {
+      this._headerPosition = newPosition;
+      Promise.resolve().then(() => this.scrollToTab());
+      this.headerPositionChange.emit(newPosition);
+    }
+  }
+  private _headerPosition: ViewportEdge = 'top';
 
   /** Use `underline` style for horizontal tabs. */
   @Input({transform: booleanAttribute})
@@ -235,11 +243,14 @@ export class CuteTabGroup extends CuteLayoutControl {
   /** Event emitted when the active tab selection is about to change. */
   @Output() selectedTabChanging = new EventEmitter<CuteTabChangingEvent>();
 
-  /** Event emitted when the tab selection has changed. */
+  /** Event emitted when the tab selection has been changed. */
   @Output() selectedTabChange = new EventEmitter<CuteTabChangeEvent>();
 
   /** Event emitted when focus has changed within a tab group. */
   @Output() focusChange = new EventEmitter<CuteTabChangeEvent>();
+
+  /** Event emitted when the position of tabs header has been changed. */
+  @Output() headerPositionChange = new EventEmitter<ViewportEdge>();
 
   /** Event emitted after the new tab was added. */
   @Output() tabAdded = new EventEmitter<void>();
@@ -316,33 +327,40 @@ export class CuteTabGroup extends CuteLayoutControl {
   }
 
   /**
-   * Activates tab with specified index.
+   * Activates tab with the specified index.
    * @param index Tab index
    * @param origin (optional) Focus origin
+   * @returns A promise of a "logical" result, where _true_ means a successful change of the active tab, and _false_ otherwise.
+   * @async
    */
-  selectTab(index: number, origin: FocusOrigin="program") {
-    if (!this.tabs) return;
-    if (index < 0 || index >= this.tabs.length) return;
-    if (index === this.selectedIndex) return;
+  async selectTab(index: number, origin: FocusOrigin="program"): Promise<boolean> {
+    if (!this.tabs) return false;
+    if (index < 0 || index >= this.tabs.length) return false;
+    if (index === this.selectedIndex) return true;
     const tabsArray = this.tabs.toArray();
-    if (tabsArray[index].disabled) return;
+    if (tabsArray[index].disabled) return false;
 
     this._indexToChange = null;
     this._selectedIndex = index;
 
     this.tabs.forEach((tab, i) => {
-      tab.active = (i === index);
+      //tab.active = (i === index);
+      tab.active = false;
     });
 
-    setTimeout(() => {
+    tabsArray[index].active = true;
+
+    await Scheduler.postTask(() => {
       if (tabsArray[index].scrollNeeded) {
         this.scrollToTab(index);
       }
-    }, 100);
+    }, {delay: 100});
 
     this.selectedIndexChange.emit(index);
 
     this.markForCheck();
+
+    return true;
   }
 
   private _createChangeEvent(event: CuteNavChangeEvent): CuteTabChangeEvent {
@@ -390,7 +408,8 @@ export class CuteTabGroup extends CuteLayoutControl {
     return this.tabs?.toArray().indexOf(tab);
   }
 
-  private scrollToTab(index: number|undefined) {
+  private scrollToTab(index?: number) {
+    index = index ?? this.selectedIndex;
     if (index != null) {
       const tabElement = this.tabLinks?.toArray()[index]?.element.nativeElement;
       if (tabElement) {
@@ -458,11 +477,14 @@ export class CuteTabGroup extends CuteLayoutControl {
     tabsArray.push(newTab);
     this.tabs?.reset( tabsArray );
 
-    this.tabAdded.emit();
-
     if (newTab.active) {
-      this.selectTab(tabsArray.length - 1);
+      const newIndex = tabsArray.length - 1;
+      if (await this.selectTab(newIndex)) {
+        this.scrollToTab(newIndex);
+      }
     }
+
+    this.tabAdded.emit();
 
     return componentRef;
   }
@@ -499,6 +521,8 @@ export class CuteTabGroup extends CuteLayoutControl {
       this.selectedIndex = newIndex;
       this.tabs.get(newIndex)?.link?.focus();
     }
+
+    this.checkScrollButtons();
 
     //this.markForCheck();
   }

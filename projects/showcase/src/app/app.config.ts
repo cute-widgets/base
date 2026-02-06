@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {provideAnimations} from '@angular/platform-browser/animations';
-import {provideHttpClient} from '@angular/common/http';
+import {HttpClient, provideHttpClient} from '@angular/common/http';
 import {provideMarkdown} from 'ngx-markdown';
 import {provideNativeDateAdapter} from '@cute-widgets/base/core';
 
@@ -15,6 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideAnimations(),
     provideNativeDateAdapter(),
-    provideMarkdown(),
+    provideMarkdown({
+      loader: HttpClient,
+    }),
   ]
 };

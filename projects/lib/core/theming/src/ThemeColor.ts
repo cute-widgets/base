@@ -132,7 +132,7 @@ export function toBgCssClass(color: string|undefined|null): string {
     if (isExtendedColor(richThemeColor)) {
       themeColor = getBaseColor(richThemeColor);
       if (richThemeColor.endsWith("-emphasis")) {
-        return `bg-${themeColor}-subtle`;
+        return `bg-${themeColor}-subtle text-${themeColor}-emphasis`;
       }
       // contrast
       return `text-bg-${themeColor}`;

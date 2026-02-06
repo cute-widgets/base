@@ -44,8 +44,8 @@ export class TabsExampleComponent /* extends ... */ {
   protected preserveContent = false;
   protected stretchTabs: boolean = false;
 
-  @ViewChild('dynTab', {read: CuteTabGroup, static: true}) dynTab!: CuteTabGroup;
-  @ViewChild('ctxContent', {read: TemplateRef, static: true}) dynTemplate!: TemplateRef<any>;
+  @ViewChild('dynTab', {read: CuteTabGroup}) dynTab!: CuteTabGroup;
+  @ViewChild('ctxContent', {read: TemplateRef}) dynTemplate!: TemplateRef<any>;
 
   constructor() {
   }

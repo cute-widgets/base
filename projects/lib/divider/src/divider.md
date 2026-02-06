@@ -1,15 +1,19 @@
-`<cute-divider>` is a component that allows for Material styling of a line separator with various orientation options.
+`<cute-divider>` is a component that allows for Bootstrap styling of a line separator with various orientation options.
 
 <!-- example(divider-overview) -->
 
-
 ### Simple divider
 
-A `<cute-divider>` element can be used on its own to create a horizontal or vertical line styled with a Material theme
+A `<cute-divider>` element can be used on its own to create a horizontal or vertical line styled with a Bootstrap theme.
 
 ```html
 <cute-divider></cute-divider>
 ```
+
+### Line style
+
+Apply `lineStyle` attribute to change the divider's default style that is **solid**. Other options are
+**double**, **dotted**, **dashed**, **shelf**, **blurry**, **washed** and **gradient**.
 
 ### Inset divider
 

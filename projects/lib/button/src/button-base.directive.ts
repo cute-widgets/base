@@ -294,6 +294,10 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
   override ngOnInit() {
     super.ngOnInit();
 
+    if (this._group) {
+      this.defaultColor = this._group.color;
+    }
+
     this._focusMonitor.monitor(this._elementRef, true);
 
     ["mousedown", "mouseup", "click"].forEach((type) => {

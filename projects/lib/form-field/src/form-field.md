@@ -1,16 +1,15 @@
 `<cute-form-field>` is a component used to wrap several Cute Widgets components and apply common
-[Text field](https://material.io/guidelines/components/text-fields.html) styles such as the
-underline, floating label, and hint messages.
+`.form-control` styles such as the underline, floating label, and hint messages.
 
 In this document, "form field" refers to the wrapper component `<cute-form-field>` and
 "form field control" refers to the component that the `<cute-form-field>` is wrapping
 (e.g. the input, textarea, select, etc.)
 
 The following Cute Widgets components are designed to work inside a `<cute-form-field>`:
-* [`<input cuteNativeControl>` &amp; `<textarea cuteNativeControl>`](https://material.angular.io/components/input/overview)
-* [`<select cuteNativeControl>`](https://material.angular.io/components/select/overview)
-* [`<cute-select>`](https://material.angular.io/components/select/overview)
-* [`<cute-chip-list>`](https://material.angular.io/components/chips/overview)
+* [`<input cuteNativeControl>` &amp; `<textarea cuteNativeControl>`](https://cutewidgets.com/components/input)
+* [`<select cuteNativeControl>`](https://cutewidgets.com/components/select)
+* [`<cute-select>`](https://cutewidgets.com/components/select)
+* [`<cute-chip-list>`](https://cutewidgets.com/components/chips)
 
 <!-- example(form-field-overview) -->
 

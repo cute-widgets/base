@@ -34,7 +34,7 @@ const bottomSheetRef = bottomSheet.open(HobbitSheet, {
 });
 ```
 
-Afterwards you can access the injected data using the `CUTE_BOTTOM_SHEET_DATA` injection token:
+Afterward you can access the injected data using the `CUTE_BOTTOM_SHEET_DATA` injection token:
 
 ```ts
 import {Component, Inject} from '@angular/core';
@@ -65,8 +65,7 @@ for `CUTE_BOTTOM_SHEET_DEFAULT_OPTIONS` in your application's root module.
 ### Accessibility
 
 `CuteBottomSheet` creates modal dialogs that implement the ARIA `role="dialog"` pattern. This root
-dialog element should be given an accessible label via the `ariaLabel` property of
-`CuteBottomSheetConfig`.
+dialog element should be given an accessible label via the `ariaLabel` property of `CuteBottomSheetConfig`.
 
 #### Keyboard interaction
 By default, the escape key closes `CuteBottomSheet`. While you can disable this behavior by using

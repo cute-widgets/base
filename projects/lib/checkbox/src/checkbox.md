@@ -1,5 +1,5 @@
 `<cute-checkbox>` provides the same functionality as a native `<input type="checkbox">`
-enhanced with Bootstrap styling and animations.
+enhanced with **Bootstrap** styling and animations.
 
 ```html
 <cute-checkbox class="example-margin"
@@ -45,7 +45,7 @@ When user clicks on the `cute-checkbox`, the default behavior is toggle `checked
 `indeterminate` to `false`. This behavior can be customized by
 [providing a new value](https://angular.dev/guide/di/dependency-injection) of `CUTE_CHECKBOX_DEFAULT_OPTIONS` to the checkbox.
 
-```
+```ts
 providers: [
   {provide: CUTE_CHECKBOX_DEFAULT_OPTIONS, useValue: { clickAction: 'noop' } as CuteCheckboxDefaultOptions}
 ]

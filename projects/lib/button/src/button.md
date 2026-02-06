@@ -26,18 +26,6 @@ Buttons can be colored in terms of the current theme using the `color` property 
 background color to one of the following main options: `primary`,`secondary`,`success`,`danger`,`warning`,
 `info`,`light`,`dark`,`link` and `tertiary`. There are its variants with `-emphases` and `-contrast` suffixes also.
 
-### Extended FAB buttons
-Traditional FAB buttons are circular and only have space for a single icon. However, you can add the
-`extended` attribute to allow the FAB to expand into a rounded rectangle shape with space for a text
-label in addition to the icon. Only full-sized FABs support the `extended` attribute, mini FABs do
-not.
-
-```html
-<button cuteButton="fab-button" extended>
-  <cute-icon>home</cute-icon>
-  Home
-</button>
-```
 
 ### Interactive disabled buttons
 Native disabled `<button>` elements cannot receive focus and do not dispatch any events. This can
@@ -67,9 +55,9 @@ with any assistive technology your application supports.
 #### Buttons with icons
 Buttons or links containing only icons (such as `fab-button`, `icon-button` and `close-button`)
 should be given a meaningful label via `aria-label` or `aria-labelledby`. [See the documentation
-for `CuteIcon`](https://material.angular.io/components/icon) for more
+for `CuteIcon`](https://cutewidgets.com/components/icon) for more
 information on using icons in buttons.
 
 #### Toggle buttons
-[See the documentation for `CuteButtonToggle`](https://material.angular.io/components/button-toggle)
+[See the documentation for `CuteButtonToggle`](https://cutewidgets.com/components/button-toggle)
 for information on stateful toggle buttons.

@@ -277,7 +277,7 @@ from `@angular/core`. If you want to override it, you can provide a new value fo
 `CUTE_DATE_LOCALE` token:
 
 ```ts
-bootstapApplication(MyApp, {
+bootstrapApplication(MyApp, {
   providers: [{provide: CUTE_DATE_LOCALE, useValue: 'en-GB'}],
 });
 ```
@@ -430,7 +430,7 @@ bootstrapApplication(MyApp, {
 });
 ```
 
-By default the `MomentDateAdapter` will parse dates in a
+By default, the `MomentDateAdapter` will parse dates in a
 [forgiving way](https://momentjs.com/guides/#/parsing/forgiving-mode/). This may result in dates
 being parsed incorrectly. You can change the default behaviour to
 [parse dates strictly](https://momentjs.com/guides/#/parsing/strict-mode/) by `strict: true` to
@@ -488,7 +488,7 @@ documented [here](https://momentjs.com/docs/#/displaying/format/).
 It is also possible to support multiple parse formats. For example:
 
 ```ts
-bootstraApplication(MyApp, {
+bootstrapApplication(MyApp, {
   providers: [provideMomentDateAdapter({
     parse: {
       dateInput: ['l', 'LL'],
@@ -627,7 +627,7 @@ In multi-year view:
 
 #### Error: CuteDatepicker: No provider found for DateAdapter/CUTE_DATE_FORMATS
 
-This error is thrown if you have not provided all of the injectables the datepicker needs to work.
+This error is thrown if you have not provided all the injectables the datepicker needs to work.
 The easiest way to resolve this is to add `provideNativeDateAdapter` or `provideMomentDateAdapter`
 to your app config. See
 [_Choosing a date implementation_](#choosing-a-date-implementation-and-date-format-settings)) for

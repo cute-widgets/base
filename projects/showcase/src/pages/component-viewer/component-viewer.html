@@ -6,7 +6,7 @@
   <cute-tab label="Overview">
     @let path = _docOverviewPath();
     @if (path) {
-      <markdown clipboard [src]="path"></markdown>
+      <markdown [clipboard]="true" [src]="path"></markdown>
     } @else {
       <p>Component's "Overview" path is undefined!</p>
     }

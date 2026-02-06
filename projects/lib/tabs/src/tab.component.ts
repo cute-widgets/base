@@ -47,13 +47,14 @@ let nextId: number = 0;
   host: {
     "class": "cute-tab tab-pane",
     "[class.fade]": "_animationEnabled",
-    "[class.show]": "active",
+    // "[class.show]": "active",
     "[class.active]": "active",
     '[attr.tabindex]': 'active && !disabled ? 0 : -1',
     '[attr.aria-labelledby]': 'ariaLabelledby || null',
     '[attr.id]': 'id || null',
     "role": "tabpanel",
   },
+  providers: [{provide: CUTE_TAB, useExisting: CuteTab}],
   imports: [
     NgTemplateOutlet,
   ],
@@ -61,9 +62,8 @@ let nextId: number = 0;
   encapsulation: ViewEncapsulation.None,
 })
 export class CuteTab extends CuteFocusableControl {
-
-  protected _tabGroup = inject(CUTE_TAB_GROUP, {optional: true});
   private _intersectionRatio: number = NaN;
+  protected _closestTabGroup = inject(CUTE_TAB_GROUP, {optional: true});
   protected _animationEnabled = !_animationsDisabled();
 
   /** Plain text label for the tab, used when there is no template label. */
@@ -74,16 +74,16 @@ export class CuteTab extends CuteFocusableControl {
   /** Explicit reference to the external content template. */
   @Input() contentTemplate: TemplateRef<any> | undefined;
 
-  /** Lazy loading label's outlet context */
+  /** Lazy loading label's outlet context. */
   @Input() labelContext: any = {};
 
-  /** Lazy loading content's outlet context */
+  /** Lazy loading content's outlet context. */
   @Input() contentContext: any = {};
 
   /** Whether the tab is closable. */
   @Input({transform: booleanAttribute}) closable = false;
 
-  /** Whether the tab preserves lazing content */
+  /** Whether the tab preserves lazing content. */
   @Input({ transform: booleanAttribute })
   preserveContent: boolean | undefined;
 
@@ -106,6 +106,13 @@ export class CuteTab extends CuteFocusableControl {
   set active(value: boolean) {
     if (value !== this._active) {
       this._active = value;
+
+      if (this._animationEnabled) {
+        setTimeout(() => this.toggleClass("show", value), 150);
+      } else {
+        this.toggleClass("show", value);
+      }
+
       this._stateChanges.next();
     }
   }
@@ -120,7 +127,7 @@ export class CuteTab extends CuteFocusableControl {
   public _isDynamic: boolean = false;
 
   protected isPreserveContent(): boolean {
-    return this.preserveContent ?? this._tabGroup?.preserveContent ?? false;
+    return this.preserveContent ?? this._closestTabGroup?.preserveContent ?? false;
   }
 
   /** Tab content defined by <ng-template cute-tab-content> or directly referenced where the latter has more priority. */
@@ -152,7 +159,7 @@ export class CuteTab extends CuteFocusableControl {
   getContentContext(): any {
     return {...this.contentContext,
       $implicit: this,
-      index: this._tabGroup?.getTabIndex(this),
+      index: this._closestTabGroup?.getTabIndex(this),
       active: this.active,
       tab: this
     };
@@ -162,10 +169,10 @@ export class CuteTab extends CuteFocusableControl {
    * Removes this tab from the tab group.
    */
   async remove() {
-    if (this._tabGroup) {
-      const index = this._tabGroup.getTabIndex(this);
+    if (this._closestTabGroup) {
+      const index = this._closestTabGroup.getTabIndex(this);
       if (index != null) {
-        return this._tabGroup.removeTab( index );
+        return this._closestTabGroup.removeTab( index );
       }
     }
     return;
@@ -173,7 +180,8 @@ export class CuteTab extends CuteFocusableControl {
 
   _visibilityChanged(entries: IntersectionObserverEntry[]) {
     if (entries.length) {
-      this._intersectionRatio = entries[0].intersectionRatio;
+      //this._intersectionRatio = entries[0].intersectionRatio;
+      this._intersectionRatio = entries.at(-1)!.intersectionRatio;
     }
   }
 

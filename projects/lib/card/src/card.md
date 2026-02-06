@@ -39,8 +39,8 @@ used.
 A `<cute-card-header>` can contain any content, but there are several predefined elements
 that can be used to create a rich header to a card. These include:
 
-| Element                   | Description                                          |
-|---------------------------|------------------------------------------------------|
+| Element                  | Description                                          |
+|--------------------------|------------------------------------------------------|
 | `<cute-card-title>`      | A title within the header                            |
 | `<cute-card-subtitle>`   | A subtitle within the header                         |
 | `<img cute-card-avatar>` | An image used as an avatar within the header         |
