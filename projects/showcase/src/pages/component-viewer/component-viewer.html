@@ -3,10 +3,10 @@
 <h5 componentHeader>{{docName}}</h5>
 
 <cute-tab-group>
-  <cute-tab label="Overview">
-    @let path = _docOverviewPath();
-    @if (path) {
-      <markdown [clipboard]="true" [src]="path"></markdown>
+  <cute-tab label="Overview" preserveContent>
+    @let content = _docContent();
+    @if (content) {
+      <markdown clipboard [data]="content"></markdown>
     } @else {
       <p>Component's "Overview" path is undefined!</p>
     }

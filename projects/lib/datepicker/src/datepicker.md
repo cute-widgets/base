@@ -294,7 +294,7 @@ from `date-fns/locale`.
 #### Choosing a date implementation and date format settings
 
 The datepicker was built to be date implementation agnostic. This means that it can be made to work
-with a variety of different date implementations. However it also means that developers need to make
+with a variety of different date implementations. However, it also means that developers need to make
 sure to provide the appropriate pieces for the datepicker to work with their chosen implementation.
 
 The easiest way to ensure this is to import one of the provided date adapters:

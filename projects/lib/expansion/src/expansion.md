@@ -1,6 +1,28 @@
 `<cute-expansion-panel>` provides an expandable details-summary view.
 
-<!-- example(expansion-overview) -->
+```html
+<cute-accordion>
+  
+  <cute-expansion-panel hideToggle>
+    <cute-expansion-panel-header>
+      <cute-panel-title> This is the expansion title </cute-panel-title>
+      <cute-panel-description> This is a summary of the content </cute-panel-description>
+    </cute-expansion-panel-header>
+    <p>This is the primary content of the panel.</p>
+  </cute-expansion-panel>
+  
+  <cute-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+    <cute-expansion-panel-header>
+      <cute-panel-title> Self aware panel </cute-panel-title>
+      <cute-panel-description>
+        Currently I am {{panelOpenState() ? 'open' : 'closed'}}
+      </cute-panel-description>
+    </cute-expansion-panel-header>
+    <p>I'm visible because I am open</p>
+  </cute-expansion-panel>
+  
+</cute-accordion>
+```
 
 ### Expansion-panel content
 

@@ -7,10 +7,8 @@ nest `<cute-chip>` elements inside the `<cute-chip-set>`.
 
 <!-- example(chips-overview) -->
 
-By default, `<cute-chip>` renders a chip with Material Design styles applied. For a chip with no styles applied, use `<cute-basic-chip>`.
-
-*Hint: `<cute-basic-chip>` receives the `cute-basic-chip` CSS class in addition to the `cute-mdc-chip` class.*
-
+By default, `<cute-chip>` renders a chip with Bootstrap styles applied. For a chip with no styles applied, use `<cute-basic-chip>`.
+  
 #### Disabled appearance
 
 Although `<cute-chip>` is not interactive, you can set the `disabled` Input to give it disabled appearance.
@@ -121,7 +119,7 @@ Use the `CUTE_CHIPS_DEFAULT_OPTIONS` token to specify default options for the ch
 
 ### Theming
 
-By default, chips use the primary color. Specify the `color` property to change the color to `accent` or `warn`.
+By default, chips use the `primary` color. Specify the `color` property to change the color to others Bootstrap theme colors.
 
 ### Interaction Patterns
 

@@ -17,7 +17,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import {CuteBaseControl} from "./base-control.directive";
-import {bsBreakpoints, LayoutBreakpoint, toBgCssClass} from "@cute-widgets/base/core";
+import {bsBreakpoints, LayoutBreakpoint, toTextBgCssClass} from "@cute-widgets/base/core";
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
@@ -34,13 +34,13 @@ import {Subscription} from 'rxjs';
 })
 export abstract class CuteLayoutControl extends CuteBaseControl {
   protected breakpointObserver = inject(BreakpointObserver);
-  private _subscription: Subscription | undefined;
+  private _bpSubscription: Subscription | undefined;
 
   /** Returns CSS-class list */
   @HostBinding("class")
   protected get classList(): string {
     // We interpret `color` value as a background color of the container
-    return this.color ? toBgCssClass(this.color) : "";
+    return this.color ? toTextBgCssClass(this.color) : "";
   }
 
   /** Clears floated content within a container */
@@ -58,7 +58,7 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
     const change = changes["breakpoint"];
     if (change) {
 
-      this._subscription?.unsubscribe();
+      this._bpSubscription?.unsubscribe();
 
       if (change.currentValue) {
         let bpArray: string[];
@@ -71,7 +71,7 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
           const label = bsBreakpoints.getLabel(value);
           return bsBreakpoints.getQuery(label+"AndDown") ?? "";
         });
-        this._subscription = this.breakpointObserver
+        this._bpSubscription = this.breakpointObserver
           .observe( queries )
           .subscribe(state => this.breakpointState.emit(state));
       }
@@ -81,6 +81,6 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
   override ngOnDestroy() {
     super.ngOnDestroy();
 
-    this._subscription?.unsubscribe();
+    this._bpSubscription?.unsubscribe();
   }
 }

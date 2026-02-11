@@ -1,0 +1,11 @@
+<ng-content select="cute-icon, i[class], [cuteMenuItemIcon]"></ng-content>
+<span class="cute-menu-item-text"><ng-content></ng-content></span>
+
+@if (_triggersSubmenu) {
+  <svg class="cute-menu-item-submenu-icon"
+       viewBox="0 0 5 10"
+       focusable="false"
+       aria-hidden="true">
+    <polygon points="0,0 5,5 0,10"/>
+  </svg>
+}

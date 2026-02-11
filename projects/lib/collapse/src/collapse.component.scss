@@ -1,0 +1,54 @@
+$animation_timing: 225ms cubic-bezier(0.4,0.0,0.2,1) forwards;
+
+.cute-collapse {
+  display: block;
+
+  .cute-collapse-content {
+    //display: none;
+
+    &.expanded {
+      animation: _cute-expand-vertical $animation_timing;
+    }
+    &.expanded-hor {
+      animation: _cute-expand-horizontal $animation_timing;
+    }
+    &.collapsed {
+      animation: _cute-collapse-vertical $animation_timing;
+    }
+    &.collapsed-hor {
+      animation: _cute-collapse-horizontal $animation_timing;
+    }
+  }
+
+  &.ng-animating {
+    overflow: hidden;
+  }
+}
+
+@keyframes _cute-collapse-vertical {
+  to {
+    height: 0;
+    display: none;
+  }
+}
+
+@keyframes _cute-collapse-horizontal {
+  to {
+    width: 0;
+    display: none;
+  }
+}
+
+@keyframes _cute-expand-vertical {
+  to {
+    height: auto;
+    display: block;
+  }
+}
+
+@keyframes _cute-expand-horizontal {
+  to {
+    width: auto;
+    display: block;
+  }
+}

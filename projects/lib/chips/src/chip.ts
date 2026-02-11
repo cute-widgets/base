@@ -65,15 +65,6 @@ export interface CuteChipEvent {
     '[class.border]': '_isStandardStaticChip',
     '[class.rounded-pill]': '_isStandardStaticChip',
     '[class.cute-static-chip]': '_isStandardStaticChip',
-    /*
-    '[class]': '"text-bg-"+color||"tertiary"',
-    '[class.mdc-evolution-chip]': '!_isBasicChip',
-    '[class.mdc-evolution-chip--disabled]': 'disabled',
-    '[class.mdc-evolution-chip--with-trailing-action]': '_hasTrailingIcon()',
-    '[class.mdc-evolution-chip--with-primary-graphic]': 'leadingIcon',
-    '[class.mdc-evolution-chip--with-primary-icon]': 'leadingIcon',
-    '[class.mdc-evolution-chip--with-avatar]': 'leadingIcon',
-    */
     '[class.cute-chip-with-avatar]': 'leadingIcon',
     '[class.cute-chip-highlighted]': 'highlighted',
     '[class.disabled]': '_isStandardStaticChip && disabled',
@@ -96,9 +87,6 @@ export class CuteChip extends CuteFocusableControl implements OnInit, AfterViewI
   public override _changeDetectorRef = inject(ChangeDetectorRef);
   protected _ngZone = inject(NgZone);
   private readonly _tagName = inject(HOST_TAG_NAME);
-  //private _globalRippleOptions = inject<RippleGlobalOptions>(MAT_RIPPLE_GLOBAL_OPTIONS, {
-  //  optional: true,
-  //});
   protected _document = inject(DOCUMENT);
 
   /** Emits when the chip is focused. */

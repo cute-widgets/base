@@ -32,18 +32,7 @@ import {CuteMenuPanel, CUTE_MENU_PANEL} from './menu-panel';
 @Component({
   selector: '[cute-menu-item]',
   exportAs: 'cuteMenuItem',
-  template: `
-        <ng-content select="cute-icon, i[class], [cuteMenuItemIcon]"></ng-content>
-        <span class="cute-menu-item-text"><ng-content></ng-content></span>
-        @if (_triggersSubmenu) {
-          <svg class="cute-menu-item-submenu-icon"
-               viewBox="0 0 5 10"
-               focusable="false"
-               aria-hidden="true">
-            <polygon points="0,0 5,5 0,10"/>
-          </svg>
-        }
-    `,
+  templateUrl: './menu-item.html',
   styleUrls: ['./menu-item.scss'],
   host: {
     '[attr.role]': 'role',

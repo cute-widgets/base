@@ -15,7 +15,7 @@ import {
   Output, signal,
   ViewEncapsulation
 } from "@angular/core";
-import {CuteBaseControl, Expandable} from "@cute-widgets/base/abstract";
+import {CuteLayoutControl, Expandable} from "@cute-widgets/base/abstract";
 import {cuteCollapseAnimations} from "./collapse-animations";
 import {Subject} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
@@ -33,15 +33,11 @@ export type CuteCollapseState = 'expanded' | 'collapsed';
  */
 @Component({
   selector: 'cute-collapse',
-  template: '<ng-content></ng-content>',
-  styles: `
-    .cute-collapse {display: block;}
-    .ng-animating {overflow: hidden;}
-  `,
+  templateUrl: './collapse.component.html',
+  styleUrl: './collapse.component.scss',
   exportAs: 'cuteCollapse',
   host: {
     'class': 'cute-collapse', // collapse',
-    //'[class.show]': '!collapsed',
     '[id]': 'id || null',
     '[@bodyExpansion]': 'getState()+(horizontal?"-hor":"")',
     '[@.disabled]': 'disableAnimation',
@@ -51,9 +47,8 @@ export type CuteCollapseState = 'expanded' | 'collapsed';
   animations: [cuteCollapseAnimations.bodyExpansion],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true
 })
-export class CuteCollapse extends CuteBaseControl implements Expandable, OnDestroy {
+export class CuteCollapse extends CuteLayoutControl implements Expandable, OnDestroy {
 
   /** Sets the element's current state to _collapsed_ or _expanded_ value. */
   @Input({transform: booleanAttribute})

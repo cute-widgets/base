@@ -1,7 +1,7 @@
 CuteWidgets' `cute-collapse` component is used to show and hide some content on the page. 
-As a rule, buttons or anchors are used as triggers for these actions and are mapped to specific elements you toggle. Collapsing
-an element will animate the `height` from its current value to `0`. Given how CSS handles
-animations, you shouldn't use `padding` on a `collapse` component. 
+As a rule, buttons or anchors are used as triggers for these actions and are mapped to specific elements you toggle. 
+Vertical collapsing an element will animate the `height` from its current value to `0`.
+Given how CSS handles animations, you shouldn't use `padding` on a `collapse` component. 
 
 ### Placement
 The `cute-collapse` component supports horizontal collapsing/expanding. Set the `horizontal` input
@@ -19,15 +19,22 @@ methods. You may call `open()` to expand content, `close()` to collapse it, or `
 the mode to the opposite. The component's current state can be received via its `collapsed` property.
 
 ### Outputs
-The following `CuteCollapse`s events can be used to fine-tune the user interface based on its state:
+The following events of the `CuteCollapse` can be used to fine-tune the user interface based on the
+component's state:
 
-| Event             | Description                               |
-|:------------------|:------------------------------------------|
-| _beforeExpand_    | Event emitting before expand element      |
-| _beforeCollapse_  | Event emitting before collapse element    |
-| _afterExpand_     | Event emitting after expand element       |
-| _afterCollapse_   | Event emitting after collapse element     |
+| Event            | Description                              |
+|------------------|------------------------------------------|
+| _beforeExpand_   | Event emitting before expand element     |
+| _beforeCollapse_ | Event emitting before collapse element   |
+| _afterExpand_    | Event emitting after expand element      |
+| _afterCollapse_  | Event emitting after collapse element    |
+  
 
+### Accessibility
+
+The `CuteCollapseTriggerFor` directive  will automatically toggle `aria-expanded` attribute on the `CuteCollapse` based on whether 
+the collapsible element has been opened or closed. This directive also assigns the `CuteCollapse`'s identifier value to its `aria-controls` property.
+   
 ### Example:
 
 ```html
