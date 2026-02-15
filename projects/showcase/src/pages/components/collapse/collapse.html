@@ -8,6 +8,7 @@
   <cute-hstack class="mb-2" gap="3">
     <cute-vstack>
       <cute-checkbox #cbxHor>Horizontal</cute-checkbox>
+<!--      <cute-checkbox #cbxOff>Disabled</cute-checkbox>-->
       <div>
         <button cuteButton withAriaExpandedIndicator [cuteCollapseTriggerFor]="collapseCard" color="info">Show collapsed</button>
         <cute-collapse #collapseCard class="mt-2" [horizontal]="cbxHor.checked">

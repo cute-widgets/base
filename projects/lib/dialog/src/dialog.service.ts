@@ -12,13 +12,9 @@
 import {ComponentType, Overlay, ScrollStrategy} from '@angular/cdk/overlay';
 import {
   ComponentRef,
-  Inject,
   Injectable,
   InjectionToken,
-  Injector,
   OnDestroy,
-  Optional,
-  SkipSelf,
   TemplateRef,
   Type,
   inject,

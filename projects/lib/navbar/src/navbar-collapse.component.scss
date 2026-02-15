@@ -1,11 +1,11 @@
 $duration: 0.2s;
 
-.cute-collapse {
+.cute-navbar-collapse {
   display: grid;
   width: 100%;
   overflow: hidden;
 
-  .cute-collapse-content {
+  .cute-navbar-collapse-content {
     min-height: 0;
     //min-width: 0;
     overflow: hidden;
@@ -16,33 +16,33 @@ $duration: 0.2s;
   }
 
   &.expanded {
-    .cute-collapse-content {
+    .cute-navbar-collapse-content {
       display: block;
     }
   }
   &.collapsed {
-    .cute-collapse-content {
+    .cute-navbar-collapse-content {
       display: none;
     }
   }
 
-  &.cute-collapse-vertical {
+  &.cute-navbar-collapse-vertical {
     grid-template-rows: 0fr;
 
     &.expanded  { grid-template-rows: 1fr; }
     &.collapsed { grid-template-rows: 0fr; }
 
-    &.cute-collapse-animations-enabled {
+    &.cute-navbar-collapse-animations-enabled {
       transition: grid-template-rows $duration;
     }
   }
 
-  &.cute-collapse-horizontal {
+  &.cute-navbar-collapse-horizontal {
     grid-template-columns: 0fr;
 
     &.expanded  { grid-template-columns: 1fr; }
     &.collapsed { grid-template-columns: 0fr; }
-    &.cute-collapse-animations-enabled {
+    &.cute-navbar-collapse-animations-enabled {
       transition: grid-template-columns $duration;
     }
   }

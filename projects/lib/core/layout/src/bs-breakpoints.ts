@@ -72,11 +72,24 @@ export const bsBreakpoints = {
    * @param code Bootstrap's breakpoint abbreviation.
    * @returns Media query string or _undefined_ if the code has an unknown value.
    */
-  getQuery(code: string): string | undefined {
+  getMediaQuery(code: string): string | undefined {
     if (code in this.query) {
       return (this.query as any)[code];
     }
     return undefined;
+  },
+
+  /**
+   * Returns the media query string array for the specified breakpoint one or more symbols.
+   * @param codes Bootstrap's breakpoint abbreviation list.
+   * @returns Media query string array for each specified code of breakpoint.
+   */
+  getMediaQueries(codes: string|string[]): string[] {
+    const bpArray = Array.isArray(codes) ? [...codes] : [codes];
+    return bpArray.map(value => {
+      const label = this.getLabel(value);
+      return this.getMediaQuery(label + "AndDown") ?? "";
+    })
   },
 
   /**

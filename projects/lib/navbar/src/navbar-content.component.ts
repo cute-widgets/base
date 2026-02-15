@@ -6,10 +6,23 @@
  * You may not use this file except in compliance with the License
  * that can be found at http://www.apache.org/licenses/LICENSE-2.0
  */
-import {ChangeDetectionStrategy, Component, inject, signal, ViewEncapsulation} from "@angular/core";
-import {CuteCollapse, CuteCollapseState} from "@cute-widgets/base/collapse";
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy, OnInit,
+  signal, viewChild,
+  ViewEncapsulation
+} from "@angular/core";
 import {CUTE_NAVBAR} from './navbar.component';
 import {Subscription} from 'rxjs';
+import {CuteLayoutControl, Expandable} from '@cute-widgets/base/abstract';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {bsBreakpoints} from '@cute-widgets/base/core';
+import {CuteNavbarCollapse} from './navbar-collapse.component';
+
+let uniqueId: number = 0;
 
 /**
  * Collapsible navbar content.
@@ -17,59 +30,100 @@ import {Subscription} from 'rxjs';
 @Component({
   selector: 'cute-navbar-content',
   template: `
-    <ng-content></ng-content>
+    <cute-navbar-collapse>
+      <ng-content></ng-content>
+    </cute-navbar-collapse>
   `,
+  styleUrl: './navbar-content.component.scss',
   exportAs: 'cuteNavbarContent',
   host: {
-    'class': 'navbar-collapse collapse',
-    '[class.show]': 'expanded',
+    'class': 'cute-navbar-content navbar-collapse',
+    //'[class.collapsed]': '!expanded',
+    '[class.breakpoint-matches]': '_breakpointMatches()',
   },
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
+  imports: [
+    CuteNavbarCollapse,
+  ]
 })
-export class CuteNavbarContent extends CuteCollapse {
-  private _subscription: Subscription = new Subscription();
+export class CuteNavbarContent extends CuteLayoutControl implements Expandable, AfterViewChecked {
+  private _selfSubscriptions: Subscription = new Subscription();
   protected _navbar = inject(CUTE_NAVBAR);
+  protected mediaMatcher = inject(MediaMatcher);
   protected _breakpointMatches = signal<boolean>(false);
+  protected _collapse = viewChild.required(CuteNavbarCollapse);
+
+  private readonly _navbarMediaQueries: string[];
 
   constructor() {
     super();
 
-    this._subscription.add(
+    this._navbarMediaQueries = bsBreakpoints.getMediaQueries(this._navbar.breakpoint ?? []);
+
+    this._selfSubscriptions.add(
       this._navbar.breakpointState.subscribe(state => {
         this._breakpointMatches.set(state.matches);
         if (!state.matches) {
-          this.close(); // if content was in the 'expanded' state when the screen width changed
+          this._collapse().close(); // if content was in the 'expanded' state when the screen width changed
           this._navbar.expansionChange.emit(false);
         }
-       })
+      })
     );
-    this._subscription.add(
-      this.afterExpand.subscribe(() => {
+
+  }
+
+  get expanded(): boolean {
+    return this._collapse().expanded;
+  }
+
+  private get mediaMatches(): boolean {
+    if (this._navbarMediaQueries.length) {
+      return this.mediaMatcher.matchMedia(this._navbarMediaQueries[0]).matches;
+    }
+    return false;
+  }
+
+  protected override generateId(): string {
+    return `cute-navbar-content-${uniqueId++}`;
+  }
+
+  open() {
+    this._collapse().open();
+  }
+
+  close() {
+    this._collapse().close();
+  }
+
+  toggle() {
+    this._collapse().toggle();
+  }
+
+  override ngOnInit() {
+    super.ngOnInit();
+
+     this._selfSubscriptions.add(
+      this._collapse().afterExpand.subscribe(() => {
         if (this._breakpointMatches()) {
           this._navbar.expansionChange.emit(true);
         }
       })
     );
-    this._subscription.add(
-      this.afterCollapse.subscribe(() => this._navbar.expansionChange.emit(false))
+    this._selfSubscriptions.add(
+      this._collapse().afterCollapse.subscribe(() => {
+        this._navbar.expansionChange.emit(false);
+      })
     );
   }
 
-  override getState(): CuteCollapseState  {
-    if (this._breakpointMatches()) {
-      return super.getState();
-    }
-    // Parent class, CuteCollapse, uses this state to trigger the expanding process.
-    // But we use it for the sake of `visibility` property only.
-    // TODO: Change to a simpler and clearer algorithm.
-    return 'expanded';
+  ngAfterViewChecked() {
+    this._breakpointMatches.set(this.mediaMatches);
   }
 
   override ngOnDestroy() {
     super.ngOnDestroy();
-    this._subscription.unsubscribe();
+    this._selfSubscriptions.unsubscribe();
   }
 
 }

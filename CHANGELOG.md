@@ -1,3 +1,14 @@
+## Changes in version 20.0.5 (2026-02-15)
+
+### Fixes
+* Fixed incorrect display of disabled states in the `CuteButtonToggle` and `CuteButtonToggleGroup` components.
+* Auto scrolling has been fixed for new dynamic `CuteTab` in the vertical header positions.
+
+### Improvements
+* Changing a page number in `CutePaginator` now works more smoothly.
+* `CuteDialog` is now more compatible with Angular Material's dialog component.
+* `CuteTabs` and `CuteCollapse` now work with native CSS animations.
+
 ## Changes in version 20.0.4 (2026-01-30)
 
 ### Fixes:

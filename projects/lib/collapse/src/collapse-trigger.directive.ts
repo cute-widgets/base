@@ -7,14 +7,14 @@
  * that can be found at http://www.apache.org/licenses/LICENSE-2.0
  */
 import {Directive, Input} from "@angular/core";
-import {CuteCollapse} from "./collapse.component";
+import {Expandable} from '@cute-widgets/base/abstract';
 
 @Directive({
   selector: '[cuteCollapseTriggerFor]',
   exportAs: 'cuteCollapseTrigger',
   host: {
     'class': 'cute-collapse-trigger',
-    '[class.collapsed]': 'collapseControl?.collapsed',
+    '[class.collapsed]': '!collapseControl?.expanded',
     '[attr.aria-expanded]': 'collapseControl ? collapseControl.expanded : null',
     '[attr.aria-controls]':  'collapseControl?.id || null',
     '(click)': 'collapseControl?.toggle()',
@@ -25,10 +25,10 @@ export class CuteCollapseTrigger {
 
   /** Reference to the `cute-collapse` component to toggle its visibility */
   @Input("cuteCollapseTriggerFor")
-  get collapseControl(): CuteCollapse | null {return this._collapseControl;}
-  set collapseControl(collapse: CuteCollapse | null) {
+  get collapseControl(): Expandable | null {return this._collapseControl;}
+  set collapseControl(collapse: Expandable | null) {
     this._collapseControl = collapse;
   }
-  private _collapseControl: CuteCollapse | null = null;
+  private _collapseControl: Expandable | null = null;
 
 }

@@ -14,11 +14,12 @@ import {CuteNavbarContent} from "./navbar-content.component";
 import {CuteNavbarToggler} from "./navbar-toggler.directive";
 import {CuteNavbarNav} from "./navbar-nav.directive";
 import {CuteNavbarText} from "./navbar-text.directive";
+import {CuteCollapseModule} from '@cute-widgets/base/collapse';
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
+    CuteCollapseModule,
     CuteNavbar,
     CuteNavbarBrand,
     CuteNavbarContent,

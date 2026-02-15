@@ -1,0 +1,13 @@
+.cute-navbar-content {
+
+  &:not(.breakpoint-matches) {
+
+      cute-navbar-collapse {
+        display: block;
+
+        .cute-navbar-collapse-content {
+          display: flex;
+        }
+      }
+  }
+}

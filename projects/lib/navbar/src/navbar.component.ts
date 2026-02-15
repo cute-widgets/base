@@ -53,6 +53,8 @@ let nextId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CuteNavbar extends CuteLayoutControl {
+  private _expanded = signal<boolean>(false);
+
   @ContentChildren(CuteNavbarContent, {descendants: true}) navContent: QueryList<CuteNavbarContent> | undefined;
 
   /** Placement `navbar` in non-static position, if the `position` differs from the default.  */
@@ -62,7 +64,6 @@ export class CuteNavbar extends CuteLayoutControl {
   @Output() expansionChange = new EventEmitter<boolean>();
 
   readonly contentExpanded = computed(() => this._expanded());
-  private _expanded = signal<boolean>(false);
 
   @HostBinding("class")
   get classBinding(): string {
@@ -91,7 +92,10 @@ export class CuteNavbar extends CuteLayoutControl {
   constructor() {
     super();
     this.role = "navigation";
-    this.expansionChange.pipe(takeUntilDestroyed()).subscribe(state => this._expanded.set(state));
+
+    this.expansionChange.pipe(takeUntilDestroyed()).subscribe(state => {
+        this._expanded.set(state);
+    });
   }
 
   protected generateId(): string {

@@ -7,19 +7,19 @@
  * that can be found at http://www.apache.org/licenses/LICENSE-2.0
  */
 import {
+  AfterContentInit,
   booleanAttribute,
   ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input, OnDestroy,
-  Output, signal,
+  Component, Directive,
+  EventEmitter, inject,
+  Input, NgZone,
+  Output,
   ViewEncapsulation
 } from "@angular/core";
+import {CdkAccordionItem} from '@angular/cdk/accordion';
+import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
 import {CuteLayoutControl, Expandable} from "@cute-widgets/base/abstract";
-import {cuteCollapseAnimations} from "./collapse-animations";
-import {Subject} from "rxjs";
-import {distinctUntilChanged} from "rxjs/operators";
-import {AnimationEvent} from "@angular/animations";
+import {_animationsDisabled} from '@cute-widgets/base/core';
 
 // Increasing integer for generating unique ids for checkbox components.
 let nextUniqueId = 0;
@@ -27,44 +27,19 @@ let nextUniqueId = 0;
 /** Animation states */
 export type CuteCollapseState = 'expanded' | 'collapsed';
 
-/**
- * This collapse component is used to show and hide content.
- * Buttons or anchors are used as triggers that are mapped to specific elements you toggle.
- */
-@Component({
-  selector: 'cute-collapse',
-  templateUrl: './collapse.component.html',
-  styleUrl: './collapse.component.scss',
-  exportAs: 'cuteCollapse',
-  host: {
-    'class': 'cute-collapse', // collapse',
-    '[id]': 'id || null',
-    '[@bodyExpansion]': 'getState()+(horizontal?"-hor":"")',
-    '[@.disabled]': 'disableAnimation',
-    '(@bodyExpansion.start)': '_bodyAnimation$.next($event)',
-    '(@bodyExpansion.done)': '_bodyAnimation$.next($event)',
-  },
-  animations: [cuteCollapseAnimations.bodyExpansion],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+@Directive({
+  hostDirectives: [{directive: CdkAccordionItem, outputs: ["expandedChange"]}],
 })
-export class CuteCollapse extends CuteLayoutControl implements Expandable, OnDestroy {
+export abstract class CuteCollapseBase extends CuteLayoutControl implements Expandable, AfterContentInit {
+  protected _ngZone = inject(NgZone);
+  protected _accordionItem = inject(CdkAccordionItem);
+  protected _animationsDisabled = _animationsDisabled();
+  private _cleanupTransitionHandlers: (() => void)[] = [];
 
-  /** Sets the element's current state to _collapsed_ or _expanded_ value. */
+  /** Whether the `CuteCollapse` is expanded. */
   @Input({transform: booleanAttribute})
-  get collapsed(): boolean { return this._collapsed(); }
-  set collapsed(value: boolean) {
-    if (value !== this._collapsed()) {
-      if (this.disableAnimation) {
-        (value ? this.beforeCollapse : this.beforeExpand).emit();
-      }
-      this._collapsed.set(value);
-      if (this.disableAnimation) {
-        (value ? this.afterCollapse : this.afterExpand).emit();
-      }
-    }
-  }
-  private _collapsed = signal<boolean>(true);
+  get expanded(): boolean {return this._accordionItem.expanded;}
+  set expanded(value: boolean) {this._accordionItem.expanded = value;}
 
   /** Expanding/Collapsing directionality, _horizontal_ or _vertical_. Default is _vertical_. */
   @Input({transform: booleanAttribute})
@@ -72,7 +47,9 @@ export class CuteCollapse extends CuteLayoutControl implements Expandable, OnDes
 
   /** Whether the animation while collapsing/expanding should be disabled */
   @Input({transform: booleanAttribute})
-  disableAnimation: boolean = false;
+  get disableAnimation(): boolean {return this._disableAnimation ?? this._animationsDisabled;}
+  set disableAnimation(value: boolean) { this._disableAnimation = value; }
+  private _disableAnimation: boolean | undefined;
 
   /** Event emitting before expand element */
   @Output() readonly beforeExpand = new EventEmitter<void>();
@@ -84,45 +61,16 @@ export class CuteCollapse extends CuteLayoutControl implements Expandable, OnDes
   /** Event emitting after collapse element */
   @Output() readonly afterCollapse = new EventEmitter<void>();
 
-  /** Weather the current state is _collapsed_ or _expanded_. Part of `Expandable` interface. */
-  public get expanded(): boolean { return !this.collapsed; }
-
-  /** Stream of body animation events. */
-  protected readonly _bodyAnimation$ = new Subject<AnimationEvent>();
-
   constructor() {
     super();
-
-    // We need a Subject with distinctUntilChanged, because the `done` event
-    // fires twice on some browsers. See https://github.com/angular/angular/issues/24084
-    this._bodyAnimation$
-      .pipe(
-        distinctUntilChanged((x, y) => {
-          return x.phaseName === y.phaseName && x.fromState === y.fromState && x.toState === y.toState;
-        }),
-      )
-      .subscribe((event: AnimationEvent) => {
-        this.onAnimationEvent(event);
-      });
   }
 
-  protected onAnimationEvent(event: AnimationEvent) {
-    if (event.fromState !== 'void') {
-      const toState = event.toState;
-      if (event.phaseName == "start") {
-        if (toState.startsWith('expanded')) {
-          this.beforeExpand.emit();
-        } else if (toState.startsWith('collapsed')) {
-          this.beforeCollapse.emit();
-        }
-      } else if (event.phaseName == "done") {
-        if (toState.startsWith('expanded')) {
-          this.afterExpand.emit();
-        } else if (toState.startsWith('collapsed')) {
-          this.afterCollapse.emit();
-        }
-      }
+  protected override setDisabledState(newState: BooleanInput, emitEvent?: boolean): boolean {
+    if (super.setDisabledState(newState, emitEvent)) {
+      this._accordionItem.disabled = coerceBooleanProperty(newState);
+      return true;
     }
+    return false;
   }
 
   protected override generateId(): string {
@@ -131,31 +79,110 @@ export class CuteCollapse extends CuteLayoutControl implements Expandable, OnDes
 
   /** Gets the expanded state string. */
   getState(): CuteCollapseState {
-    return this.collapsed ? 'collapsed' : 'expanded';
+    return this._accordionItem.expanded ? 'expanded' : 'collapsed';
   }
 
-  /** Part of `Expandable` interface */
+  /**
+   * @inheritDoc
+   * Part of `Expandable` interface.
+   */
   toggle(): void {
-    this.collapsed = !this.collapsed;
+    this._accordionItem.toggle();
   }
 
-  /** Part of `Expandable` interface */
+  /**
+   * @inheritDoc
+   * Part of `Expandable` interface.
+   */
   open(): void {
-    if (this.collapsed) {
-      this.collapsed = false;
+    this._accordionItem.open();
+  }
+
+  /**
+   * @inheritDoc
+   * Part of `Expandable` interface.
+   */
+  close(): void {
+    this._accordionItem.close();
+  }
+
+  private _transitionStartListener = (event: TransitionEvent) => {
+    if (event.target === this._nativeElement &&
+      (event.propertyName === 'grid-template-rows' || event.propertyName === 'grid-template-columns')
+    ) {
+      this._ngZone.run(() => {
+        if (this._accordionItem.expanded) {
+          this.beforeExpand.emit();
+        } else {
+          this.beforeCollapse.emit();
+        }
+      });
     }
   }
 
-  /** Part of `Expandable` interface */
-  close(): void {
-    if (!this.collapsed) {
-      this.collapsed = true;
+  private _transitionEndListener = (event: TransitionEvent) => {
+    if (event.target === this._nativeElement &&
+      (event.propertyName === 'grid-template-rows' || event.propertyName === 'grid-template-columns')
+    ) {
+      this._ngZone.run(() => {
+        if (this._accordionItem.expanded) {
+          this.afterExpand.emit();
+        } else {
+          this.afterCollapse.emit();
+        }
+      });
     }
+  }
+
+  protected _setupAnimationEvents() {
+    // This method is defined separately, because we need to
+    // disable this logic in some internal components.
+    this._ngZone.runOutsideAngular(() => {
+      if (this.disableAnimation) {
+        this._accordionItem.opened.subscribe(() => this._ngZone.run(() => this.beforeExpand.emit()));
+        this._accordionItem.closed.subscribe(() => this._ngZone.run(() => this.beforeCollapse.emit()));
+        this._accordionItem.opened.subscribe(() => this._ngZone.run(() => this.afterExpand.emit()));
+        this._accordionItem.closed.subscribe(() => this._ngZone.run(() => this.afterCollapse.emit()));
+      } else {
+        setTimeout(() => {
+          const element = this._nativeElement;
+          this._cleanupTransitionHandlers.push(
+            this._renderer.listen(element, 'transitionend', this._transitionEndListener),
+            this._renderer.listen(element, 'transitionstart', this._transitionStartListener),
+          );
+          element.classList.add('cute-collapse-animations-enabled');
+        }, 200);
+      }
+    });
+  }
+
+  override ngAfterContentInit() {
+    super.ngAfterContentInit();
+    this._setupAnimationEvents();
   }
 
   override ngOnDestroy() {
     super.ngOnDestroy();
-    this._bodyAnimation$.complete();
+    this._cleanupTransitionHandlers.forEach(cleanup => cleanup());
   }
 
 }
+
+/**
+ * This collapse component is used to show and hide content.
+ * Buttons or anchors are used as triggers that are mapped to specific elements you toggle.
+ */
+@Component({
+  selector: 'cute-collapse',
+  templateUrl: './collapse.component.html',
+  styleUrl: './collapse.component.scss',
+  exportAs: 'cuteCollapse',
+  host: {
+    'class': 'cute-collapse',
+    '[class]': '"cute-collapse-"+(horizontal ? "horizontal" : "vertical")+" "+getState()',
+    '[id]': 'id || null',
+  },
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CuteCollapse extends CuteCollapseBase {}

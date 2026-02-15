@@ -110,7 +110,7 @@ export class CuteDialogContainer extends CdkDialogContainer<CuteDialogConfig> im
       const bpName = bsBreakpoints.getLabel(dialogConfig.fullscreenStrategy.substring(BREAKPOINT_KEY.length));
       breakpointObserver
         .observe([
-          bsBreakpoints.getQuery(bpName+'AndDown') ?? "",
+          bsBreakpoints.getMediaQuery(bpName+'AndDown') ?? "",
         ])
         .pipe(takeUntilDestroyed())
         .subscribe(result => {

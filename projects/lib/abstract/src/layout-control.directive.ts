@@ -17,7 +17,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import {CuteBaseControl} from "./base-control.directive";
-import {bsBreakpoints, LayoutBreakpoint, toTextBgCssClass} from "@cute-widgets/base/core";
+import {bsBreakpoints, LayoutBreakpoint, toBgCssClass} from "@cute-widgets/base/core";
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
@@ -40,7 +40,7 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
   @HostBinding("class")
   protected get classList(): string {
     // We interpret `color` value as a background color of the container
-    return this.color ? toTextBgCssClass(this.color) : "";
+    return this.color ? toBgCssClass(this.color) : "";
   }
 
   /** Clears floated content within a container */
@@ -61,16 +61,8 @@ export abstract class CuteLayoutControl extends CuteBaseControl {
       this._bpSubscription?.unsubscribe();
 
       if (change.currentValue) {
-        let bpArray: string[];
-        if (Array.isArray(change.currentValue)) {
-          bpArray = change.currentValue;
-        } else {
-          bpArray = [change.currentValue];
-        }
-        const queries = bpArray.map(value => {
-          const label = bsBreakpoints.getLabel(value);
-          return bsBreakpoints.getQuery(label+"AndDown") ?? "";
-        });
+        const queries = bsBreakpoints.getMediaQueries(change.currentValue);
+
         this._bpSubscription = this.breakpointObserver
           .observe( queries )
           .subscribe(state => this.breakpointState.emit(state));

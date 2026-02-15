@@ -12,7 +12,7 @@
 
 /** Possible states of the lifecycle of a dialog. */
 import {FocusOrigin} from '@angular/cdk/a11y';
-import {merge, Observable, ReplaySubject, Subject} from 'rxjs';
+import {merge, Observable, ReplaySubject} from 'rxjs';
 import {DialogRef} from '@angular/cdk/dialog';
 import {DialogPosition, CuteDialogConfig} from './dialog-config';
 import {CuteDialogContainer} from './dialog-container.component';
