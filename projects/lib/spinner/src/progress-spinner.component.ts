@@ -74,7 +74,7 @@ export const CUTE_PROGRESS_SPINNER_DEFAULT_OPTIONS =
       // set tab index to -1 so screen readers will read the aria-label
       // Note: there is a known issue with JAWS that does not read progressbar aria labels on FireFox
       'tabindex': '-1',
-      '[role]': 'mode==="indeterminate"? "status": "progressbar"',
+      '[attr.role]': 'mode==="indeterminate"? "status": "progressbar"',
     },
     standalone: true,
     encapsulation: ViewEncapsulation.None,

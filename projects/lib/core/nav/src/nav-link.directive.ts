@@ -28,7 +28,7 @@ let nextId: number = -1;
     //'[class]': 'color ? "link-"+toThemeColor(color) : undefined',
     '[class.active]': 'active',
     '[class.disabled]': 'disabled',
-    '[disabled]': 'disabled',
+    '[attr.disabled]': '_isAnchor && disabled ? true : null',
     '[attr.aria-disabled]': 'disabled',
     '[attr.aria-current]': 'active ? "page" : null',
     '[attr.aria-selected]': 'active || null',
@@ -37,7 +37,7 @@ let nextId: number = -1;
     '[attr.role]': 'role || null',
     '[attr.tabindex]': 'active && !disabled ? 0 : -1',
     '[style.--bs-btn-border-radius]': '0',          // bootstrap's tab-link already stylized with radius of top angles
-    '[style.--bs-navbar-active-color]': '!nav.isTab() ? "var("+(color ? "--bs-"+toThemeColor(color)+"-text-emphasis" : "--bs-emphasis-color")+")" : undefined',
+    '[style.--bs-navbar-active-color]': 'nav && !nav.isTab() ? "var("+(color ? "--bs-"+toThemeColor(color)+"-text-emphasis" : "--bs-emphasis-color")+")" : undefined',
     '(click)': 'onClick($event)',
     //'(touchstart)': 'onTouchStart($event)',
   },
@@ -48,6 +48,7 @@ export class CuteNavLink extends CuteFocusableControl {
   protected _ngZone = inject(NgZone);
   protected readonly nav = inject(CUTE_NAV, {optional: true});
 
+  protected _isAnchor: boolean = false;
   protected toThemeColor = toThemeColor;
 
   /** Whether the link is active. */
@@ -60,6 +61,8 @@ export class CuteNavLink extends CuteFocusableControl {
 
   constructor() {
     super();
+
+    this._isAnchor = (this._nativeElement.tagName == "A");
 
     this._focusMonitor.monitor(this._elementRef)
       .pipe(takeUntilDestroyed())
@@ -107,7 +110,7 @@ export class CuteNavLink extends CuteFocusableControl {
     }
   }
 
-  protected onClick(event: MouseEvent): void {
+  protected onClick(event: Event): void {
     const elem = event.target as HTMLElement;
     event.preventDefault();
     if (elem instanceof HTMLAnchorElement && elem.hash && elem.hash.startsWith("#")) {

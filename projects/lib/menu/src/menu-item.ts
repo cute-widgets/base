@@ -42,7 +42,7 @@ import {CuteMenuPanel, CUTE_MENU_PANEL} from './menu-panel';
     //'[class.disabled]': 'disabled',
     '[attr.tabindex]': '_getTabIndex()',
     '[attr.aria-disabled]': 'disabled',
-    '[disabled]': 'disabled || null',
+    '[attr.disabled]': 'disabled || null',
     '(click)': '_checkDisabled($event)',
     '(mouseenter)': '_handleMouseEnter()',
   },

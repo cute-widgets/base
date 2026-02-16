@@ -23,11 +23,6 @@ import {
   STICKY_POSITIONING_LISTENER,
   HeaderRowOutlet, DataRowOutlet, NoDataRowOutlet, FooterRowOutlet,
 } from '@angular/cdk/table';
-import {
-  _DisposeViewRepeaterStrategy,
-  _RecycleViewRepeaterStrategy,
-  _VIEW_REPEATER_STRATEGY,
-} from '@angular/cdk/collections';
 import {ThemeColor} from "@cute-widgets/base/core";
 
 //++ CWT
@@ -48,8 +43,6 @@ export type TableBorders = "all" | "none" | "rows";
  */
 @Directive({
   selector: 'cute-table[recycleRows], table[cute-table][recycleRows]',
-  providers: [{provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy}],
-  standalone: true,
 })
 export class CuteRecycleRows {}
 
@@ -109,9 +102,6 @@ export class CuteRecycleRows {}
     { provide: CdkTable, useExisting: CuteTable },
     { provide: CDK_TABLE, useExisting: CuteTable },
     { provide: CUTE_TABLE, useExisting: CuteTable },
-    // TODO(michaeljamesparsons) Abstract the view repeater strategy to a directive API so this code
-    //  is only included in the build if used.
-    { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
     // Prevent nested tables from seeing this table's StickyPositioningListener.
     { provide: STICKY_POSITIONING_LISTENER, useValue: null },
   ],

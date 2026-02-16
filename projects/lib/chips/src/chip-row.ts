@@ -20,9 +20,7 @@ import {
   Output,
   ViewChild,
   ViewEncapsulation,
-  ANIMATION_MODULE_TYPE,
 } from '@angular/core';
-import {FocusMonitor} from '@angular/cdk/a11y';
 import {CuteChip, CuteChipEvent} from './chip';
 import {CuteChipEditInput} from './chip-edit-input';
 import {takeUntil} from 'rxjs/operators';
@@ -119,7 +117,7 @@ export class CuteChipRow extends CuteChip implements AfterViewInit {
   }
 
   /** Sends focus to the first gridcell when the user clicks anywhere inside the chip. */
-  _handleFocus() {
+  _handleFocus(event: FocusEvent) {
     if (!this._isEditing && !this.disabled) {
       this.focus();
     }

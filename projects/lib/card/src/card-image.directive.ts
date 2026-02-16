@@ -9,7 +9,7 @@
  * This code is a modification of the `@angular/material` original
  * code licensed under MIT-style License (https://angular.dev/license).
  */
-import {ChangeDetectorRef, Directive, HostAttributeToken, inject, input, Input, isDevMode} from "@angular/core";
+import {Directive, HostAttributeToken, inject, Input, isDevMode} from "@angular/core";
 import {CuteCard} from "./card.component";
 
 export type CuteCardImagePosition = "top"|"bottom"|"fluid";
@@ -31,7 +31,7 @@ export type CuteCardImagePosition = "top"|"bottom"|"fluid";
     '[class.img-fluid]': '_position=="fluid"',
     '[attr.height]': 'height',
     '[style.border-radius]': "_position=='top' && card?._header() ? 0 : (_position=='bottom' && card?._footer() ? 0 : undefined)",
-    '[style.--cute-card-image-height]': 'height>=0 ? height+"px" : undefined'
+    '[style.--cute-card-image-height]': 'height!=null && height>=0 ? height+"px" : undefined'
   },
   standalone: true,
 })

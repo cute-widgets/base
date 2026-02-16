@@ -13,10 +13,8 @@
 import {
   Directive,
   ElementRef,
-  Optional,
   inject,
   InjectionToken,
-  Inject,
   OnInit,
   Injector,
   DoCheck,
@@ -33,11 +31,6 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import {
-  CUTE_DATE_FORMATS,
-  DateAdapter,
-  CuteDateFormats,
-} from '@cute-widgets/base/core';
 import {ErrorStateMatcher, _ErrorStateTracker} from '@cute-widgets/base/core/error';
 import {Directionality} from '@angular/cdk/bidi';
 import {BACKSPACE, LEFT_ARROW, RIGHT_ARROW} from '@angular/cdk/keycodes';
@@ -174,8 +167,8 @@ abstract class CuteDateRangeInputPartBase<D>
   }
 
   /** Handles `input` events on the input element. */
-  override _onInput(value: string) {
-    super._onInput(value);
+  override _onInput(event: Event) {
+    super._onInput(event);
     this._rangeInput._handleChildValueChange();
   }
 
@@ -230,13 +223,13 @@ abstract class CuteDateRangeInputPartBase<D>
   host: {
     'class': 'cute-start-date cute-date-range-input-inner',
     '[disabled]': 'disabled',
-    '(input)': '_onInput($event.target.value)',
+    '(input)': '_onInput($event)',
     '(change)': '_onChange()',
     '(keydown)': '_onKeydown($event)',
     '[attr.aria-haspopup]': '_rangeInput.rangePicker ? "dialog" : null',
     '[attr.aria-owns]': '(_rangeInput.rangePicker?.opened && _rangeInput.rangePicker.id) || null',
-    '[attr.min]': '_getMinDate() ? _dateAdapter.toIso8601(_getMinDate()) : null',
-    '[attr.max]': '_getMaxDate() ? _dateAdapter.toIso8601(_getMaxDate()) : null',
+    '[attr.min]': '_getMinDate() ? _dateAdapter.toIso8601(_getMinDate()!) : null',
+    '[attr.max]': '_getMaxDate() ? _dateAdapter.toIso8601(_getMaxDate()!) : null',
     '(blur)': '_onBlur()',
     'type': 'text',
   },
@@ -321,13 +314,13 @@ export class CuteStartDate<D> extends CuteDateRangeInputPartBase<D> {
   host: {
     'class': 'cute-end-date cute-date-range-input-inner',
     '[disabled]': 'disabled',
-    '(input)': '_onInput($event.target.value)',
+    '(input)': '_onInput($event)',
     '(change)': '_onChange()',
     '(keydown)': '_onKeydown($event)',
     '[attr.aria-haspopup]': '_rangeInput.rangePicker ? "dialog" : null',
     '[attr.aria-owns]': '(_rangeInput.rangePicker?.opened && _rangeInput.rangePicker.id) || null',
-    '[attr.min]': '_getMinDate() ? _dateAdapter.toIso8601(_getMinDate()) : null',
-    '[attr.max]': '_getMaxDate() ? _dateAdapter.toIso8601(_getMaxDate()) : null',
+    '[attr.min]': '_getMinDate() ? _dateAdapter.toIso8601(_getMinDate()!) : null',
+    '[attr.max]': '_getMaxDate() ? _dateAdapter.toIso8601(_getMaxDate()!) : null',
     '(blur)': '_onBlur()',
     'type': 'text',
   },

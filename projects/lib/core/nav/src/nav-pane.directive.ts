@@ -58,7 +58,7 @@ export class CuteNavPaneOutlet extends CdkPortalOutlet implements OnDestroy  {
   exportAs: 'cuteNavPane',
   host: {
     'class': 'cute-nav-pane tab-pane',
-    '[class.fade]': 'item.nav.animation',
+    '[class.fade]': 'item?.nav?.animation',
     '[class.active]': '_active',
     '[class.show]': '_show',
     '[attr.tabindex]': '0', //'_active ? 0 : -1',

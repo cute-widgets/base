@@ -41,8 +41,8 @@ export class CuteToolbarRow {}
   styleUrl: './toolbar.scss',
   host: {
     'class': 'cute-toolbar',
-    '[class.cute-toolbar-multiple-rows]': '_toolbarRows.length > 0',
-    '[class.cute-toolbar-single-row]': '_toolbarRows.length === 0',
+    '[class.cute-toolbar-multiple-rows]': '_toolbarRows ? _toolbarRows.length > 0 : false',
+    '[class.cute-toolbar-single-row]': '_toolbarRows ? _toolbarRows.length === 0 : false',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

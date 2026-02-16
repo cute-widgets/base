@@ -15,10 +15,8 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
-  Inject,
   Input,
   OnDestroy,
-  Optional,
   Output,
   AfterViewInit,
   OnChanges,
@@ -325,7 +323,8 @@ export abstract class CuteDatepickerInputBase<S, D = ExtractDateTypeFromSelectio
     }
   }
 
-  _onInput(value: string) {
+  _onInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
     const lastValueWasValid = this._lastValueValid;
     let date = this._dateAdapter.parse(value, this._dateFormats.parse.dateInput);
     this._lastValueValid = this._isValidValue(date);

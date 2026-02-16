@@ -13,7 +13,7 @@ import {
   afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
-  Component, DestroyRef,
+  Component,
   DoCheck, ElementRef, EventEmitter,
   inject,
   InjectionToken, Injector, Input, NgZone,
@@ -76,7 +76,7 @@ export const CUTE_RADIO_DEFAULT_OPTIONS = new InjectionToken<CuteRadioDefaultOpt
     // Note: under normal conditions focus shouldn't land on this element, however, it may be
     // programmatically set, for example, inside a focus trap, in this case we want to forward
     // the focus to the native element.
-    '(focus)': '_inputElement?.nativeElement.focus()',
+    '(focus)': '_inputElement?.nativeElement?.focus()',
   },
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush

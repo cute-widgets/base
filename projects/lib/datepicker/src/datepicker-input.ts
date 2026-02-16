@@ -45,14 +45,14 @@ export const CUTE_DATEPICKER_VALIDATORS: any = {
   host: {
     'class': 'cute-datepicker-input',
     '[attr.aria-haspopup]': '_datepicker ? "dialog" : null',
-    '[attr.aria-owns]': '(_datepicker?.opened && _datepicker.id) || null',
+    '[attr.aria-owns]': '(_datepicker?.opened && _datepicker?.id) || null',
     '[attr.min]': 'min ? _dateAdapter.toIso8601(min) : null',
     '[attr.max]': 'max ? _dateAdapter.toIso8601(max) : null',
     // Used by the test harness to tie this input to its calendar. We can't depend on
     // `aria-owns` for this, because it's only defined while the calendar is open.
     '[attr.data-cute-calendar]': '_datepicker ? _datepicker.id : null',
     '[disabled]': 'disabled',
-    '(input)': '_onInput($event.target.value)',
+    '(input)': '_onInput($event)',
     '(change)': '_onChange()',
     '(blur)': '_onBlur()',
     '(keydown)': '_onKeydown($event)',

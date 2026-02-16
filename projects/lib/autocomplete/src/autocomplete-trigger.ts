@@ -503,7 +503,7 @@ export class CuteAutocompleteTrigger
     }
   }
 
-  protected _handleInput(event: KeyboardEvent): void {
+  protected _handleInput(event: Event): void {
     let target = event.target as HTMLInputElement;
     let value: number | string | null = target.value;
 
