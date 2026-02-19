@@ -7,7 +7,6 @@
  * that can be found at http://www.apache.org/licenses/LICENSE-2.0
  */
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {CuteNavbar} from "./navbar.component";
 import {CuteNavbarBrand} from "./navbar-brand.directive";
 import {CuteNavbarContent} from "./navbar-content.component";

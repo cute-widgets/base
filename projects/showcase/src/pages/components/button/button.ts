@@ -11,20 +11,26 @@ import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {FormsModule} from '@angular/forms';
 import {AbstractPage} from '../abstract/abstract-page';
 import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {CuteRadioModule} from '@cute-widgets/base/radio';
+import {TitleCasePipe} from '@angular/common';
+import {CuteLabel} from '@cute-widgets/base/form-field';
 
 @Component({
   selector: 'app-button-page',
-    imports: [
-        CuteButtonModule,
-        CuteIconModule,
-        CuteHStack,
-        CuteTooltipModule,
-        CuteProgressSpinner,
-        CuteTabsModule,
-        CuteCheckbox,
-        FormsModule,
-        ComponentViewer
-    ],
+  imports: [
+    CuteButtonModule,
+    CuteIconModule,
+    CuteHStack,
+    CuteTooltipModule,
+    CuteProgressSpinner,
+    CuteTabsModule,
+    CuteCheckbox,
+    FormsModule,
+    ComponentViewer,
+    CuteRadioModule,
+    TitleCasePipe,
+    CuteLabel
+  ],
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })
@@ -38,5 +44,6 @@ export class ButtonPage extends AbstractPage {
 
   protected applyGradient: boolean = false;
   protected applyDisabled: boolean = false;
+  protected selectedSize: RelativeSize5 = "middle";
 
 }

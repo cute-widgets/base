@@ -265,6 +265,15 @@ const DOCS: {[key: string]: DocItem[]} = {
       additionalApiDocs: [{name: 'Testing', path: 'cute-menu-testing.html'}],
     },
     {
+      id: 'navbar',
+      name: 'Navbar',
+      summary: 'A powerful, responsive navigation header.',
+      exampleSpecs: {
+        prefix: 'menu-',
+      },
+      additionalApiDocs: [{name: 'Testing', path: 'cute-navbar-testing.html'}],
+    },
+    {
       id: 'paginator',
       name: 'Paginator',
       summary: 'Controls for displaying paged data.',

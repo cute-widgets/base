@@ -5,10 +5,10 @@
   "compilerOptions": {
     "paths": {
       "@cute-widgets/base": [
-        "dist/lib"
+        "./dist/lib"
       ],
       "@cute-widgets/base/*": [
-        "dist/lib/*"
+        "./dist/lib/*"
       ]
     },
     "baseUrl": "./",

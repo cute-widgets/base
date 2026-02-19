@@ -11,7 +11,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnDestroy, OnInit,
   signal, viewChild,
   ViewEncapsulation
 } from "@angular/core";

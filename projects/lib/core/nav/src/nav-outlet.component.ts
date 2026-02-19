@@ -7,13 +7,11 @@
  * that can be found at http://www.apache.org/licenses/LICENSE-2.0
  */
 import {
-  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
   Input,
   ViewEncapsulation,
 } from "@angular/core";
-import {NgFor} from "@angular/common";
 import {PortalModule} from "@angular/cdk/portal";
 import {CuteNav} from "./nav.directive";
 import {CuteNavPane, CuteNavPaneOutlet} from "./nav-pane.directive";

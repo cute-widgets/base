@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import {CuteStepperModule} from "@cute-widgets/base/stepper";
 import {CuteIcon} from "@cute-widgets/base/icon";
-import {JsonPipe, NgIf} from "@angular/common";
+import { JsonPipe } from "@angular/common";
 import {CuteButtonModule} from "@cute-widgets/base/button";
 import {StepperOrientation} from "@angular/cdk/stepper";
 import {StepperLabelPosition} from "@cute-widgets/base/stepper";

@@ -14,7 +14,7 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import {CommonModule} from "@angular/common";
+
 import {CuteButtonBase, CUTE_BUTTON_BASE} from "./button-base.directive";
 import {toThemeColor} from "@cute-widgets/base/core";
 
@@ -27,7 +27,7 @@ import {toThemeColor} from "@cute-widgets/base/core";
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
   exportAs: "cuteButton",
-  imports: [CommonModule],
+  imports: [],
   host: {
     'class': 'cute-button',
     '[class.cute-anchor]': '_isAnchor',

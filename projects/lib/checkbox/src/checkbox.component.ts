@@ -28,7 +28,7 @@ import {
   CuteCheckboxDefaultOptions
 } from "./checkbox.config";
 import {CuteInputControl} from '@cute-widgets/base/abstract';
-import {CommonModule} from "@angular/common";
+
 import {RelativeSize} from "@cute-widgets/base/core";
 
 /** Change event object emitted by checkbox. */
@@ -59,7 +59,7 @@ const defaults = CUTE_CHECKBOX_DEFAULT_OPTIONS_FACTORY();
       '[attr.role]': 'null',
       '[id]': 'id',
     },
-    imports: [CommonModule],
+    imports: [],
     providers: [
       {
         provide: NG_VALUE_ACCESSOR,

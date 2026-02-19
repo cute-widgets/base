@@ -27,6 +27,7 @@ export const routes: Routes = [
       {path: "input", loadComponent: () => import('../pages/components/input/input').then(m => m.InputPage)},
       {path: "list", loadComponent: () => import('../pages/components/list/list').then(m => m.ListPage)},
       {path: "menu", loadComponent: () => import('../pages/components/menu/menu').then(m => m.MenuPage)},
+      {path: "navbar", loadComponent: () => import('../pages/components/navbar/navbar').then(m => m.NavbarPage)},
       {path: "paginator", loadComponent: () => import('../pages/components/paginator/paginator').then(m => m.PaginatorPage)},
       {path: "progress-bar", loadComponent: () => import('../pages/components/progress-bar/progress-bar').then(m => m.ProgressBarPage)},
       {path: "progress-spinner", loadComponent: () => import('../pages/components/progress-spinner/progress-spinner').then(m => m.ProgressSpinnerPage)},

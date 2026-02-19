@@ -7,6 +7,8 @@
 
         .cute-navbar-collapse-content {
           display: flex;
+          align-items: center;
+          padding: 0.25rem 0; // place for ring focus
         }
       }
   }

@@ -184,17 +184,25 @@
     <cute-tab label="Button groups">
 
       <h6>Button group</h6>
-      <cute-hstack gap="3" class="align-items-start flex-wrap">
-        <cute-button-group color="primary" vertical [disabled]="applyDisabled" [gradientFill]="applyGradient" aria-label="Font Style">
+
+      <cute-label class="mt-2">Magnitude:</cute-label>
+      <cute-radio-group [(ngModel)]="selectedSize">
+        @for (size of sizes; track size) {
+          <cute-radio-button [value]="size" inline>{{size | titlecase}}</cute-radio-button>
+        }
+      </cute-radio-group>
+
+      <cute-hstack gap="3" class="mt-2 align-items-start flex-wrap">
+        <cute-button-group color="primary" vertical [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="selectedSize" aria-label="Font Style">
           <button cute-button color="danger-emphasis">Bold</button>
           <button cute-button>Italic</button>
           <button cute-button>Underline</button>
           <button cute-button>Strikethrough</button>
         </cute-button-group>
 
-        <cute-button-group color="primary" [disabled]="applyDisabled" [gradientFill]="applyGradient" aria-label="Horizontal button group">
-          <button cuteButton="flat-button">Button 1</button>
-          <button cuteButton="flat-button">Button 2</button>
+        <cute-button-group [disabled]="applyDisabled" [gradientFill]="applyGradient" [magnitude]="selectedSize" aria-label="Horizontal button group">
+          <button cuteButton="flat-button" color="success">Button 1</button>
+          <button cuteButton="flat-button" color="warning">Button 2</button>
         </cute-button-group>
       </cute-hstack>
 

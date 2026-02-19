@@ -1,0 +1,37 @@
+<app-component-viewer
+  [(docItem)]="_docItem"
+  [examplesTemplate]="menuExamples">
+</app-component-viewer>
+
+<ng-template #menuExamples>
+
+<!--  <cute-toolbar>-->
+
+    <cute-navbar breakpoint="lg" class="mb-3" color="tertiary-emphasis">
+      <cute-icon svgIcon="bootstrap" style="font-size: 24px; color: #712cf9" class="me-1"></cute-icon>
+      <a cute-navbar-brand routerLink="">Navbar</a>
+      <button cute-navbar-toggler [cuteNavbarTogglerFor]="navbarContent" aria-label="Toggle navigation">
+        <cute-icon fontIcon="list"></cute-icon>
+      </button>
+      <cute-navbar-content #navbarContent="cuteNavbarContent" >
+        <ul cute-navbar-nav class="me-auto mb-2 mb-lg-0">
+          <li cute-nav-item>
+            <a cute-nav-link active="true" routerLink="">Home</a>
+          </li>
+          <li cute-nav-item>
+            <a cute-nav-link routerLink="">Link</a>
+          </li>
+          <li cute-nav-item>
+            <a cute-nav-link disabled>Disabled</a>
+          </li>
+        </ul>
+        <form class="d-flex align-items-center" role="search">
+          <input cuteInput class="me-2" type="search" placeholder="Search" aria-label="Search">
+          <button cuteButton="outline-button" color="success" type="submit">Search</button>
+        </form>
+      </cute-navbar-content>
+    </cute-navbar>
+
+<!--  </cute-toolbar>-->
+
+</ng-template>
