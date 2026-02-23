@@ -2,7 +2,7 @@
 
 <h5 componentHeader>{{docName}}</h5>
 
-<cute-tab-group>
+<cute-tab-group (selectedTabChange)="selectedTabChange.emit($event)">
   <cute-tab label="Overview" preserveContent>
     @let content = _docContent();
     @if (content) {

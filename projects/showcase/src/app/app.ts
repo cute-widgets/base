@@ -45,7 +45,6 @@ export class App implements OnDestroy {
   protected currentTheme = signal<CuteTheme|undefined>(undefined);
 
   constructor() {
-
     this.iconRegistry.addSvgIconSet(this.sanitizer.bypassSecurityTrustResourceUrl("assets/svg/bootstrap-icons.svg"), {width: '1em', height: '1em'});
 
     this.themeService.change.subscribe(event => {
@@ -61,15 +60,12 @@ export class App implements OnDestroy {
     console.debug(event);
   }
 
-
   footerVisibilityChange(entries: IntersectionObserverEntry[]) {
     console.debug("footer visibility: ", entries);
   }
 
   ngOnDestroy() {
-
   }
-
 }
 
 function resetScrollPosition() {

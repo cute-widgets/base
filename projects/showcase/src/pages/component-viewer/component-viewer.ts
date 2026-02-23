@@ -1,17 +1,17 @@
 import {
   Component,
-  computed, effect,
+  computed, effect, EventEmitter,
   inject,
   Injectable,
   Input,
-  model, OnDestroy,
+  model, OnDestroy, Output,
   SecurityContext, signal,
   TemplateRef
 } from '@angular/core';
 import {ComponentHeader} from '../../shared/utils/component-header';
 import {CuteAlertModule} from '@cute-widgets/base/alert';
 import {CuteIconModule} from '@cute-widgets/base/icon';
-import {CuteTabsModule} from '@cute-widgets/base/tabs';
+import {CuteTabChangeEvent, CuteTabsModule} from '@cute-widgets/base/tabs';
 import {MarkdownComponent} from 'ngx-markdown';
 import {DocItem, DocItems} from '../../shared/documentation-items/doc-items';
 import {NgTemplateOutlet} from '@angular/common';
@@ -62,6 +62,8 @@ export class ComponentViewer implements OnDestroy {
 
   @Input()
   examplesTemplate: TemplateRef<any> | undefined;
+
+  @Output() selectedTabChange = new EventEmitter<CuteTabChangeEvent>();
 
   protected _docOverviewPath = computed(() => {
     const docItem = this.docItem();

@@ -1,6 +1,8 @@
 <app-component-viewer
   [(docItem)]="_docItem"
-  [examplesTemplate]="expansionExamples">
+  [examplesTemplate]="expansionExamples"
+  (selectedTabChange)="onTabChange($event)"
+>
 </app-component-viewer>
 
 <ng-template #expansionExamples>

@@ -27,9 +27,8 @@ import {
   ViewEncapsulation,
   OnInit,
   ChangeDetectorRef,
-  booleanAttribute, isDevMode, inject, Injector, AfterRenderRef, afterNextRender,
+  booleanAttribute, isDevMode, inject, Injector, AfterRenderRef, afterNextRender, signal,
 } from '@angular/core';
-import {AnimationEvent} from '@angular/animations';
 import {FocusKeyManager, FocusOrigin} from '@angular/cdk/a11y';
 import {Direction} from '@angular/cdk/bidi';
 import {
@@ -47,7 +46,7 @@ import {CuteMenuPanel, CUTE_MENU_PANEL} from './menu-panel';
 import {MenuPositionX, MenuPositionY} from './menu-positions';
 import {throwCuteMenuInvalidPositionX, throwCuteMenuInvalidPositionY} from './menu-errors';
 import {CuteMenuContent, CUTE_MENU_CONTENT} from './menu-content';
-import {cuteMenuAnimations} from './menu-animations';
+import {_animationsDisabled} from '@cute-widgets/base/core';
 import {CdkMenu} from "@angular/cdk/menu";
 
 let menuPanelUid = 0;
@@ -83,23 +82,20 @@ export const CUTE_MENU_DEFAULT_OPTIONS = new InjectionToken<CuteMenuDefaultOptio
   'cute-menu-default-options',
   {
     providedIn: 'root',
-    factory: CUTE_MENU_DEFAULT_OPTIONS_FACTORY,
+    factory: () => ({
+      overlapTrigger: false,
+      xPosition: 'after',
+      yPosition: 'below',
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+    }),
   },
 );
 
-/**
- * @docs-private
- * @deprecated No longer used, will be removed.
- * @breaking-change 21.0.0
- */
-export function CUTE_MENU_DEFAULT_OPTIONS_FACTORY(): CuteMenuDefaultOptions {
-  return {
-    overlapTrigger: false,
-    xPosition: 'after',
-    yPosition: 'below',
-    backdropClass: 'cdk-overlay-transparent-backdrop',
-  };
-}
+/** Name of the enter animation `@keyframes`. */
+const ENTER_ANIMATION = '_cute-menu-enter';
+
+/** Name of the exit animation `@keyframes`. */
+const EXIT_ANIMATION = '_cute-menu-exit';
 
 @Component({
   selector: 'cute-menu',
@@ -112,9 +108,7 @@ export function CUTE_MENU_DEFAULT_OPTIONS_FACTORY(): CuteMenuDefaultOptions {
     '[attr.aria-labelledby]': 'null',
     '[attr.aria-describedby]': 'null',
   },
-  animations: [cuteMenuAnimations.transformMenu, cuteMenuAnimations.fadeInItems],
   providers: [{provide: CUTE_MENU_PANEL, useExisting: CuteMenu}],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [CdkMenu]
@@ -134,20 +128,25 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
   private _elevationPrefix = 'shadow';
   private _baseElevation: MenuShadowElevation = 1;
 
-  /** Config object to be passed into the menu's ngClass */
-  protected _classList: {[key: string]: boolean} = {};
+  protected _animationsDisabled = _animationsDisabled();
 
-  /** Current state of the panel animation. */
-  protected _panelAnimationState: 'void' | 'enter' = 'void';
+  /** All items inside the menu. Includes items nested inside another menu. */
+  @ContentChildren(CuteMenuItem, {descendants: true}) _allItems: QueryList<CuteMenuItem> | undefined;
 
   /** Only the direct descendant menu items. */
   _directDescendantItems = new QueryList<CuteMenuItem>();
 
+  /** Config object to be passed into the menu's ngClass */
+  protected _classList: {[key: string]: boolean} = {};
+
+  /** Current state of the panel animation. */
+  _panelAnimationState: 'void' | 'enter' = 'void';
+
   /** Emits whenever an animation on the menu completes. */
-  readonly _animationDone = new Subject<AnimationEvent>();
+  readonly _animationDone = new Subject<'void' | 'enter'>();
 
   /** Whether the menu is animating. */
-  _isAnimating: boolean | undefined;
+  _isAnimating = signal(false);
 
   /** Parent menu of the current menu panel. */
   parentMenu: CuteMenuPanel | undefined;
@@ -208,10 +207,6 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
   @ViewChild(TemplateRef)
   templateRef!: TemplateRef<any>;
 
-  /** All items inside the menu. Includes items nested inside another menu. */
-  @ContentChildren(CuteMenuItem, {descendants: true})
-  _allItems: QueryList<CuteMenuItem> | undefined;
-
   /**
    * List of the items inside a menu.
    * @deprecated
@@ -227,7 +222,7 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
   lazyContent: CuteMenuContent | undefined;
 
   /**
-   * This method takes classes set on the host mat-menu element and applies them on the
+   * This method takes classes set on the host cute-menu element and applies them on the
    * menu template that displays in the overlay container.  Otherwise, it's difficult
    * to style the containing menu from outside the component.
    * @param classes list of class names
@@ -333,7 +328,7 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
   }
 
   /** Handle a keyboard event from the menu, delegating to the appropriate action. */
-  protected _handleKeydown(event: KeyboardEvent) {
+  _handleKeydown(event: KeyboardEvent) {
     const keyCode = event.keyCode;
     const manager = this._keyManager;
 
@@ -457,8 +452,8 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
   /**
    * Adds classes to the menu panel based on its position. Can be used by
    * consumers to add specific styling based on the position.
-   * @param posX Position of the menu along the x axis.
-   * @param posY Position of the menu along the y axis.
+   * @param posX Position of the menu along the x-axis.
+   * @param posY Position of the menu along the y-axis.
    */
   setPositionClasses(posX: MenuPositionX = this.xPosition, posY: MenuPositionY = this.yPosition) {
     const classes = this._classList;
@@ -470,36 +465,58 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
     this._changeDetectorRef.markForCheck();
   }
 
-  /** Starts the entered animation. */
-  _startAnimation() {
-    // @breaking-change 8.0.0 Combine with _resetAnimation.
-    this._panelAnimationState = 'enter';
-  }
-
-  /** Resets the panel animation to its initial state. */
-  _resetAnimation() {
-    // @breaking-change 8.0.0 Combine with _startAnimation.
-    this._panelAnimationState = 'void';
-  }
-
   /** Callback that is invoked when the panel animation completes. */
-  _onAnimationDone(event: AnimationEvent) {
-    this._animationDone.next(event);
-    this._isAnimating = false;
+  _onAnimationDone(state: string) {
+    const isExit = state === EXIT_ANIMATION;
+
+    if (isExit || state === ENTER_ANIMATION) {
+      if (isExit) {
+        clearTimeout(this._exitFallbackTimeout);
+        this._exitFallbackTimeout = undefined;
+      }
+      this._animationDone.next(isExit ? 'void' : 'enter');
+      this._isAnimating.set(false);
+    }
   }
 
-  _onAnimationStart(event: AnimationEvent) {
-    this._isAnimating = true;
-
-    // Scroll the content element to the top as soon as the animation starts. This is necessary,
-    // because we move focus to the first item while it's still being animated, which can throw
-    // the browser off when it determines the scroll position. Alternatively, we can move focus
-    // when the animation is done, however, moving focus asynchronously will interrupt screen
-    // readers which are in the process of reading out the menu already. We take the `element`
-    // from the `event` since we can't use a `ViewChild` to access the pane.
-    if (event.toState === 'enter' && this._keyManager?.activeItemIndex === 0) {
-      event.element.scrollTop = 0;
+  _onAnimationStart(state: string) {
+    if (state === ENTER_ANIMATION || state === EXIT_ANIMATION) {
+      this._isAnimating.set(true);
     }
+  }
+
+  _setIsOpen(isOpen: boolean) {
+    this._panelAnimationState = isOpen ? 'enter' : 'void';
+
+    if (isOpen) {
+      if (this._keyManager?.activeItemIndex === 0) {
+        // Scroll the content element to the top as soon as the animation starts. This is necessary,
+        // because we move focus to the first item while it's still being animated, which can throw
+        // the browser off when it determines the scroll position. Alternatively we can move focus
+        // when the animation is done, however moving focus asynchronously will interrupt screen
+        // readers which are in the process of reading out the menu already. We take the `element`
+        // from the `event` since we can't use a `ViewChild` to access the pane.
+        const menuPanel = this._resolvePanel();
+
+        if (menuPanel) {
+          menuPanel.scrollTop = 0;
+        }
+      }
+    } else if (!this._animationsDisabled) {
+      // Some apps do `* { animation: none !important; }` in tests which will prevent the
+      // `animationend` event from firing. Since the exit animation is loading-bearing for
+      // removing the content from the DOM, add a fallback timer.
+      this._exitFallbackTimeout = setTimeout(() => this._onAnimationDone(EXIT_ANIMATION), 200);
+    }
+
+    // Animation events won't fire when animations are disabled so we simulate them.
+    if (this._animationsDisabled) {
+      setTimeout(() => {
+        this._onAnimationDone(isOpen ? ENTER_ANIMATION : EXIT_ANIMATION);
+      });
+    }
+
+    this._changeDetectorRef.markForCheck();
   }
 
   /**
@@ -522,7 +539,7 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
     let menuPanel: HTMLElement | null = null;
 
     if (this._directDescendantItems.length) {
-      // Because the `mat-menuPanel` is at the DOM insertion point, not inside the overlay, we don't
+      // Because the `cute-menuPanel` is at the DOM insertion point, not inside the overlay, we don't
       // have a nice way of getting a hold of the menuPanel panel. We can't use a `ViewChild` either
       // because the panel is inside an `ng-template`. We work around it by starting from one of
       // the items and walking up the DOM.

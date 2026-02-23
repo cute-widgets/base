@@ -7,24 +7,25 @@
  * that can be found at http://www.apache.org/licenses/LICENSE-2.0
  */
 import {NgModule, Type} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {CuteMenu} from "./menu";
 import {CuteMenuItem} from "./menu-item";
 import {CuteMenuContent} from "./menu-content";
-import {CUTE_MENU_SCROLL_STRATEGY_FACTORY_PROVIDER, CuteMenuTrigger} from "./menu-trigger";
+import {CuteMenuTrigger} from "./menu-trigger";
+import {CuteContextMenuTrigger} from './context-menu-trigger';
+import {OverlayModule} from '@angular/cdk/overlay';
+import {CdkScrollableModule} from '@angular/cdk/scrolling';
+
 
 const TYPES: (any | Type<any>)[] = [
-  CommonModule,
   CuteMenu,
   CuteMenuItem,
   CuteMenuContent,
   CuteMenuTrigger,
+  CuteContextMenuTrigger,
 ];
 
 @NgModule({
-  imports: [CommonModule, ...TYPES],
-  exports: TYPES,
-  declarations: [],
-  providers: [CUTE_MENU_SCROLL_STRATEGY_FACTORY_PROVIDER],
+  imports: [OverlayModule, ...TYPES],
+  exports: [CdkScrollableModule, ...TYPES],
 })
 export class CuteMenuModule { }

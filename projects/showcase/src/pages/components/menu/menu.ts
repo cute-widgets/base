@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
-import {CuteMenuModule} from '@cute-widgets/base/menu';
+import {CuteMenuModule, CuteMenuTrigger} from '@cute-widgets/base/menu';
 import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteDividerModule} from '@cute-widgets/base/divider';
 import {CuteMenuItem} from '@cute-widgets/base/menu';
@@ -18,6 +18,7 @@ import {ComponentViewer} from '../../component-viewer/component-viewer';
         CuteIconModule,
         CuteDividerModule,
         ComponentViewer,
+      CuteMenuTrigger,
     ],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',

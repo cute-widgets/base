@@ -1,4 +1,4 @@
-import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {HomePage} from '../pages/home/home-page';
 import {NotFoundPage} from '../pages/not-found/not-found';
 
