@@ -151,7 +151,7 @@ export class CuteTable<T> extends CdkTable<T> implements OnInit {
   set compact(value: boolean) {
     if (value !== this._compact) {
       this._compact = value;
-      this.updateStickyStyles();
+      Promise.resolve().then(() => this.updateStickyStyles());
     }
   }
   private _compact: boolean = false;
@@ -174,7 +174,7 @@ export class CuteTable<T> extends CdkTable<T> implements OnInit {
   set verticalHeads(value: boolean) {
     if (value !== this._verticalHeads) {
       this._verticalHeads = value;
-      this.updateStickyStyles();
+      Promise.resolve().then(() => this.updateStickyStyles());
     }
   }
   private _verticalHeads: boolean = false;

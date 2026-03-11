@@ -137,6 +137,10 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
 
       if (this.buttonToggleGroup) {
         this.buttonToggleGroup._syncButtonToggle(this, this._checked);
+      } else {
+        //++ CWT
+        this.change.emit( new CuteButtonToggleChange(this, this.value) );
+        //--
       }
 
       this.markForCheck();
@@ -179,6 +183,21 @@ export class CuteButtonToggle extends CuteButtonBase implements OnInit, OnDestro
     this.buttonToggleGroup = toggleGroup;
     if (!toggleGroup) this.inputButtonStyle = "outline-button";
     this.disabledInteractive = defaultOptions?.disabledInteractive ?? false;
+  }
+
+  /** Toggles the `checked` state of the toggle button. */
+  toggle(): void {
+    this.checked = !this.checked;
+  }
+
+  /** Sets the `checked` state of the toggle button. */
+  check(): void {
+    this.checked = true;
+  }
+
+  /** Clears the `checked` state of the toggle button. */
+  uncheck(): void {
+    this.checked = false;
   }
 
   override ngOnInit() {

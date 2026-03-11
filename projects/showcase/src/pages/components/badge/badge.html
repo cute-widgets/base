@@ -20,8 +20,31 @@
 
     <a cuteButton="pill-button" color="warning-emphasis" style="width: 8rem">
       Warning
-      <cute-badge roundedPill color="danger" style="width:2.2em">5</cute-badge>
+      <cute-badge roundedPill color="danger">5</cute-badge>
     </a>
+
+    <h6 class="my-3">Positioned</h6>
+
+    <cute-hstack gap="2" class="px-3">
+      <button cuteButton="flat-button" color="primary">
+        Profile
+        <cute-badge position="top-start" roundedPill color="danger" aria-description="Unread messages">99+</cute-badge>
+      </button>
+      <button cuteButton="flat-button" color="primary">
+        Profile
+        <cute-badge position="top-end" roundedPill color="danger" aria-description="Unread messages">99+</cute-badge>
+      </button>
+    </cute-hstack>
+    <cute-hstack gap="2" class="px-3">
+      <button cuteButton="flat-button" color="primary">
+        Profile
+        <cute-badge position="bottom-start" roundedPill color="danger" aria-description="Unread messages">99+</cute-badge>
+      </button>
+      <button cuteButton="flat-button" color="primary">
+        Profile
+        <cute-badge position="bottom-end" roundedPill color="danger" aria-description="Unread messages">99+</cute-badge>
+      </button>
+    </cute-hstack>
 
   </cute-vstack>
 

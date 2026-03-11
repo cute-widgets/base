@@ -224,7 +224,7 @@ export abstract class CuteButtonBase extends CuteFocusableControl implements DoC
     this.wrapText = config?.wrapText ?? false;
     this._ripple = RippleManager.getInstance(this._nativeElement);
 
-    this._isAnchor = (this._nativeElement.tagName == "A");
+    this._isAnchor = (this._nativeElement.tagName==="A");
   }
 
   protected override generateId(): string {

@@ -44,6 +44,10 @@ $duration: 0.2s;
     &.collapsed { grid-template-columns: 0fr; }
     &.cute-collapse-animations-enabled {
       transition: grid-template-columns $duration;
+
+      .cute-collapse-content {
+        transition-duration: $duration;
+      }
     }
   }
 

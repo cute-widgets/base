@@ -111,6 +111,9 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
   /** Whether focus should be restored when the menu is closed. */
   abstract restoreFocus: boolean;
 
+  /** Element reference that can be used in class compositions. */
+  get elementRef(): Readonly<ElementRef<HTMLElement>> {return this._element;}
+
   /** Menu currently assigned to the trigger. */
   protected get _menu(): CuteMenuPanel | null {
     return this._menuInternal;
@@ -154,7 +157,7 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
 
   protected abstract _getOutsideClickStream(overlayRef: OverlayRef): Observable<unknown>;
 
-  constructor(private readonly _canHaveBackdrop: boolean) {
+  protected constructor(private readonly _canHaveBackdrop: boolean) {
     const parentMenu = inject<CuteMenuPanel>(CUTE_MENU_PANEL, {optional: true});
     this._parentCuteMenu = parentMenu instanceof CuteMenu ? parentMenu : undefined;
   }
@@ -263,6 +266,7 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
   /**
    * Focuses the menu trigger.
    * @param origin Source of the menu trigger's focus.
+   * @param options Optional focus options.
    */
   focus(origin?: FocusOrigin, options?: FocusOptions) {
     if (this._focusMonitor && origin) {
@@ -416,6 +420,7 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
   /**
    * Sets the appropriate positions on a position strategy
    * so the overlay connects with the trigger correctly.
+   * @param menu Menu panel.
    * @param positionStrategy Strategy whose position to update.
    */
   private _setPosition(menu: CuteMenuPanel, positionStrategy: FlexibleConnectedPositionStrategy) {
@@ -427,7 +432,7 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
 
     let [originY, originFallbackY] = [overlayY, overlayFallbackY];
     let [overlayX, overlayFallbackX] = [originX, originFallbackX];
-    let offsetY = 0;
+    let offsetY = 4; //0;
 
     if (this._triggersSubmenu()) {
       // When the menu is a sub-menu, it should always align itself

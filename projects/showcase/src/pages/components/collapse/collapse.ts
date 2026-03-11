@@ -6,18 +6,20 @@ import {CuteCollapseModule} from '@cute-widgets/base/collapse';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {AbstractPage} from '../abstract/abstract-page';
 import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {CuteButtonToggle} from '@cute-widgets/base/button-toggle';
 
 @Component({
   selector: 'app-collapse',
-    imports: [
-        CuteHStack,
-        CuteButtonModule,
-        CuteCardModule,
-        CuteCollapseModule,
-        CuteVStack,
-        CuteCheckbox,
-        ComponentViewer,
-    ],
+  imports: [
+    CuteHStack,
+    CuteButtonModule,
+    CuteCardModule,
+    CuteCollapseModule,
+    CuteVStack,
+    CuteCheckbox,
+    ComponentViewer,
+    // CuteButtonToggle,
+  ],
   templateUrl: './collapse.html',
   styleUrl: './collapse.scss',
 })

@@ -235,9 +235,9 @@ export class CuteInput extends CuteInputControl
     if (!this._isTextarea && getSupportedInputTypes().has(this._type)) {
       (this._elementRef.nativeElement as HTMLInputElement).type = this._type;
     }
-    if (this._type !== prevType) {
-      this._ensureWheelDefaultBehavior();
-    }
+    // if (this._type !== prevType) {
+    //   this._ensureWheelDefaultBehavior();
+    // }
   }
   protected _type = 'text';
 
@@ -722,7 +722,7 @@ export class CuteInput extends CuteInputControl
       this._cleanupWebkitWheel = this._renderer.listen(
         this._elementRef.nativeElement,
         'wheel',
-        this._webkitBlinkWheelListener,
+        this._webkitBlinkWheelListener
       );
     }
   }

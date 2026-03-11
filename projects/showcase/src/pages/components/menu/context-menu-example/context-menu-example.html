@@ -1,0 +1,23 @@
+<div class="example-context-menu-area" [cuteContextMenuTriggerFor]="contextMenu">
+  Right click here to trigger a context menu
+</div>
+
+<cute-menu #contextMenu>
+  <button cute-menu-item>
+    <cute-icon>scissors</cute-icon>
+    Cut
+  </button>
+  <button cute-menu-item>
+    <cute-icon>copy</cute-icon>
+    Copy
+  </button>
+  <button cute-menu-item>
+    <cute-icon>clipboard</cute-icon>
+    Paste
+  </button>
+  <button cute-menu-item>
+    <cute-icon>printer</cute-icon>
+    Print
+  </button>
+</cute-menu>
+

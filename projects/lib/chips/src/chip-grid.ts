@@ -44,7 +44,6 @@ import {takeUntil} from 'rxjs/operators';
 import {CuteChipEvent} from './chip';
 import {CuteChipRow} from './chip-row';
 import {CuteChipSet} from './chip-set';
-import {Directionality} from '@angular/cdk/bidi';
 
 /** Change event object that is emitted when the chip grid value has changed. */
 export class CuteChipGridChange {

@@ -1,3 +1,10 @@
+## Changes in version 21.0.0 (2026-02-28)
+
+### Improvements
+* Upgraded to **Angular v21**.
+* `CuteMenu` now works with native CSS animations.
+* Add `position` input property to `CuteBadge` component.
+
 ## Changes in version 20.0.5 (2026-02-15)
 
 ### Fixes

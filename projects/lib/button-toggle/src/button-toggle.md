@@ -2,7 +2,13 @@
 configured to behave as either radio-buttons or checkboxes. While they can be standalone, they are
 typically part of a `cute-button-toggle-group`.
 
-<!-- example(button-toggle-overview) -->
+```html
+<cute-button-toggle-group name="fontStyle" aria-label="Font Style">
+  <cute-button-toggle value="bold">Bold</cute-button-toggle>
+  <cute-button-toggle value="italic">Italic</cute-button-toggle>
+  <cute-button-toggle value="underline">Underline</cute-button-toggle>
+</cute-button-toggle-group>
+```
 
 ### Exclusive selection vs. multiple selection
 By default, `cute-button-toggle-group` acts like a radio-button group - only one item can be selected.

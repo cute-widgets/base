@@ -10,7 +10,10 @@
       <cute-checkbox #cbxHor>Horizontal</cute-checkbox>
 <!--      <cute-checkbox #cbxOff>Disabled</cute-checkbox>-->
       <div>
-        <button cuteButton withAriaExpandedIndicator [cuteCollapseTriggerFor]="collapseCard" color="info">Show collapsed</button>
+        <cute-hstack gap="3">
+          <button cuteButton withAriaExpandedIndicator [cuteCollapseTriggerFor]="collapseCard" color="info">Show collapsed</button>
+<!--          <cute-button-toggle color="primary" [cuteCollapseTriggerFor]="collapseCard">Show collapsed</cute-button-toggle>-->
+        </cute-hstack>
         <cute-collapse #collapseCard class="mt-2" [horizontal]="cbxHor.checked">
           <cute-card style="width: 300px;">
             <cute-card-header>

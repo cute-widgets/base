@@ -58,7 +58,7 @@
             ],
             "styles": [
               "projects/showcase/src/styles.scss",
-              "node_modules/prismjs/themes/prism-okaidia.css"
+              "node_modules/prismjs/themes/prism-twilight.css"
             ],
             "scripts": [
               "node_modules/prismjs/prism.js",

@@ -7,19 +7,21 @@ import {CuteMenuItem} from '@cute-widgets/base/menu';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {AbstractPage} from '../abstract/abstract-page';
 import {ComponentViewer} from '../../component-viewer/component-viewer';
+import {ContextMenuExample} from './context-menu-example/context-menu-example';
 
 @Component({
   selector: 'app-menu',
-    imports: [
-        CuteHStack,
-        CuteVStack,
-        CuteMenuModule,
-        CuteButtonModule,
-        CuteIconModule,
-        CuteDividerModule,
-        ComponentViewer,
-      CuteMenuTrigger,
-    ],
+  imports: [
+    CuteHStack,
+    CuteVStack,
+    CuteMenuModule,
+    CuteButtonModule,
+    CuteIconModule,
+    CuteDividerModule,
+    ComponentViewer,
+    CuteMenuTrigger,
+    ContextMenuExample,
+  ],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
 })

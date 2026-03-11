@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExpansionPanelPage } from './expansion-panel';
+import { ContextMenuExample } from './context-menu-example';
 
-describe('ExpansionPanel', () => {
-  let component: ExpansionPanelPage;
-  let fixture: ComponentFixture<ExpansionPanelPage>;
+describe('ContextMenuExample', () => {
+  let component: ContextMenuExample;
+  let fixture: ComponentFixture<ContextMenuExample>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExpansionPanelPage]
+      imports: [ContextMenuExample]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ExpansionPanelPage);
+    fixture = TestBed.createComponent(ContextMenuExample);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
