@@ -33,4 +33,8 @@ export abstract class AbstractPage /* extends ... */ {
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
+  protected log(...data: any[]) {
+    console.log(...data);
+  }
+
 }

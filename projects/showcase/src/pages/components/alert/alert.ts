@@ -22,8 +22,4 @@ export class AlertPage extends AbstractPage {
     super();
   }
 
-  log(...msg: string[]) {
-    console.log(...msg);
-  }
-
 }

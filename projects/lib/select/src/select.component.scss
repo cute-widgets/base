@@ -36,7 +36,7 @@
   user-select: none;
   -webkit-user-select: none;
 
-  &:disabled {
+  &:disabled, &.disabled {
     cursor: auto;
     opacity: 0.65;
   }
@@ -44,6 +44,10 @@
   &.form-select {
     &.form-select-sm {
       background-position: right 0.5rem center;
+    }
+    &.disabled {
+      background-color: var(--bs-secondary-bg);
+      pointer-events: none;
     }
   }
 

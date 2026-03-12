@@ -18,6 +18,7 @@
            [value]="triggerValue"
            (click)="toggle()"
            (focus)="onInputFocus($event)"
+           (blur)="onInputBlur($event)"
            autocomplete="off"
     >
       <!--    Prevents selection -->
@@ -25,6 +26,7 @@
   } @else {
     <div #trigger
          class="form-select cute-select-trigger__custom"
+         [class.disabled]="disabled"
          [attr.tabindex]="disabled ? -1 : tabIndex"
          [attr.id]="inputId">
       <ng-content select="cute-select-trigger"></ng-content>

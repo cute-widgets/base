@@ -1430,6 +1430,12 @@ export class CuteSelect extends CuteInputDropdownControl
   onContainerClick(event: MouseEvent) {
     const target = _getEventTarget(event) as HTMLElement | null;
 
+    //++ CWT
+    if (this.disabled) {
+      return;
+    }
+    //--
+
     // Since the overlay is inside the form field, this handler can fire for interactions
     // with the container. Note that while it's redundant to select both for the popover
     // and select panel, we need to do it because it tests the clicks can occur after
@@ -1456,11 +1462,22 @@ export class CuteSelect extends CuteInputDropdownControl
     return this.panelOpen || !this.empty || (this.focused && !!this.placeholder);
   }
 
-  /** `input` element gets focus. */
+  /** `input` element got focus. */
   protected onInputFocus(event: FocusEvent) {
     const elem = event.target as HTMLInputElement;
     // CWT: disable auto select input text
     elem.selectionStart = elem.selectionEnd;
+
+    // roll up event to `select` component
+    const newEvent = new FocusEvent(event.type, event);
+    this._nativeElement.dispatchEvent(newEvent);
+  }
+
+  /** `input` element lost focus */
+  protected onInputBlur(event: FocusEvent) {
+    // roll up event to `select` component
+    const newEvent = new FocusEvent(event.type, event);
+    this._nativeElement.dispatchEvent(newEvent);
   }
 }
 

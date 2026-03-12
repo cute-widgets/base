@@ -26,9 +26,6 @@ export class ExpansionPanelPage extends AbstractPage implements OnInit, AfterVie
 
   @ViewChild("pan1") panel1: CuteExpansionPanel | undefined;
 
-  protected log(...msg: string[]) {
-    console.log(...msg);
-  }
 
   onTabChange(event: CuteTabChangeEvent) {
     if (event.index == 1) {

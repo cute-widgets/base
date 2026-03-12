@@ -7,6 +7,10 @@
 
   <cute-vstack gap="3">
 
+    <p>
+      <cute-checkbox [(ngModel)]="disableSelect">Disable select</cute-checkbox>
+    </p>
+
     <cute-hstack gap="3" class="align-items-end">
       <cute-form-field subscriptSizing="dynamic">
         <cute-label>Location</cute-label>
@@ -14,6 +18,11 @@
                      style="width: 350px"
                      placeholder="Pick Your Holiday Destination"
                      value="4"
+                     [disabled]="disableSelect()"
+                     (focus)="log('focus')"
+                     (blur)="log('blur')"
+                     (focusin)="log('focusin')"
+                     (focusout)="log('focusout')"
         >
           <cute-option value="1">Paris</cute-option>
           <cute-option value="2">Mauritius</cute-option>
@@ -26,7 +35,7 @@
 
       <cute-form-field style="width: 350px" subscriptSizing="dynamic">
         <cute-label>Toppings</cute-label>
-        <cute-select [formControl]="toppings" multiple>
+        <cute-select [formControl]="toppings" placeholder="Select toppings..." multiple>
           <cute-select-trigger>
             {{toppings.value?.[0] || ''}}
             @if ((toppings.value?.length || 0) > 1) {
@@ -45,14 +54,10 @@
 
     <cute-hstack gap="3" class="align-items-end">
       <div>
-        <p>
-          <cute-checkbox [formControl]="disableSelect">Disable select</cute-checkbox>
-        </p>
-
         <h6>cute-select</h6>
         <cute-form-field>
           <cute-label>Choose an option</cute-label>
-          <cute-select [disabled]="disableSelect.value" placeholder="Select something...">
+          <cute-select [disabled]="disableSelect()" placeholder="Select something...">
             <cute-option value="option1">Option 1</cute-option>
             <cute-option value="option2" disabled>Option 2 (disabled)</cute-option>
             <cute-option value="option3">Option 3</cute-option>
@@ -63,7 +68,7 @@
         <h6>native select</h6>
         <cute-form-field class="w-100">
           <cute-label>Choose an option</cute-label>
-          <select cuteNativeControl [disabled]="disableSelect.value||false" placeholder="Choose your auto...">
+          <select cuteNativeControl [disabled]="disableSelect()" placeholder="Choose your auto...">
             <option value="" selected></option>
             <option value="volvo">Volvo</option>
             <option value="saab" disabled>Saab</option>

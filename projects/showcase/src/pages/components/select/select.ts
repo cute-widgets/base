@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, effect, model} from '@angular/core';
 import {CuteHStack, CuteVStack} from '@cute-widgets/base/layout';
 import {CuteSelectModule} from '@cute-widgets/base/select';
 import {CuteFormFieldModule} from '@cute-widgets/base/form-field';
@@ -37,8 +37,8 @@ interface PokemonGroup {
 })
 export class SelectPage extends AbstractPage {
 
-  disableSelect = new FormControl(false);
-  toppings = new FormControl('');
+  disableSelect = model<boolean>(false);
+  toppings = new FormControl({value: "", disabled: this.disableSelect()});
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 
   value: number | null = null;
@@ -137,5 +137,16 @@ export class SelectPage extends AbstractPage {
       ],
     },
   ];
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.disableSelect()) {
+        this.toppings.disable()
+      } else {
+        this.toppings.enable();
+      }
+    });
+  }
 
 }
