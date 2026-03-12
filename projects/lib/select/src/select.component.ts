@@ -1464,6 +1464,10 @@ export class CuteSelect extends CuteInputDropdownControl
 
   /** `input` element got focus. */
   protected onInputFocus(event: FocusEvent) {
+    if (this.disabled) {
+      return;
+    }
+
     const elem = event.target as HTMLInputElement;
     // CWT: disable auto select input text
     elem.selectionStart = elem.selectionEnd;
@@ -1475,6 +1479,10 @@ export class CuteSelect extends CuteInputDropdownControl
 
   /** `input` element lost focus */
   protected onInputBlur(event: FocusEvent) {
+    if (this.disabled) {
+      return;
+    }
+
     // roll up event to `select` component
     const newEvent = new FocusEvent(event.type, event);
     this._nativeElement.dispatchEvent(newEvent);
