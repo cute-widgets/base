@@ -51,6 +51,10 @@
     }
   }
 
+  .cute-select-trigger__placeholder {
+    opacity: 0.35;
+  }
+
   [dir="rtl"] & {
     &.form-select {
       padding: 0.375rem 0.75rem 0.375rem 2.25rem;

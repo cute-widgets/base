@@ -30,6 +30,11 @@
          [attr.tabindex]="disabled ? -1 : tabIndex"
          [attr.id]="inputId">
       <ng-content select="cute-select-trigger"></ng-content>
+      @if (empty) {
+        <span class="cute-select-trigger__placeholder">
+          {{placeholder}}
+        </span>
+      }
     </div>
   }
 
