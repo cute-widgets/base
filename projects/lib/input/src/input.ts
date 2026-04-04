@@ -345,18 +345,18 @@ export class CuteInput extends CuteInputControl
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // We are changing the valueAccessor from the DefaultValueAccessor object to our class!!!
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // if (this.ngControl) {
-    //   // Note: we provide the value accessor through here, instead of
-    //   // the `providers` to avoid running into a circular import.
-    //   this.ngControl.valueAccessor = this;
-    //
-    //   // This is a snippet code that we need to prevent the loss of functionality implemented in
-    //   // DefaultValueAccessor class.
-    //   this._compositionMode = inject(COMPOSITION_BUFFER_MODE, {optional: true});
-    //   if (this._compositionMode == null) {
-    //     this._compositionMode = !_isAndroid();
-    //   }
-    // }
+    if (this.ngControl) {
+      // Note: we provide the value accessor through here, instead of
+      // the `providers` to avoid running into a circular import.
+      this.ngControl.valueAccessor = this;
+
+      // // This is a snippet code that we need to prevent the loss of functionality implemented in
+      // // DefaultValueAccessor class.
+      // this._compositionMode = inject(COMPOSITION_BUFFER_MODE, {optional: true});
+      // if (this._compositionMode == null) {
+      //   this._compositionMode = !_isAndroid();
+      // }
+    }
     //-------------------------------------------------------------------------------------
 
     // On some versions of iOS, the caret gets stuck in the wrong place when holding down the delete

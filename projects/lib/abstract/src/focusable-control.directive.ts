@@ -49,7 +49,12 @@ export abstract class CuteFocusableControl extends CuteBaseControl
     }
   }
 
-  /** Set focus on this component */
+  /**
+   * Set focus on this component. The focused element is the element that will receive keyboard and similar events by default.
+   *
+   * @param origin An optional focus origin value.
+   * @param options An optional object for controlling aspects of the focusing process.
+   */
   focus(origin?: FocusOrigin, options?: FocusOptions): void {
     if (origin) {
       this._focusMonitor.focusVia(this._elementRef.nativeElement, origin, options);

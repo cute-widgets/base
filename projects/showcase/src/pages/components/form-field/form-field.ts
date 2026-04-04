@@ -50,6 +50,8 @@ export class FormFieldPage extends AbstractPage {
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());
+
+    setTimeout(() => {this.email.setValue("my.email@example.com")}, 200);
   }
 
   clickEvent(event: MouseEvent) {

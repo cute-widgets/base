@@ -84,6 +84,9 @@ export abstract class CuteBaseControl
    */
   private _pendingSubscribers: Subscriber<void>[] | null = [];
 
+  /**
+   * Use this API as the last resort when direct access to DOM is needed.
+   */
   protected get _nativeElement(): HTMLElement {
     return this._elementRef.nativeElement;
   }
@@ -344,7 +347,7 @@ export abstract class CuteBaseControl
   markForCheck(): void {
     this._changeDetectorRef.markForCheck();
   }
-  
+
   /** Checks this view and its children. */
   detectChanges(): void {
     this._changeDetectorRef.detectChanges();

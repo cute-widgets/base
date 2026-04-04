@@ -92,6 +92,10 @@
     --bs-btn-disabled-border-color: transparent;
     --bs-btn-hover-bg:            rgba(var(--cute-base-button-color-rgb), 0.06);
 
+    &:focus {
+      background-color: var(--bs-btn-hover-bg);
+    }
+
   }
 
   &.cute-flat-button {

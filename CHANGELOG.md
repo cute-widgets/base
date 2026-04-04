@@ -1,3 +1,10 @@
+## Changes in version 21.0.1 (2026-03-31)
+
+### Fixes
+* Background color of the base `CuteButton` has been changed in the _focus_ state.
+* `CuteSelect` now correctly displays **placeholder** for the custom triggers.
+* Small changes in the `CuteTable` component.
+
 ## Changes in version 21.0.0 (2026-02-28)
 
 ### Improvements
