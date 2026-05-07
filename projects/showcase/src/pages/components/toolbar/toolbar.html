@@ -10,7 +10,7 @@
       <button cuteButton="icon-button" class="example-icon" aria-label="Example icon-button with menu icon">
         <cute-icon>list</cute-icon>
       </button>
-      <span>My App</span>
+      <span class="ms-1">My App</span>
       <span class="example-spacer"></span>
       <button cuteButton="icon-button" class="example-icon" aria-label="Example icon-button with heart icon">
         <cute-icon>heart-fill</cute-icon>
@@ -21,23 +21,25 @@
     </cute-toolbar>
 
     <cute-toolbar color="primary">
-      <cute-toolbar-row>
+      <cute-toolbar-row [magnitude]="isCompact?'small':'middle'">
         <h5>Custom Toolbar</h5>
         <cute-icon class="ms-auto example-icon">1-square</cute-icon>
       </cute-toolbar-row>
 
-      <cute-toolbar-row>
+      <cute-toolbar-row [magnitude]="isCompact?'small':'middle'">
         <span>Second Line</span>
         <a cuteButton="pill-button" href="#" color="primary-emphasis" aria-label="Home page">Home</a>
         <cute-icon class="ms-auto example-icon" aria-hidden="false" aria-label="Example user verified icon">2-square</cute-icon>
       </cute-toolbar-row>
 
-      <cute-toolbar-row>
+      <cute-toolbar-row [magnitude]="isCompact?'small':'middle'">
         <span>Third Line</span>
         <cute-icon class="ms-auto example-icon" aria-hidden="false" aria-label="Example heart icon">heart-fill</cute-icon>
         <cute-icon class="example-icon" aria-hidden="false" aria-label="Example delete icon">3-square</cute-icon>
       </cute-toolbar-row>
     </cute-toolbar>
+
+    <cute-checkbox [(ngModel)]="isCompact" labelPosition="before">Compact row</cute-checkbox>
 
   </cute-vstack>
 

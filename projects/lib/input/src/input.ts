@@ -25,6 +25,7 @@ import {
   SimpleChanges, WritableSignal,
 } from '@angular/core';
 import {
+  COMPOSITION_BUFFER_MODE, DefaultValueAccessor,
   FormGroupDirective,
   NgControl,
   NgForm,
@@ -35,7 +36,7 @@ import {CuteFormFieldControl, CuteFormField, CUTE_FORM_FIELD} from '@cute-widget
 import {getCuteInputUnsupportedTypeError} from './input-errors';
 import {CUTE_INPUT_VALUE_ACCESSOR} from './input-value-accessor';
 import {CUTE_INPUT_VALUE_FORMATTER} from "./input-value-formatter";
-import {CUTE_INPUT_VALUE_PREDECESSOR} from "./input-value-predecessor";
+import {CUTE_INPUT_VALUE_INTERCEPTOR} from "./input-value-interceptor";
 import {RelativeSize3} from "@cute-widgets/base/core";
 import {CuteInputControl} from "@cute-widgets/base/abstract";
 import {Subject} from "rxjs";
@@ -62,16 +63,16 @@ export interface CuteInputConfig {
 /** Injection token that can be used to provide the default options for the input. */
 export const CUTE_INPUT_CONFIG = new InjectionToken<CuteInputConfig>('CUTE_INPUT_CONFIG');
 
-let nextUniqueId = 0;
-
 /**
  * We must check whether the agent is Android because composition events
  * behave differently between iOS and Android.
  */
-// function _isAndroid(): boolean {
-//   const userAgent = getDOM() ? getDOM().getUserAgent() : '';
-//   return /android (\d+)/.test(userAgent.toLowerCase());
-// }
+function _isAndroid(): boolean {
+  const userAgent = globalThis.navigator ? globalThis.navigator.userAgent : '';
+  return /android (\d+)/.test(userAgent.toLowerCase());
+}
+
+let nextUniqueId = 0;
 
 @Directive({
   selector: `
@@ -125,12 +126,12 @@ export class CuteInput extends CuteInputControl
   protected override _elementRef =
             inject<ElementRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>>(ElementRef);
   protected _platform = inject(Platform);
-  readonly ngControl = inject(NgControl, {optional: true, self: true})!;
+  readonly ngControl = inject(NgControl, {optional: true, self: true});
   private _autofillMonitor = inject(AutofillMonitor);
   private _ngZone = inject(NgZone);
   private _formField? = inject<CuteFormField>(CUTE_FORM_FIELD, {optional: true});
   private _valueFormatter? = inject(CUTE_INPUT_VALUE_FORMATTER, {optional: true, self: true});
-  private _inputValuePredecessor = inject(CUTE_INPUT_VALUE_PREDECESSOR, {optional: true, self: true});
+  private _inputValueInterceptor = inject(CUTE_INPUT_VALUE_INTERCEPTOR, {optional: true, self: true});
 
   protected _previousNativeValue: any;
   private _inputValueAccessor: {value: any} = {value: undefined};
@@ -343,19 +344,19 @@ export class CuteInput extends CuteInputControl
     this.id = this.id;
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // We are changing the valueAccessor from the DefaultValueAccessor object to our class!!!
+    // CWT: We are changing the valueAccessor from the DefaultValueAccessor object to our class!!!
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (this.ngControl) {
+    if (this.ngControl && (!this.ngControl.valueAccessor || this.ngControl.valueAccessor instanceof DefaultValueAccessor)) {
       // Note: we provide the value accessor through here, instead of
       // the `providers` to avoid running into a circular import.
       this.ngControl.valueAccessor = this;
 
-      // // This is a snippet code that we need to prevent the loss of functionality implemented in
-      // // DefaultValueAccessor class.
-      // this._compositionMode = inject(COMPOSITION_BUFFER_MODE, {optional: true});
-      // if (this._compositionMode == null) {
-      //   this._compositionMode = !_isAndroid();
-      // }
+      // This is a snippet code that we need to prevent the loss of functionality implemented in
+      // 'DefaultValueAccessor' class.
+      this._compositionMode = inject(COMPOSITION_BUFFER_MODE, {optional: true});
+      if (this._compositionMode == null) {
+        this._compositionMode = !_isAndroid();
+      }
     }
     //-------------------------------------------------------------------------------------
 
@@ -394,43 +395,41 @@ export class CuteInput extends CuteInputControl
         this.stateChanges.next();
       });
     }
-    //++
-    // Promise.resolve().then(()=>{
-    //   this.ngControl?.valueChanges?.pipe(takeUntil(this._destroyed$)).subscribe((v)=> {
-    //     this.writeValue(v);
-    //   });
-    // });
-    //--
   }
 
   override registerOnChange(fn: (value: any) => void) {
     this._onChange = (value: any) => {
-      if (this._inputValuePredecessor) {
-        value = this._inputValuePredecessor.beforeOnChange(value);
+      if (this._inputValueInterceptor) {
+        value = this._inputValueInterceptor.beforeOnChange(value);
       }
       fn(value);
     };
   }
 
   override writeValue(newValue: any): void {
-    const element = this._nativeElement as HTMLInputElement;
-    element.type = this.type;
 
-    if (this.focused) {
-      if (this._inputValuePredecessor) {
-        newValue = this._inputValuePredecessor.beforeWriteValue(newValue);
-      }
-    } else {
-      if (this._valueFormatter) {
+    if (!this._isTextarea) {
+      // TextArea doesn't have 'type' attribute
+      const element = this._nativeElement as HTMLInputElement;
+      element.type = this.type;
+
+      if (this.focused) {
+        if (this._inputValueInterceptor) {
+          newValue = this._inputValueInterceptor.beforeWriteValue(newValue);
+        }
+      } else {
+        if (this._valueFormatter) {
           const srcValue = newValue;
           newValue = this._valueFormatter.format(newValue);
           if (srcValue !== newValue) {
             element.type = "text";
           }
-      } else if (this._inputValuePredecessor) {
-        newValue = this._inputValuePredecessor.beforeWriteValue(newValue);
+        } else if (this._inputValueInterceptor) {
+          newValue = this._inputValueInterceptor.beforeWriteValue(newValue);
+        }
       }
     }
+
     this.value = newValue ?? "";
   }
 
@@ -518,13 +517,20 @@ export class CuteInput extends CuteInputControl
 
     this.focused = isFocused;
 
-    if (!isFocused) {
-      this._onTouched();
+    //++ CWT: We need to update input value with display format or input mask of the control's model
+    if (this.ngControl && this.ngControl.valueAccessor===this) {
+      this.writeValue(this.ngControl.value);
+
+      if (isFocused) {
+        Promise.resolve().then(() => {
+          element.select();
+        });
+      }
+
+      if (!isFocused) {
+        this._onTouched();
+      }
     }
-    //++
-    // if (this.ngControl) {
-    //   this.writeValue(this.ngControl.value);
-    // }
     //--
 
     this.stateChanges.next();
@@ -539,9 +545,11 @@ export class CuteInput extends CuteInputControl
     // Listening to the input event wouldn't be necessary when the input is using the
     // FormsModule or ReactiveFormsModule, because Angular forms also listen to input events.
 
-    if (!this._compositionMode || (this._compositionMode && !this._composing)) {
-      const inputElem = event.target as HTMLInputElement;
-      this._onChange(inputElem.value);
+    if (this.ngControl && this.ngControl.valueAccessor===this) {
+      if (!this._compositionMode || (this._compositionMode && !this._composing)) {
+        const inputElem = event.target as HTMLInputElement;
+        this._onChange(inputElem.value);
+      }
     }
   }
 

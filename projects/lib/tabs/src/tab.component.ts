@@ -47,9 +47,7 @@ let nextId: number = 0;
   host: {
     "class": "cute-tab tab-pane",
     "[class.fade]": "_animationEnabled",
-    // "[class.show]": "active",
     "[class.active]": "active",
-    '[attr.tabindex]': 'active && !disabled ? 0 : -1',
     '[attr.aria-labelledby]': 'ariaLabelledby || null',
     '[attr.id]': 'id || null',
     "role": "tabpanel",

@@ -1,0 +1,17 @@
+<cute-divider lineStyle="dotted"></cute-divider>
+
+<h6 class="mt-3">Display value autocomplete</h6>
+
+<form class="example-form">
+  <cute-form-field class="example-full-width">
+    <cute-label>Assignee</cute-label>
+    <input type="text" cuteInput [formControl]="myControl" [cuteAutocomplete]="auto">
+    <cute-autocomplete #auto="cuteAutocomplete" [displayWith]="displayFn">
+      @for (option of filteredOptions | async; track option) {
+        <cute-option [value]="option">{{option.name}}</cute-option>
+      }
+    </cute-autocomplete>
+  </cute-form-field>
+</form>
+
+Control value: {{$any(myControl.value)?.name || 'empty'}}

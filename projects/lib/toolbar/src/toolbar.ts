@@ -10,7 +10,6 @@
  * code licensed under MIT-style License (https://angular.dev/license).
  */
 import {Platform} from '@angular/cdk/platform';
-
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -20,19 +19,25 @@ import {
   isDevMode,
   QueryList,
   ViewEncapsulation,
-  DOCUMENT
+  DOCUMENT, Input
 } from '@angular/core';
 import {CuteLayoutControl} from "@cute-widgets/base/abstract";
+import {RelativeSize3} from '@cute-widgets/base/core';
 
 let nextUniqueId = 0;
 
 @Directive({
   selector: 'cute-toolbar-row',
   exportAs: 'cuteToolbarRow',
-  host: {'class': 'cute-toolbar-row'},
-  standalone: true,
+  host: {
+    'class': 'cute-toolbar-row',
+    '[style.--cute-toolbar-standard-height]': 'magnitude=="small" ? "48px" : (magnitude=="large" ? "64px" : "")',
+  },
 })
-export class CuteToolbarRow {}
+export class CuteToolbarRow {
+  /** The relative size of the toolbar row. */
+  @Input() magnitude: RelativeSize3 = "middle";
+}
 
 @Component({
   selector: 'cute-toolbar',
@@ -42,11 +47,10 @@ export class CuteToolbarRow {}
   host: {
     'class': 'cute-toolbar',
     '[class.cute-toolbar-multiple-rows]': '_toolbarRows ? _toolbarRows.length > 0 : false',
-    '[class.cute-toolbar-single-row]': '_toolbarRows ? _toolbarRows.length === 0 : false',
+    '[class.cute-toolbar-single-row]': '_toolbarRows ? _toolbarRows.length === 0 : true',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
 })
 export class CuteToolbar extends CuteLayoutControl implements AfterViewInit {
   private _platform = inject(Platform);

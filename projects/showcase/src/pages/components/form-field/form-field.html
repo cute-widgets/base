@@ -79,6 +79,7 @@
         <input cuteInput type="text" value="Input"
                [disabled]="cbxDisabled.checked"
                [disabledInteractive]="cbxDisabledInt.checked"
+               [cuteTooltipDisabled]="!cbxDisabledInt.checked"
                cuteTooltip="Enter a text value"
                cuteTooltipShowDelay="500"
                cuteTooltipPositionAtOrigin
@@ -88,10 +89,29 @@
         <input cuteInput value="Readonly input"
                [disabled]="cbxDisabled.checked"
                [disabledInteractive]="cbxDisabledInt.checked"
+               [cuteTooltipDisabled]="!cbxDisabledInt.checked"
                cuteTooltip="Readonly input control"
                cuteTooltipShowDelay="500"
                cuteTooltipPositionAtOrigin
                readonly>
+      </cute-form-field>
+
+      <cute-form-field class="example-form-field" subscriptSizing="dynamic">
+        <input cuteInput value="Readonly input with button"
+               [disabled]="cbxDisabled.checked"
+               [disabledInteractive]="cbxDisabledInt.checked"
+               [cuteTooltipDisabled]="!cbxDisabledInt.checked"
+               cuteTooltip="Readonly input control with button as a suffix"
+               cuteTooltipShowDelay="500"
+               cuteTooltipPositionAtOrigin
+               readonly>
+        <button cuteButton="outline-button" cuteSuffix color="secondary"
+                [disabled]="cbxDisabled.checked"
+                [disabledInteractive]="cbxDisabledInt.checked"
+                cuteTooltip="Suffix button"
+                cuteTooltipShowDelay="500">
+          <cute-icon>bi-table</cute-icon>
+        </button>
       </cute-form-field>
     </cute-vstack>
 

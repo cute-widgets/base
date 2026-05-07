@@ -73,8 +73,9 @@
       overflow-x: auto;
       overflow-y: hidden;
       // we try to avoid the bootstrap's focus shadow partial clipping on the active tab
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      //padding-top: 0.25rem;
+      //padding-bottom: 0.25rem;
+      padding: 0.25rem;
 
       scrollbar-width: none; /* Firefox */
       //-ms-overflow-style: none; /* IE/Edge */

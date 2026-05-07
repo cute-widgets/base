@@ -1,3 +1,12 @@
+## Changes in version 21.0.2 (2026-05-07)
+
+### Fixes
+* Refactoring of `CuteInput` internal architecture.
+
+### Improvements
+* Add `magnitude` input property to `CuteToolbarRow` component.
+* `CuteTooltip` now is more compatible with Angular Material component.
+
 ## Changes in version 21.0.1 (2026-03-31)
 
 ### Fixes

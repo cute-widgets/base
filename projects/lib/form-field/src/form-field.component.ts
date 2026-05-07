@@ -10,15 +10,14 @@
  * code licensed under MIT-style License (https://angular.dev/license).
  */
 import {
-  AfterContentChecked, afterEveryRender,
+  AfterContentChecked,
   ChangeDetectionStrategy,
-  Component, computed, contentChild, ContentChild, ContentChildren, ElementRef, inject,
+  Component, computed, contentChild, ContentChild, ContentChildren, effect, ElementRef, inject,
   InjectionToken, Injector, Input, isDevMode, NgZone, QueryList, ViewChild,
   ViewEncapsulation
 } from "@angular/core";
 import {NgTemplateOutlet} from "@angular/common";
 import {Direction, Directionality} from "@angular/cdk/bidi";
-import {Platform} from "@angular/cdk/platform";
 import {AbstractControlDirective, ValidatorFn} from "@angular/forms";
 import {RelativeSize3, ThemeColor} from "@cute-widgets/base/core";
 import {EMPTY, merge, pairwise, Subject, Subscription} from "rxjs";
@@ -129,8 +128,6 @@ let nextUniqueId = 0;
 })
 export class CuteFormField extends CuteBaseControl implements AfterContentChecked {
   override _elementRef = inject(ElementRef);
-  private _dir = inject(Directionality);
-  private _platform = inject(Platform);
   private _ngZone = inject(NgZone);
   private _defaults = inject<CuteFormFieldDefaultOptions>(CUTE_FORM_FIELD_DEFAULT_OPTIONS, {
     optional: true,
@@ -241,7 +238,7 @@ export class CuteFormField extends CuteBaseControl implements AfterContentChecke
   private _destroyed = new Subject<void>();
   private _isFocused: boolean | null = null;
   private _needsOutlineLabelOffsetUpdate = false;
-  private _previousControl: CuteFormFieldControl<any> | undefined = undefined;
+  private _previousControl: CuteFormFieldControl<unknown> | undefined = undefined;
   private _previousControlValidatorFn: ValidatorFn | null = null;
   private _stateChanges: Subscription | undefined;
   private _valueChanges: Subscription | undefined;
@@ -272,6 +269,8 @@ export class CuteFormField extends CuteBaseControl implements AfterContentChecke
   constructor() {
     super();
     const defaults = this._defaults;
+    const dir = inject(Directionality);
+
     if (defaults) {
       //if (_defaults.appearance) {
       //  this.appearance = _defaults.appearance;
@@ -281,6 +280,12 @@ export class CuteFormField extends CuteBaseControl implements AfterContentChecke
         this.color = defaults.color;
       }
     }
+
+    // We need this value inside a `afterRenderEffect`, however at the time of writing, reading the
+    // signal directly causes a memory leak (see https://github.com/angular/angular/issues/62980).
+    // TODO(crisbeto): clean this up once the framework issue is resolved.
+    effect(() => (this._currentDirection = dir.valueSignal()));
+    //this._syncOutlineLabelOffset();
   }
 
   protected override setDisabledState(newState: BooleanInput, emitEvent?: boolean): boolean {
@@ -313,7 +318,7 @@ export class CuteFormField extends CuteBaseControl implements AfterContentChecke
     this._assertFormFieldControl();
     this._initializeSubscript();
     this._initializePrefixAndSuffix();
-    this._initializeOutlineLabelOffsetSubscriptions();
+    //this._initializeOutlineLabelOffsetSubscriptions();
 
     // CWT: Set `magnitude` value of the component to the child's `label` control as a default value
     const childLabel = this._labelChildNonStatic || this._labelChildStatic;
@@ -353,6 +358,7 @@ export class CuteFormField extends CuteBaseControl implements AfterContentChecke
     super.ngOnDestroy();
     this._stateChanges?.unsubscribe();
     this._valueChanges?.unsubscribe();
+    this._describedByChanges?.unsubscribe();
     this._destroyed.next();
     this._destroyed.complete();
   }
@@ -526,40 +532,6 @@ export class CuteFormField extends CuteBaseControl implements AfterContentChecke
 
     this._elementRef.nativeElement.classList.toggle('cute-focused', controlFocused);
     this._textField?.nativeElement.classList.toggle('cute-text-field--focused', controlFocused);
-  }
-
-  /**
-   * The floating label in the docked state needs to account for prefixes. The horizontal offset
-   * is calculated whenever the appearance changes to `outline`, the prefixes change, or when the
-   * form field is added to the DOM. This method sets up all subscriptions that are needed to
-   * trigger the label offset update. In general, we want to avoid performing measurements often,
-   * so we rely on the `NgZone` as indicator when the offset should be recalculated, instead of
-   * checking every change detection cycle.
-   * @deprecated
-   */
-  private _initializeOutlineLabelOffsetSubscriptions() {
-    // Whenever the prefix changes, schedule an update of the label offset.
-    this._prefixChildren?.changes.subscribe(
-        () => (this._needsOutlineLabelOffsetUpdate = true),
-    );
-
-    // TODO(mmalerba): Split this into separate `afterEveryRender` calls using the `EarlyRead` and
-    //  `Write` phases.
-    afterEveryRender(
-      () => {
-        if (this._needsOutlineLabelOffsetUpdate) {
-          this._needsOutlineLabelOffsetUpdate = false;
-          this._getOutlinedLabelOffset();
-        }
-      },
-      {
-        injector: this._injector,
-      },
-    );
-
-    this._dir.change
-        .pipe(takeUntil(this._destroyed))
-        .subscribe(() => (this._needsOutlineLabelOffsetUpdate = true));
   }
 
   /** Is there any `<cute-label>` in the form field? */

@@ -5,17 +5,23 @@ import {CuteButtonModule} from '@cute-widgets/base/button';
 import {CuteIconModule} from '@cute-widgets/base/icon';
 import {ComponentViewer} from "../../component-viewer/component-viewer";
 import {AbstractPage} from '../abstract/abstract-page';
+import {FormsModule} from '@angular/forms';
+import {CuteCheckboxModule} from '@cute-widgets/base/checkbox';
 
 @Component({
   selector: 'app-toolbar',
-    imports: [
-        CuteToolbarModule,
-        CuteVStack,
-        CuteButtonModule,
-        CuteIconModule,
-        ComponentViewer,
-    ],
+  imports: [
+    CuteToolbarModule,
+    CuteVStack,
+    CuteButtonModule,
+    CuteCheckboxModule,
+    CuteIconModule,
+    ComponentViewer,
+    FormsModule,
+  ],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.scss',
 })
-export class ToolbarPage extends AbstractPage {}
+export class ToolbarPage extends AbstractPage {
+  protected isCompact = false;
+}

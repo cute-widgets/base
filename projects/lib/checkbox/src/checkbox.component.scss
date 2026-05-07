@@ -22,6 +22,10 @@
       }
     }
 
+    &.form-check-reverse {
+      width: fit-content;
+    }
+
     &.form-switch .form-check-input {
       [dir="rtl"] & {
         transform: rotate(180deg);

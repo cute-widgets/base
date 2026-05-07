@@ -18,7 +18,6 @@ import {Directive, ElementRef, inject} from '@angular/core';
 @Directive({
   selector: '[cuteAutocompleteOrigin]',
   exportAs: 'cuteAutocompleteOrigin',
-  standalone: true,
 })
 export class CuteAutocompleteOrigin {
   elementRef = inject<ElementRef<HTMLElement>>(ElementRef);

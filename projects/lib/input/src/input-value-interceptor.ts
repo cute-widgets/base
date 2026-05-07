@@ -8,7 +8,7 @@
  */
 import {InjectionToken} from "@angular/core";
 
-export interface CuteInputValuePredecessor {
+export interface CuteInputValueInterceptor {
   beforeWriteValue(value: any): string;
   beforeOnChange(value: string): any;
 }
@@ -18,6 +18,6 @@ export interface CuteInputValuePredecessor {
  * The typical example of such object is a _CuteEditMask_, that needs to get masked value before assign it to the view and
  * get cleaned value before send it to the model (form control).
  */
-export const CUTE_INPUT_VALUE_PREDECESSOR = new InjectionToken<CuteInputValuePredecessor>(
-  'CUTE_INPUT_VALUE_PREDECESSOR',
+export const CUTE_INPUT_VALUE_INTERCEPTOR = new InjectionToken<CuteInputValueInterceptor>(
+  'CUTE_INPUT_VALUE_INTERCEPTOR',
 );

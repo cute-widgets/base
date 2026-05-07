@@ -115,7 +115,11 @@
 
     transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    &:hover, &:focus  /*, &.cdk-focused*/ {
+    &:focus {
+      outline: 4px solid var(--bs-focus-ring-color);
+      //outline-offset: 2px;
+    }
+    &:hover  /*, &.cdk-focused*/ {
       box-shadow: 0 2px 4px -1px rgba($shadow-color, 0.2),
                   0 4px 5px 0 rgba($shadow-color, 0.14),
                   0 1px 10px 0 rgba($shadow-color, 0.12);

@@ -1,15 +1,31 @@
 `<cute-toolbar>` is a container for headers, titles, or actions.
 
-<!-- example(toolbar-overview) -->
+```html
+<cute-toolbar color="tertiary">
+  <button cuteButton="icon-button" class="example-icon" aria-label="Example icon-button with menu icon">
+    <cute-icon>list</cute-icon>
+  </button>
+  <span class="ms-1">My App</span>
+  <span class="example-spacer"></span>
+  <button cuteButton="icon-button" class="example-icon" aria-label="Example icon-button with heart icon">
+    <cute-icon>heart-fill</cute-icon>
+  </button>
+  <button cuteButton="icon-button" class="example-icon" aria-label="Example icon-button with share icon">
+    <cute-icon>share-fill</cute-icon>
+  </button>
+</cute-toolbar>
+```
 
 ### Single row
 
 In most situations, a toolbar will be placed at the top of your application and will only
 have a single row that includes the title of your application.
 
-<!-- example({"example":"toolbar-overview",
-              "file":"toolbar-overview-example.html", 
-              "region":"toolbar-simple"}) -->
+```html
+<cute-toolbar>
+  <span>My Application</span>
+</cute-toolbar>
+```
 
 ### Multiple rows
 
@@ -17,9 +33,13 @@ The CuteWidgets' specifications describe that toolbars can also have multiple ro
 toolbars with multiple rows in CuteWidgets can be done by placing `<cute-toolbar-row>` elements
 inside a `<cute-toolbar>`.
 
-<!-- example({"example":"toolbar-multirow",
-              "file":"toolbar-multirow-example.html", 
-              "region":"toolbar-row"}) -->
+```html
+<cute-toolbar>
+  <cute-toolbar-row>
+    <span>Custom Toolbar</span>
+  </cute-toolbar-row>
+</cute-toolbar>
+```
 
 **Note**: Placing content outside a `<cute-toolbar-row>` when multiple rows are specified is not
 supported.
@@ -31,18 +51,30 @@ position the content as it suits their application.
 A common pattern is to position a title on the left with some actions on the right. This can be
 easily achieved with `display: flex`:
 
-<!-- example({"example":"toolbar-multirow",
-              "file":"toolbar-multirow-example.html", 
-              "region":"toolbar-position-content"}) -->
+```html
+<cute-toolbar-row>
+  <span>Second Line</span>
+  <span class="example-spacer"></span>
+  <cute-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">bi-person-check</cute-icon>
+</cute-toolbar-row>
+```
 
-<!-- example({"example":"toolbar-multirow",
-              "file":"toolbar-multirow-example.css", 
-              "region":"toolbar-position-content-style"}) -->
+```css
+/* css */
+.example-spacer {
+  flex: 1 1 auto;
+}
+```
 
 ### Theming
-The color of a `<cute-toolbar>` can be changed by using the `color` property. By default, toolbars
+The color of a `<cute-toolbar>` can be changed by using the `color` input property. By default, toolbars
 use a neutral background color based on the current theme (light or dark). This can be changed to
 `'primary'`, `'secondary'`, `'warning'` and other Bootstrap's color themes.
+
+### Sizing
+
+The relative height of the `<cute-toolbar-row>` can be adjusted using its `magnitude` input property. By default,
+toolbar row has a _middle_ size.
 
 ### Accessibility
 By default, the toolbar assumes that it will be used in a purely decorative fashion and thus sets

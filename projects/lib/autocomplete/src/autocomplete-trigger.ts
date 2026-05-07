@@ -119,7 +119,6 @@ export const CUTE_AUTOCOMPLETE_SCROLL_STRATEGY = new InjectionToken<() => Scroll
   },
   exportAs: 'cuteAutocompleteTrigger',
   providers: [CUTE_AUTOCOMPLETE_VALUE_ACCESSOR],
-  standalone: true,
 })
 export class CuteAutocompleteTrigger
   implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy, Expandable
@@ -256,7 +255,7 @@ export class CuteAutocompleteTrigger
     this._cleanupWindowBlur = this._renderer.listen('window', 'blur', this._windowBlurHandler);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges<this>) {
     if (changes['position'] && this._positionStrategy) {
       this._setStrategyPositions(this._positionStrategy);
 
@@ -913,9 +912,8 @@ export class CuteAutocompleteTrigger
       this._getConnectedElement(),
     )
       .withFlexibleDimensions(false)
-      .withPush(false);
-      // TODO: not exists in CDK ver. 20.x
-      //.withPopoverLocation('inline');
+      .withPush(false)
+      .withPopoverLocation('inline');
 
     this._setStrategyPositions(strategy);
     this._positionStrategy = strategy;

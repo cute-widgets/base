@@ -110,7 +110,7 @@ export class ComponentViewer implements OnDestroy {
   /** Show an error that occurred when fetching a document. */
   private _showError(url: string, error: HttpErrorResponse) {
     console.error(error);
-    this._docContent.set(`Failed to load document: ${url}. Error: ${error.statusText}`);
+    this._docContent.set(`Failed to load document: ${url}. Status: ${error.status}`);
   }
 
   ngOnDestroy() {

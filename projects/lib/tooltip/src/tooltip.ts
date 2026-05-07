@@ -24,17 +24,15 @@ import {
   Component,
   Directive,
   ElementRef,
-  Inject,
   InjectionToken,
   Input,
   NgZone,
   OnDestroy,
-  Optional,
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation,
   inject, isDevMode, Injector, afterNextRender,
-  DOCUMENT
+  DOCUMENT, Renderer2
 } from '@angular/core';
 import {NgClass} from '@angular/common';
 import {normalizePassiveListenerOptions, Platform} from '@angular/cdk/platform';
@@ -43,7 +41,7 @@ import {AriaDescriber, FocusMonitor} from '@angular/cdk/a11y';
 import {Directionality} from '@angular/cdk/bidi';
 import {
   ConnectedPosition,
-  ConnectionPositionPair,
+  ConnectionPositionPair, createFlexibleConnectedPositionStrategy, createOverlayRef, createRepositionScrollStrategy,
   FlexibleConnectedPositionStrategy,
   HorizontalConnectionPos,
   OriginConnectionPosition,
@@ -56,6 +54,8 @@ import {
 } from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {Observable, Subject} from 'rxjs';
+import {MediaMatcher} from "@angular/cdk/layout";
+import {_animationsDisabled} from '@cute-widgets/base/core';
 
 /** Possible positions for a tooltip. */
 export type TooltipPosition = 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
@@ -85,39 +85,22 @@ export const CUTE_TOOLTIP_SCROLL_STRATEGY = new InjectionToken<() => ScrollStrat
   {
     providedIn: 'root',
     factory: () => {
-      const overlay = inject(Overlay);
-      return () => overlay.scrollStrategies.reposition({scrollThrottle: SCROLL_THROTTLE_MS});
+      const injector = inject(Injector);
+      return () => createRepositionScrollStrategy(injector, {scrollThrottle: SCROLL_THROTTLE_MS});
     },
   },
 );
-
-/** @docs-private */
-export function CUTE_TOOLTIP_SCROLL_STRATEGY_FACTORY(overlay: Overlay): () => ScrollStrategy {
-  return () => overlay.scrollStrategies.reposition({scrollThrottle: SCROLL_THROTTLE_MS});
-}
-
-/** @docs-private */
-export const CUTE_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER = {
-  provide: CUTE_TOOLTIP_SCROLL_STRATEGY,
-  deps: [Overlay],
-  useFactory: CUTE_TOOLTIP_SCROLL_STRATEGY_FACTORY,
-};
-
-/** @docs-private */
-export function CUTE_TOOLTIP_DEFAULT_OPTIONS_FACTORY(): CuteTooltipDefaultOptions {
-  return {
-    showDelay: 0,
-    hideDelay: 0,
-    touchendHideDelay: 1500,
-  };
-}
 
 /** Injection token to be used to override the default options for `cuteTooltip`. */
 export const CUTE_TOOLTIP_DEFAULT_OPTIONS = new InjectionToken<CuteTooltipDefaultOptions>(
   'cute-tooltip-default-options',
   {
     providedIn: 'root',
-    factory: CUTE_TOOLTIP_DEFAULT_OPTIONS_FACTORY,
+    factory: () => ({
+      showDelay: 0,
+      hideDelay: 0,
+      touchendHideDelay: 1500,
+    }),
   },
 );
 
@@ -155,12 +138,31 @@ export interface CuteTooltipDefaultOptions {
    * `tooltipClass` is defined directly on the tooltip element, as it will override the default.
    */
   tooltipClass?: string | string[];
+
+  /**
+   * By default the tooltip attempts to detect whether the user's device is able to hover by
+   * consulting the `Platform` provider that was created a long time ago and is based on
+   * some data points that may not be entirely accurate anymore (e.g. user agent string and
+   * Android/iOS-specific APIs), however changing them will break existing users. You can use this
+   * config property to opt into a more modern detection mechanism.
+   *
+   * The supported values include:
+   *
+   * - `false` - Default value. Detection is based on the `Platform` provider.
+   * - `true` - The tooltip will use the `any-hover` media query for more accurate detection.
+   * Note that this may break existing unit tests running in a headless browser.
+   * - `() => boolean` - If the automatic detection doesn't work properly in your case (e.g. the
+   * `any-hover` media query isn't supported) and you're able to detect more accurately, you can
+   * pass in a function that will be used for detection instead. It should return `true` if the
+   * device **has the ability to hover**, or `false` if it cannot.
+   */
+  detectHoverCapability?: boolean | (() => boolean);
 }
 
 const PANEL_CLASS = 'tooltip-panel';
 
 /** Options used to bind passive event listeners. */
-const passiveListenerOptions = normalizePassiveListenerOptions({passive: true});
+const passiveListenerOptions = {passive: true};
 
 /**
  * Time between the user putting the pointer on a tooltip
@@ -191,27 +193,29 @@ const MAX_WIDTH = 200;
   standalone: true,
 })
 export class CuteTooltip implements OnDestroy, AfterViewInit {
-  private _overlay = inject(Overlay);
   private _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private _scrollDispatcher = inject(ScrollDispatcher);
-  private _viewContainerRef = inject(ViewContainerRef);
   private _ngZone = inject(NgZone);
   private _platform = inject(Platform);
   private _ariaDescriber = inject(AriaDescriber);
   private _focusMonitor = inject(FocusMonitor);
   protected _dir = inject(Directionality);
   private _injector = inject(Injector);
+  private _viewContainerRef = inject(ViewContainerRef);
+  private _mediaMatcher = inject(MediaMatcher);
+  private _document = inject(DOCUMENT);
+  private _renderer = inject(Renderer2);
+  private _animationsDisabled = _animationsDisabled();
   private _defaultOptions = inject<CuteTooltipDefaultOptions>(CUTE_TOOLTIP_DEFAULT_OPTIONS, {
     optional: true,
   });
 
   protected _overlayRef: OverlayRef | null = null;
   protected _tooltipInstance: TooltipComponent | null = null;
+  protected _overlayPanelClass: string[] | undefined; // Used for styling internally.
 
   private _portal: ComponentPortal<TooltipComponent> | undefined;
   private _viewInitialized = false;
   private _pointerExitEventsInitialized = false;
-  private readonly _scrollStrategy = inject(CUTE_TOOLTIP_SCROLL_STRATEGY);
   private readonly _tooltipComponent = TooltipComponent;
   private _viewportMargin = 8;
   private _currentPosition: TooltipPosition = "below";
@@ -342,14 +346,17 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
   private readonly _passiveListeners: (readonly [string, EventListenerOrEventListenerObject])[] =
     [];
 
-  /** Reference to the current document. */
-  private _document: Document = inject(DOCUMENT);
+  /** Manually-bound passive event listeners. */
+  private readonly _eventCleanups: (() => void)[] = [];
 
   /** The Timer started at the last `touchstart` event. */
   private _touchstartTimeout: ReturnType<typeof setTimeout> | null = null;
 
   /** Emits when the component is destroyed. */
   private readonly _destroyed = new Subject<void>();
+
+  /** Whether ngOnDestroyed has been called. */
+  private _isDestroyed = false;
 
   constructor(...args: unknown[]);
   constructor() {
@@ -376,7 +383,8 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
       }
     }
 
-    this._viewportMargin = MIN_VIEWPORT_TOOLTIP_THRESHOLD;  }
+    this._viewportMargin = MIN_VIEWPORT_TOOLTIP_THRESHOLD;
+  }
 
   ngAfterViewInit() {
     // This needs to happen after view init, so the initial values for all inputs have been set.
@@ -412,15 +420,11 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
       this._tooltipInstance = null;
     }
 
-    // Clean up the event listeners set in the constructor
-    this._passiveListeners.forEach(([event, listener]) => {
-      nativeElement.removeEventListener(event, listener, passiveListenerOptions);
-    });
-    this._passiveListeners.length = 0;
-
+    this._eventCleanups.forEach(cleanup => cleanup());
+    this._eventCleanups.length = 0;
     this._destroyed.next();
     this._destroyed.complete();
-
+    this._isDestroyed = true;
     this._ariaDescriber.removeDescription(nativeElement, this.message, 'tooltip');
     this._focusMonitor.stopMonitoring(nativeElement);
   }
@@ -485,18 +489,22 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
       this._detach();
     }
 
-    const scrollableAncestors = this._scrollDispatcher.getAncestorScrollContainers(
-      this._elementRef,
-    );
+    const scrollableAncestors = this._injector
+      .get(ScrollDispatcher)
+      .getAncestorScrollContainers(this._elementRef);
 
-    // Create a connected position strategy that listens for scroll events to reposition.
-    const strategy = this._overlay
-      .position()
-      .flexibleConnectedTo(this.positionAtOrigin ? origin || this._elementRef : this._elementRef)
+    const panelClass = `${this._cssClassPrefix}-${PANEL_CLASS}`;
+
+    // Create connected position strategy that listens for scroll events to reposition.
+    const strategy = createFlexibleConnectedPositionStrategy(
+      this._injector,
+      this.positionAtOrigin ? origin || this._elementRef : this._elementRef,
+    )
       .withTransformOriginOn(`.${this._cssClassPrefix}-tooltip`)
       .withFlexibleDimensions(false)
       .withViewportMargin(this._viewportMargin)
-      .withScrollableContainers(scrollableAncestors);
+      .withScrollableContainers(scrollableAncestors)
+      .withPopoverLocation('global');
 
     strategy.positionChanges.pipe(takeUntil(this._destroyed)).subscribe(change => {
       this._updateCurrentPositionClass(change.connectionPair);
@@ -510,11 +518,13 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
       }
     });
 
-    this._overlayRef = this._overlay.create({
+    this._overlayRef = createOverlayRef(this._injector, {
       direction: this._dir,
       positionStrategy: strategy,
-      panelClass: `${this._cssClassPrefix}-${PANEL_CLASS}`,
-      scrollStrategy: this._scrollStrategy(),
+      panelClass: this._overlayPanelClass ? [...this._overlayPanelClass, panelClass] : panelClass,
+      scrollStrategy: this._injector.get(CUTE_TOOLTIP_SCROLL_STRATEGY)(),
+      disableAnimations: this._animationsDisabled,
+      eventPredicate: this._overlayEventPredicate,
     });
 
     this._updatePosition(this._overlayRef);
@@ -533,11 +543,10 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
       .keydownEvents()
       .pipe(takeUntil(this._destroyed))
       .subscribe(event => {
-        if (this._isTooltipVisible() && event.keyCode === ESCAPE && !hasModifierKey(event)) {
-          event.preventDefault();
-          event.stopPropagation();
-          this._ngZone.run(() => this.hide(0));
-        }
+        // Note: we don't check the `keyCode` since it's covered by the `eventPredicate` above.
+        event.preventDefault();
+        event.stopPropagation();
+        this._ngZone.run(() => this.hide(0));
       });
 
     if (this._defaultOptions?.disableTooltipInteractivity) {
@@ -689,8 +698,11 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
   /** Updates the tooltip class */
   private _setTooltipClass(tooltipClass: string | string[] | Set<string> | {[key: string]: any}) {
     if (this._tooltipInstance) {
-      this._tooltipInstance.tooltipClass = tooltipClass;
-      this._tooltipInstance._markForCheck();
+      if (this._tooltipInstance) {
+        this._tooltipInstance.tooltipClass =
+          tooltipClass instanceof Set ? Array.from(tooltipClass) : tooltipClass;
+        this._tooltipInstance._markForCheck();
+      }
     }
   }
 
@@ -748,54 +760,41 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
 
   /** Binds the pointer events to the tooltip trigger. */
   private _setupPointerEnterEventsIfNeeded() {
-    // Optimization: Defer hooking up events if there's no message or the tooltip is disabled.
-    if (
-      this._disabled ||
-      !this.message ||
-      !this._viewInitialized ||
-      this._passiveListeners.length
-    ) {
+// Optimization: Defer hooking up events if there's no message or the tooltip is disabled.
+    if (this._disabled || !this.message || !this._viewInitialized || this._eventCleanups.length) {
       return;
     }
 
     // The mouse events shouldn't be bound on mobile devices, because they can prevent the
     // first tap from firing its click event or can cause the tooltip to open for clicks.
-    if (this._platformSupportsMouseEvents()) {
-      this._passiveListeners.push([
-        'mouseenter',
-        event => {
-          this._setupPointerExitEventsIfNeeded();
-          let point = undefined;
-          if ((event as MouseEvent).x !== undefined && (event as MouseEvent).y !== undefined) {
-            point = event as MouseEvent;
-          }
-          this.show(undefined, point);
-        },
-      ]);
+    if (!this._isTouchPlatform()) {
+      this._addListener('mouseenter', (event: MouseEvent) => {
+        this._setupPointerExitEventsIfNeeded();
+        let point = undefined;
+        if (event.x !== undefined && event.y !== undefined) {
+          point = event;
+        }
+        this.show(undefined, point);
+      });
     } else if (this.touchGestures !== 'off') {
       this._disableNativeGesturesIfNecessary();
+      this._addListener('touchstart', (event: TouchEvent) => {
+        const touch = event.targetTouches?.[0];
+        const origin = touch ? {x: touch.clientX, y: touch.clientY} : undefined;
+        // Note that it's important that we don't `preventDefault` here,
+        // because it can prevent click events from firing on the element.
+        this._setupPointerExitEventsIfNeeded();
+        if (this._touchstartTimeout) {
+          clearTimeout(this._touchstartTimeout);
+        }
 
-      this._passiveListeners.push([
-        'touchstart',
-        event => {
-          const touch = (event as TouchEvent).targetTouches?.[0];
-          const origin = touch ? {x: touch.clientX, y: touch.clientY} : undefined;
-          // Note that it's important that we don't `preventDefault` here,
-          // because it can prevent click events from firing on the element.
-          this._setupPointerExitEventsIfNeeded();
-          if (this._touchstartTimeout) {
-            clearTimeout(this._touchstartTimeout);
-          }
-          const DEFAULT_LONGPRESS_DELAY = 500;
-          this._touchstartTimeout = setTimeout(() => {
-            this._touchstartTimeout = null;
-            this.show(undefined, origin);
-          }, this._defaultOptions?.touchLongPressShowDelay ?? DEFAULT_LONGPRESS_DELAY);
-        },
-      ]);
+        const DEFAULT_LONGPRESS_DELAY = 500;
+        this._touchstartTimeout = setTimeout(() => {
+          this._touchstartTimeout = null;
+          this.show(undefined, origin);
+        }, this._defaultOptions?.touchLongPressShowDelay ?? DEFAULT_LONGPRESS_DELAY);
+      });
     }
-
-    this._addListeners(this._passiveListeners);
   }
 
   private _setupPointerExitEventsIfNeeded() {
@@ -804,20 +803,28 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
     }
     this._pointerExitEventsInitialized = true;
 
-    const exitListeners: (readonly [string, EventListenerOrEventListenerObject])[] = [];
-    if (this._platformSupportsMouseEvents()) {
-      exitListeners.push(
-        [
-          'mouseleave',
-          event => {
-            const newTarget = (event as MouseEvent).relatedTarget as Node | null;
-            if (!newTarget || !this._overlayRef?.overlayElement.contains(newTarget)) {
-              this.hide();
-            }
-          },
-        ],
-        ['wheel', event => this._wheelListener(event as WheelEvent)],
-      );
+    if (!this._isTouchPlatform()) {
+      this._addListener('mouseleave', (event: MouseEvent) => {
+        const newTarget = event.relatedTarget as Node | null;
+        if (!newTarget || !this._overlayRef?.overlayElement.contains(newTarget)) {
+          this.hide();
+        }
+      });
+
+      this._addListener('wheel', (event: WheelEvent) => {
+        if (this._isTooltipVisible()) {
+          const elementUnderPointer = this._document.elementFromPoint(event.clientX, event.clientY);
+          const element = this._elementRef.nativeElement;
+
+          // On non-touch devices we depend on the `mouseleave` event to close the tooltip, but it
+          // won't fire if the user scrolls away using the wheel without moving their cursor. We
+          // work around it by finding the element under the user's cursor and closing the tooltip
+          // if it's not the trigger.
+          if (elementUnderPointer !== element && !element.contains(elementUnderPointer)) {
+            this.hide();
+          }
+        }
+      });
     } else if (this.touchGestures !== 'off') {
       this._disableNativeGesturesIfNecessary();
       const touchendListener = () => {
@@ -827,37 +834,33 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
         this.hide(this._defaultOptions?.touchendHideDelay);
       };
 
-      exitListeners.push(['touchend', touchendListener], ['touchcancel', touchendListener]);
+      this._addListener('touchend', touchendListener);
+      this._addListener('touchcancel', touchendListener);
+    }
+  }
+
+  private _addListener<T extends Event>(name: string, listener: (event: T) => void) {
+    this._eventCleanups.push(
+      this._renderer.listen(this._elementRef.nativeElement, name, listener, passiveListenerOptions),
+    );
+  }
+
+  private _isTouchPlatform(): boolean {
+    const detectHoverCapability = this._defaultOptions?.detectHoverCapability;
+
+    if (typeof detectHoverCapability === 'function') {
+      return !detectHoverCapability();
     }
 
-    this._addListeners(exitListeners);
-    this._passiveListeners.push(...exitListeners);
-  }
-
-  private _addListeners(listeners: (readonly [string, EventListenerOrEventListenerObject])[]) {
-    listeners.forEach(([event, listener]) => {
-      this._elementRef.nativeElement.addEventListener(event, listener, passiveListenerOptions);
-    });
-  }
-
-  private _platformSupportsMouseEvents() {
-    return !this._platform.IOS && !this._platform.ANDROID;
-  }
-
-  /** Listener for the `wheel` event on the element. */
-  private _wheelListener(event: WheelEvent) {
-    if (this._isTooltipVisible()) {
-      const elementUnderPointer = this._document.elementFromPoint(event.clientX, event.clientY);
-      const element = this._elementRef.nativeElement;
-
-      // On non-touch devices we depend on the `mouseleave` event to close the tooltip, but it
-      // won't fire if the user scrolls away using the wheel without moving their cursor. We
-      // work around it by finding the element under the user's cursor and closing the tooltip
-      // if it's not the trigger.
-      if (elementUnderPointer !== element && !element.contains(elementUnderPointer)) {
-        this.hide();
-      }
+    if (this._platform.IOS || this._platform.ANDROID) {
+      // If we detected iOS or Android, it's definitely supported.
+      return true;
+    } else if (!this._platform.isBrowser) {
+      // If it's not a browser, it's definitely not supported.
+      return false;
     }
+
+    return !!detectHoverCapability && this._mediaMatcher.matchMedia('(any-hover: none)').matches;
   }
 
   /** Disables the native browser gestures, based on how the tooltip has been configured. */
@@ -866,26 +869,26 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
 
     if (gestures !== 'off') {
       const element = this._elementRef.nativeElement;
-      const style = element.style;
+      const style = element.style as unknown as Record<string, string>;
 
       // If gestures are set to `auto`, we don't disable text selection on inputs and
       // textareas, because it prevents the user from typing into them on iOS Safari.
       if (gestures === 'on' || (element.nodeName !== 'INPUT' && element.nodeName !== 'TEXTAREA')) {
-        style.userSelect =
-          (style as any).msUserSelect =
-          style.webkitUserSelect =
-          (style as any).MozUserSelect =
+        style['userSelect'] =
+          style['msUserSelect'] =
+            style['webkitUserSelect'] =
+              style['MozUserSelect'] =
                 'none';
       }
 
       // If we have `auto` gestures and the element uses native HTML dragging,
       // we don't set `-webkit-user-drag` because it prevents the native behavior.
       if (gestures === 'on' || !element.draggable) {
-        (style as any).webkitUserDrag = 'none';
+        style['webkitUserDrag'] = 'none';
       }
 
-      style.touchAction = 'none';
-      (style as any).webkitTapHighlightColor = 'transparent';
+      style['touchAction'] = 'none';
+      style['webkitTapHighlightColor'] = 'transparent';
     }
   }
 
@@ -898,20 +901,38 @@ export class CuteTooltip implements OnDestroy, AfterViewInit {
     this._ariaDescriptionPending = true;
     this._ariaDescriber.removeDescription(this._elementRef.nativeElement, oldMessage, 'tooltip');
 
-    this._ngZone.runOutsideAngular(() => {
-      // The `AriaDescriber` has some functionality that avoids adding a description if it's the
-      // same as the `aria-label` of an element, however we can't know whether the tooltip trigger
-      // has a data-bound `aria-label` or when it'll be set for the first time. We can avoid the
-      // issue by deferring the description by a tick so Angular has time to set the `aria-label`.
-      Promise.resolve().then(() => {
-        this._ariaDescriptionPending = false;
+    // The `AriaDescriber` has some functionality that avoids adding a description if it's the
+    // same as the `aria-label` of an element, however we can't know whether the tooltip trigger
+    // has a data-bound `aria-label` or when it'll be set for the first time. We can avoid the
+    // issue by deferring the description by a tick so Angular has time to set the `aria-label`.
+    if (!this._isDestroyed) {
+      afterNextRender(
+        {
+          write: () => {
+            this._ariaDescriptionPending = false;
 
-        if (this.message && !this.disabled) {
-          this._ariaDescriber.describe(this._elementRef.nativeElement, this.message, 'tooltip');
-        }
-      });
-    });
+            if (this.message && !this.disabled) {
+              this._ariaDescriber.describe(this._elementRef.nativeElement, this.message, 'tooltip');
+            }
+          },
+        },
+        {injector: this._injector},
+      );
+    }
   }
+
+  /** Determines which events should be routed to the tooltip overlay. */
+  private _overlayEventPredicate = (event: Event) => {
+    if (event.type === 'keydown') {
+      return (
+        this._isTooltipVisible() &&
+        (event as KeyboardEvent).keyCode === ESCAPE &&
+        !hasModifierKey(event as KeyboardEvent)
+      );
+    }
+    return true;
+  };
+
 }
 
 
@@ -960,7 +981,7 @@ export class TooltipComponent implements OnDestroy {
   _mouseLeaveHideDelay: number = 0;
 
   /** Whether animations are currently disabled. */
-  private _animationsDisabled: boolean;
+  private _animationsDisabled: boolean = _animationsDisabled();
 
   /** Reference to the internal tooltip element. */
   @ViewChild('tooltip', {
@@ -986,10 +1007,7 @@ export class TooltipComponent implements OnDestroy {
   private readonly _hideAnimation = 'cute-tooltip-hide';
 
   constructor(...args: unknown[]);
-  constructor() {
-    const animationMode = inject(ANIMATION_MODULE_TYPE, {optional: true});
-    this._animationsDisabled = animationMode === 'NoopAnimations';
-  }
+  constructor() {}
 
   /**
    * Shows the tooltip with an animation originating from the provided origin

@@ -11,21 +11,23 @@ import {map, startWith} from 'rxjs/operators';
 import {CuteCheckbox} from '@cute-widgets/base/checkbox';
 import {AbstractPage} from '../abstract/abstract-page';
 import {ComponentViewer} from "../../component-viewer/component-viewer";
+import {AutocompleteDisplayExample} from './display-example/display-example';
 
 @Component({
   selector: 'app-autocomplete',
-    imports: [
-        CuteFormFieldModule,
-        CuteInputModule,
-        CuteAutocompleteModule,
-        CuteOption,
-        ReactiveFormsModule,
-        AsyncPipe,
-        CuteVStack,
-        CuteCheckbox,
-        FormsModule,
-        ComponentViewer
-    ],
+  imports: [
+    CuteFormFieldModule,
+    CuteInputModule,
+    CuteAutocompleteModule,
+    CuteOption,
+    ReactiveFormsModule,
+    AsyncPipe,
+    CuteVStack,
+    CuteCheckbox,
+    FormsModule,
+    ComponentViewer,
+    AutocompleteDisplayExample
+  ],
   templateUrl: './autocomplete.html',
   styleUrl: './autocomplete.scss',
 })
@@ -33,9 +35,8 @@ export class AutocompletePage extends AbstractPage {
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   protected myControl = new FormControl('');
   protected options: string[] = ['One', 'Two', 'Three', 'Four', 'Five'];
-  protected filteredOptions: Observable<string[]> | undefined;
-
   protected requiredSelection = false;
+  protected filteredOptions: Observable<string[]> | undefined;
 
   constructor() {
     super();
