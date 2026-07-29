@@ -8,7 +8,7 @@
  */
 import {
   booleanAttribute,
-  ContentChildren, DestroyRef,
+  ContentChildren,
   Directive, EventEmitter,
   HostBinding, inject,
   InjectionToken,
@@ -19,14 +19,14 @@ import {FocusKeyManager, FocusOrigin, ListKeyManager} from "@angular/cdk/a11y";
 import {Directionality} from "@angular/cdk/bidi";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CuteLayoutControl} from "@cute-widgets/base/abstract";
-import {ContentAlignment, LayoutOrientation} from "@cute-widgets/base/core";
+import {_animationsDisabled, ContentAlignment, LayoutOrientation} from "@cute-widgets/base/core";
 import {CuteNavLink} from "./nav-link.directive";
 import {CuteNavItem} from "./nav-item.component";
 
 /** Navigation's presentation style */
 export type CuteNavStyle = "base" | "tabs" | "pills" | "underline";
 /** Stretching level */
-export type CuteNavStretch = "none"|"fill"|"justified";
+export type CuteNavStretch = "fill"|"justified";
 
 /**
  * Token used to provide a `CuteNav` to `CuteNavItem` or `CuteNavLink`.
@@ -111,6 +111,8 @@ export class CuteNav extends CuteLayoutControl  {
   /** To synchronize selectedIndex and keyManager.activeIndex */
   private _selectedIndexToChange: number | null = null;
 
+  readonly _animationEnabled = !_animationsDisabled();
+
   @ContentChildren(CuteNavItem, {descendants: true})
   readonly navItems: QueryList<CuteNavItem> | undefined;
 
@@ -145,7 +147,7 @@ export class CuteNav extends CuteLayoutControl  {
    * Determines how the `cute-nav`'s content is stretched, such as taking up the entire available width (**none**), proportionally (**fill**) or equally (**justified**).
    * The width is determined by the longest `cute-nav-link`'s label. By default, stretching of items is not used (**none**).
    */
-  @Input() stretchItems: CuteNavStretch = "none";
+  @Input() stretchItems: CuteNavStretch | undefined;
 
   /**
    * By default, tabs remove their content from the DOM while it's off-screen. Setting this to _true_ will keep it in
@@ -153,10 +155,6 @@ export class CuteNav extends CuteLayoutControl  {
    */
   @Input({transform: booleanAttribute})
   preserveTabContent: boolean = false;
-
-  /** @deprecated */
-  @Input({transform: booleanAttribute})
-  animation: boolean = true;
 
   /** Should the first not disabled link item be automatically selected if none were activated during initialization. */
   @Input({transform: booleanAttribute})
@@ -168,7 +166,7 @@ export class CuteNav extends CuteLayoutControl  {
   set selectedIndex(value: number) {
     if (value !== this._selectedIndex) {
       this._selectedIndexToChange = value;
-      Promise.resolve().then(() => this.activateNavLink(value));
+      Promise.resolve().then(() => this._activateNavLink(value));
     }
   }
   private _selectedIndex: number | null = null;
@@ -230,12 +228,41 @@ export class CuteNav extends CuteLayoutControl  {
   }
 
   /**
+   * Whether the current navigation link can be deactivated.
+   * @param linkToActivate Link to activate
+   * @param origin (optional) Tells how the element will be focused (via the mouse, keyboard, touch, or programmatically). The latter is the default value.
+   * @returns _true_ when succeeded, otherwise _false_.
+   */
+  _canDeactivateCurrentNavLinkTo(linkToActivate: CuteNavLink|number, origin: FocusOrigin = "program"): boolean {
+    if (this._selectedIndex == null) return true;
+    if (!this.navLinks) return false;
+
+    const oldIndex = this._selectedIndex;
+    const oldLink = this.navLinks.get(oldIndex) ?? null;
+    if (oldLink == null) return false;
+
+    let newLink = linkToActivate;
+    if (typeof newLink==="number" ) {
+      const searchLink = this.navLinks.get(newLink);
+      if (searchLink == null) return false;
+      newLink = searchLink;
+    }
+    if (!newLink || newLink.disabled) return false;
+
+    const newIndex = this.getNavLinkIndex(newLink);
+
+    const event = new CuteNavChangingEvent(newIndex, newLink, oldIndex, oldLink, origin);
+    this.selectedLinkChanging.emit( event );
+
+    return !event.defaultPrevented;
+  }
+  /**
    * Request to activate cute-nav-link element
    * @param linkToActivate `cute-nav-link` or its index in the links array to activate. Set _null_ for use the currently selected or first `cute-nav-link` in the list.
    * @param origin (optional) Tells how the element was focused (via the mouse, keyboard, touch, or programmatically). The latter is the default value.
    * @returns _true_ when succeeded, otherwise _false_.
    */
-  activateNavLink(linkToActivate: CuteNavLink|number|null, origin: FocusOrigin = "program"): boolean {
+  _activateNavLink(linkToActivate: CuteNavLink|number|null, origin: FocusOrigin = "program"): boolean {
     if (linkToActivate == null) {
       if (this.selectedIndex != null) {
         linkToActivate = this.selectedIndex;
@@ -264,14 +291,14 @@ export class CuteNav extends CuteLayoutControl  {
     const newIndex = this.getNavLinkIndex(navLink);
 
     if (this.selectedIndex == newIndex) {
-      // The link has already been activated
+      // The link has been activated already
       this._keyManager?.updateActiveItem(newIndex);
       return true;
     }
 
     if (newIndex >= 0 && !navLink.disabled) {
       const oldIndex = this._selectedIndex;
-      const oldLink = oldIndex != null ? this.navLinks.get(oldIndex)??null : null
+      const oldLink = oldIndex != null ? this.navLinks.get(oldIndex)??null : null;
 
       if (oldLink) {
         // Check before index changing condition
@@ -337,9 +364,10 @@ export class CuteNav extends CuteLayoutControl  {
     if (event.code == "Space" || event.code == "Enter") {
       if (this._keyManager
           && this._keyManager.activeItemIndex != null
-          && this.selectedIndex != this._keyManager.activeItemIndex)
+          && this.selectedIndex != this._keyManager.activeItemIndex
+          && this._canDeactivateCurrentNavLinkTo(this._keyManager.activeItemIndex, "keyboard"))
       {
-        this.activateNavLink(this._keyManager.activeItemIndex, "keyboard");
+        this._activateNavLink(this._keyManager.activeItemIndex, "keyboard");
       }
       event.preventDefault();
     } else {
@@ -388,7 +416,7 @@ export class CuteNav extends CuteLayoutControl  {
           });
 
       if (this._selectedIndexToChange == null && this.autoSelect) {
-        Promise.resolve().then(()=> this.activateNavLink(null));
+        Promise.resolve().then(()=> this._activateNavLink(null));
       }
     }
   }

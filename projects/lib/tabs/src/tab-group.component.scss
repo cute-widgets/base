@@ -53,10 +53,6 @@
   & .tab-header-wrapper {
     position: relative;
     overflow: hidden;
-    //display: flex;
-    //& .cdk-drag .cute-nav-link {
-    //  cursor: move !important;
-    //}
   }
 
   & .tab-header-scroll {
@@ -102,6 +98,7 @@
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    padding: 0.25rem;
 
     & .cute-nav {
       flex-wrap: nowrap;
@@ -117,18 +114,13 @@
     }
   }
 
-  & .tab-content-wrapper {
-    overflow: auto;
-    height: 100%;
+  & .tab-body-wrapper {
+    display: block;
     flex: 1;
-    //position: relative;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
     transform: none;
-
-    //.tab-content {
-    //  //display: flex;
-    //  width: 100%;
-    //  height: 100%;
-    //}
   }
 
   & .cute-nav-link {

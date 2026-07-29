@@ -8,7 +8,7 @@
  */
 import {
   Directive, EventEmitter, forwardRef, inject,
-  Input, numberAttribute, OnDestroy, Output,
+  Input, numberAttribute, OnDestroy, Output, signal,
 } from "@angular/core";
 import {CdkPortalOutlet} from "@angular/cdk/portal";
 import {CdkScrollable} from "@angular/cdk/overlay";
@@ -17,6 +17,8 @@ import {CuteLayoutControl} from "@cute-widgets/base/abstract";
 import {Subscription} from "rxjs";
 import {getOverallTransitionDuration} from "@cute-widgets/base/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+
+//let navPaneId: number = 0;
 
 @Directive({
   selector: '[cuteNavPaneOutlet]',
@@ -58,9 +60,9 @@ export class CuteNavPaneOutlet extends CdkPortalOutlet implements OnDestroy  {
   exportAs: 'cuteNavPane',
   host: {
     'class': 'cute-nav-pane tab-pane',
-    '[class.fade]': 'item?.nav?.animation',
-    '[class.active]': '_active',
-    '[class.show]': '_show',
+    '[class.fade]': 'item?.nav?._animationEnabled',
+    '[class.active]': '_active()',
+    '[class.show]': '_show()',
     '[attr.tabindex]': '0', //'_active ? 0 : -1',
     '[attr.aria-labelledby]': 'ariaLabelledby || null',
     'role': 'tabpanel',
@@ -69,16 +71,16 @@ export class CuteNavPaneOutlet extends CdkPortalOutlet implements OnDestroy  {
 })
 export class CuteNavPane extends CuteLayoutControl {
   private _subs: Subscription | undefined;
-  protected _active: boolean = false;
-  protected _show: boolean = false;
+  protected _active = signal<boolean>(false);
+  protected _show = signal<boolean>(false);
 
-  /** Pane index */
-  @Input({transform: numberAttribute})
+  /** Pane index. */
+  @Input({transform: numberAttribute, required: true})
   index: number = NaN;
 
-  /** Navigation item reference */
-  @Input()
-  item: CuteNavItem | undefined;
+  /** Navigation item reference. */
+  @Input({required: true})
+  item!: CuteNavItem;
 
   @Output() hide = new EventEmitter<void>();
   @Output() show = new EventEmitter<void>();
@@ -88,39 +90,35 @@ export class CuteNavPane extends CuteLayoutControl {
   }
 
   protected generateId(): string {
-    return "";
+    return ""; //`cute-nav-pane${navPaneId++}`;
   }
 
   override ngOnInit() {
     super.ngOnInit();
 
-    this.id = `${this.item?.nav.id}-pane-${this.index}`;
+    this.id = `${this.item.nav.id}-pane-${this.index}`;
 
     if (this.item) {
       this._subs = this.item.nav.selectedLinkChange.subscribe(ev => {
-        this._active = (ev.index === this.index);
-        if (this._active) {
-          this.show.emit();
+        this._active.set(ev.index === this.index);
+        if (this._active()) {
           setTimeout(()=> {
-            this._show = true;
-            this.markForCheck();
+            this._show.set(true);
+            this.show.emit();
+            //this.markForCheck();
           }, getOverallTransitionDuration(this._nativeElement));
         } else {
+          this._show.set(false);
           this.hide.emit();
-          this._show = false;
         }
-        this.markForCheck();
+        //this.markForCheck();
       });
     }
-
   }
 
   override ngOnDestroy() {
     super.ngOnDestroy();
-
-    if (this._subs) {
-      this._subs.unsubscribe();
-    }
+    this._subs?.unsubscribe();
   }
 
 }

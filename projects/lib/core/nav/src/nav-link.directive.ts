@@ -12,6 +12,7 @@ import {CuteFocusableControl} from "@cute-widgets/base/abstract";
 import {toThemeColor} from '@cute-widgets/base/core';
 import {CUTE_NAV} from "./nav.directive";
 import {fromEvent} from "rxjs";
+import {CuteClickOutside} from '@cute-widgets/base/core/directives';
 
 let nextId: number = -1;
 
@@ -32,7 +33,7 @@ let nextId: number = -1;
     '[attr.aria-disabled]': 'disabled',
     '[attr.aria-current]': 'active ? "page" : null',
     '[attr.aria-selected]': 'active || null',
-    '[aria-controls]': 'ariaControls || getAriaControls()',
+    '[aria-controls]': 'ariaControls || getAriaControls() || undefined',
     '[attr.id]': 'id || null',
     '[attr.role]': 'role || null',
     '[attr.tabindex]': 'active && !disabled ? 0 : -1',
@@ -41,12 +42,14 @@ let nextId: number = -1;
     '(click)': 'onClick($event)',
     //'(touchstart)': 'onTouchStart($event)',
   },
+  hostDirectives: [CuteClickOutside],
   standalone: true,
 })
 export class CuteNavLink extends CuteFocusableControl {
   protected _document = inject(DOCUMENT);
   protected _ngZone = inject(NgZone);
   protected readonly nav = inject(CUTE_NAV, {optional: true});
+  protected _clickOutside = inject(CuteClickOutside);
 
   protected _isAnchor: boolean = false;
   protected toThemeColor = toThemeColor;
@@ -78,6 +81,12 @@ export class CuteNavLink extends CuteFocusableControl {
     fromEvent<MouseEvent>(this._nativeElement, "mousedown", {capture: true})
       .pipe(takeUntilDestroyed())
       .subscribe((event) => this.onMouseDown(event));
+
+    this._clickOutside.cuteClickOutside
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this._elementRef.nativeElement.style.pointerEvents = "auto";
+      });
   }
 
   protected generateId(): string {
@@ -96,21 +105,24 @@ export class CuteNavLink extends CuteFocusableControl {
   }
 
   /**
-   * MouseDown event handler in `capture` state of the event propagation.
+   * MouseDown event handler in `capture` state of the event propagation so we can
    * @param event MouseEvent
    * @protected
    */
   protected onMouseDown(event: MouseEvent): void {
+    //console.debug("MouseDown");
     if (this.nav) {
-      if (!this.nav.activateNavLink(this, 'mouse')) {
+      if (!this.nav._canDeactivateCurrentNavLinkTo(this, 'mouse')) {
         // we need to prevent default action so CSS-styles may be applied incorrectly
         event.stopImmediatePropagation();
         event.preventDefault();
+        this._elementRef.nativeElement.style.pointerEvents = "none";
       }
     }
   }
 
   protected onClick(event: Event): void {
+    //console.debug("Click");
     const elem = event.target as HTMLElement;
     event.preventDefault();
     if (elem instanceof HTMLAnchorElement && elem.hash && elem.hash.startsWith("#")) {
@@ -119,12 +131,17 @@ export class CuteNavLink extends CuteFocusableControl {
       if (target) {
         target.scrollIntoView({behavior: "smooth", block: "nearest"});
       }
+    } else if (this.nav) {
+      if (!this.nav._activateNavLink(this, 'mouse')) {
+        // we need to prevent default action so CSS-styles may be applied incorrectly
+        event.stopImmediatePropagation();
+      }
     }
   }
 
   protected onTouchStart(event: TouchEvent): void {
     if (this.nav) {
-      this.nav.activateNavLink(this, 'touch');
+      this.nav._activateNavLink(this, 'touch');
       event.preventDefault();
     }
   }

@@ -1,3 +1,14 @@
+## Changes in version 21.0.3 (2026-07-29)
+
+### Fixes
+* Work with dynamic `CuteTab` in `CuteTabGroup` is more stable now.
+* Small refactoring internal architecture of `CuteNav` and `CuteNavLink` directives.
+
+### Improvements
+
+* Small not breaking changes in some core directives.
+* New `cuteClickInside` core directive has been created.
+
 ## Changes in version 21.0.2 (2026-05-07)
 
 ### Fixes

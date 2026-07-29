@@ -17,7 +17,7 @@ import { Directive, HostListener } from '@angular/core';
 })
 export class CuteDisableContextMenu {
   @HostListener('contextmenu', ['$event'])
-  onContextMenu(event: Event): void {
+  protected onContextMenu(event: Event): void {
     event.preventDefault();
   }
 }

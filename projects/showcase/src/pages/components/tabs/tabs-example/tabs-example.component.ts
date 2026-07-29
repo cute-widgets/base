@@ -43,6 +43,7 @@ export class TabsExampleComponent /* extends ... */ {
   protected tabEdge: ViewportEdge = "top";
   protected preserveContent = false;
   protected stretchTabs: boolean = false;
+  protected dynamicHeight: boolean = false;
 
   @ViewChild('dynTab', {read: CuteTabGroup}) dynTab!: CuteTabGroup;
   @ViewChild('ctxContent', {read: TemplateRef}) dynTemplate!: TemplateRef<any>;

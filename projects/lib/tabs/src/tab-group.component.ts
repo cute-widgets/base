@@ -10,19 +10,25 @@
  * code licensed under MIT-style License (https://angular.dev/license).
  */
 import {
-  Component,
-  Input,
-  Output,
-  ContentChildren,
-  QueryList,
-  ViewChildren,
-  EventEmitter,
-  TemplateRef,
+  booleanAttribute,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
-  InjectionToken,
+  Component,
+  ComponentRef,
+  ContentChildren,
+  DestroyRef,
+  ElementRef,
+  EventEmitter,
+  inject,
+  InjectionToken, Injector,
+  Input,
   numberAttribute,
-  booleanAttribute, ViewContainerRef, ViewChild, ComponentRef, ElementRef, inject, DestroyRef
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef,
+  ViewEncapsulation
 } from '@angular/core';
 import {CuteTab} from './tab.component';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
@@ -41,6 +47,8 @@ import {CuteButtonModule} from "@cute-widgets/base/button";
 import {debounceTime, fromEvent} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CuteObserveVisibility} from "@cute-widgets/base/core/observers";
+import {CUTE_TABS_CONFIG, CuteTabsConfig} from "./tab-config";
+import {CuteTabBodyWrapper} from './tab-body-wrapper.directive';
 
 let nextId: number = 0;
 
@@ -101,6 +109,7 @@ export class CuteTabChangeEvent extends Event {
     "[class.tabs-right]": "headerPosition === 'right'",
     "[class.tabs-end]": "headerPosition === 'end'",
     "[class.tabs-start]": "headerPosition === 'start'",
+    '[class.cute-tab-group-dynamic-height]': 'dynamicHeight',
     "[attr.cute-align-tabs]": "alignTabs",
     "[style.--cute-tab-animation-duration]": "animationDuration",
   },
@@ -111,6 +120,7 @@ export class CuteTabChangeEvent extends Event {
     CuteNavModule,
     CuteButtonModule,
     CuteObserveVisibility,
+    CuteTabBodyWrapper,
   ],
   providers: [
       {provide: CUTE_TAB_GROUP, useExisting: CuteTabGroup},
@@ -131,6 +141,7 @@ export class CuteTabGroup extends CuteLayoutControl {
   protected dynamicTabs: ComponentRef<CuteTab>[] = [];
 
   protected destroyRef = inject(DestroyRef);
+  protected injector = inject(Injector);
 
   @ContentChildren(CuteTab)
   protected tabs: QueryList<CuteTab> | undefined;
@@ -149,14 +160,14 @@ export class CuteTabGroup extends CuteLayoutControl {
 
   /** The index of the active tab. */
   @Input({transform: numberAttribute})
-  get selectedIndex(): number|undefined {return this._selectedIndex;}
+  get selectedIndex(): number|null {return this._selectedIndex;}
   set selectedIndex(value: number) {
     if (value !== this._selectedIndex) {
       this._indexToChange = value;
       Promise.resolve().then(()=> this.selectTab(value));
     }
   }
-  private _selectedIndex: number | undefined;
+  private _selectedIndex: number|null = null;
 
   /**
    *  Alignment for tabs.
@@ -170,19 +181,15 @@ export class CuteTabGroup extends CuteLayoutControl {
    * The width is determined by the longest `cute-tab-label`'s content. By default, stretching of items is not used (**none**).
    */
   @Input({alias: 'cute-stretch-tabs'})
-  get stretchTabs(): CuteNavStretch { return this._stretchTabs; }
+  get stretchTabs(): CuteNavStretch|undefined { return this._stretchTabs; }
   set stretchTabs(value: CuteNavStretch|boolean|"false"|"true"|undefined) {
-    if (value) {
-      if (typeof value==="boolean" || value==="true" || value==="false") {
-        this._stretchTabs = Boolean(value) ? "justified" : "none";
-      } else {
-        this._stretchTabs = value;
-      }
+    if (typeof value==="boolean" || value==="true" || value==="false") {
+      this._stretchTabs = Boolean(value) ? "justified" : undefined;
     } else {
-      this._stretchTabs = "none";
+      this._stretchTabs = value;
     }
   }
-  private _stretchTabs: CuteNavStretch = "none";
+  private _stretchTabs: CuteNavStretch | undefined;
 
   /** Duration for the tab animation. Will be normalized to milliseconds if no units are set. */
   @Input()
@@ -260,6 +267,28 @@ export class CuteTabGroup extends CuteLayoutControl {
 
   constructor() {
     super();
+
+    const defaultConfig = inject<CuteTabsConfig>(CUTE_TABS_CONFIG, {optional: true});
+    if (defaultConfig) {
+      //this._groupId = inject(_IdGenerator).getId('mat-tab-group-');
+      this.animationDuration = defaultConfig.animationDuration ? defaultConfig.animationDuration : '500ms';
+      // this.disablePagination =
+      //   defaultConfig.disablePagination != null
+      //     ? defaultConfig.disablePagination
+      //     : false;
+      this.dynamicHeight = defaultConfig.dynamicHeight ?? false;
+      // if (defaultConfig.contentTabIndex != null) {
+      //   this.contentTabIndex = defaultConfig.contentTabIndex;
+      // }
+      this.preserveContent = !!defaultConfig.preserveContent;
+      // this.fitInkBarToContent =
+      //   defaultConfig.fitInkBarToContent != null
+      //     ? defaultConfig.fitInkBarToContent
+      //     : false;
+      this.stretchTabs = defaultConfig.stretchTabs ?? true;
+      this.alignTabs = defaultConfig.alignTabs ?? 'start';
+    }
+
   }
 
   /** Whether the tab group currently has a horizontal layout */
@@ -291,13 +320,24 @@ export class CuteTabGroup extends CuteLayoutControl {
     return `cute-tab-group-${nextId++}`;
   }
 
+  /** Clamps the given index to the bounds of 0 and the tabs' length. */
+  private _clampTabIndex(index: number | null): number {
+    // Note the `|| 0`, which ensures that values like NaN can't get through
+    // and which would otherwise throw the component into an infinite loop
+    // (since Math.max(NaN, 0) === NaN).
+    return Math.min(this.tabCount - 1, Math.max(index || 0, 0));
+  }
+
   private checkScrollButtons() {
-    const el = this.headerScroll.nativeElement;
-    this.showScrollButtons = el.scrollWidth > el.clientWidth;
-    this.canScrollLeft = el.scrollLeft > 0;
-    this.canScrollRight = el.scrollLeft < el.scrollWidth - el.clientWidth - 1;
-    //this._changeDetectorRef.detectChanges();
-    this.markForCheck();
+    this.showScrollButtons = false;
+    if (this.headerPosition === 'top' || this.headerPosition === 'bottom') {
+      const el = this.headerScroll.nativeElement;
+      this.showScrollButtons = el.scrollWidth > el.clientWidth;
+      this.canScrollLeft = el.scrollLeft > 0;
+      this.canScrollRight = el.scrollLeft < el.scrollWidth - el.clientWidth - 1;
+      //this._changeDetectorRef.detectChanges();
+      this.markForCheck();
+    }
   }
 
   private setupScrollListener() {
@@ -328,8 +368,8 @@ export class CuteTabGroup extends CuteLayoutControl {
 
   /**
    * Activates tab with the specified index.
-   * @param index Tab index
-   * @param origin (optional) Focus origin
+   * @param index Tab index.
+   * @param origin (optional) Focus origin.
    * @returns A promise of a "logical" result, where _true_ means a successful change of the active tab, and _false_ otherwise.
    * @async
    */
@@ -348,15 +388,15 @@ export class CuteTabGroup extends CuteLayoutControl {
       tab.active = false;
     });
 
-    tabsArray[index].active = true;
-
     await Scheduler.postTask(() => {
       if (tabsArray[index].scrollNeeded) {
         this.scrollToTab(index);
       }
     }, {delay: 100});
 
+    tabsArray[index].active = true;
     this.selectedIndexChange.emit(index);
+    //this.tabLinks?.get(index)?.focus();
 
     this.markForCheck();
 
@@ -409,7 +449,7 @@ export class CuteTabGroup extends CuteLayoutControl {
   }
 
   private scrollToTab(index?: number) {
-    index = index ?? this.selectedIndex;
+    index = index ?? this.selectedIndex ?? undefined;
     if (index != null) {
       const tabElement = this.tabLinks?.toArray()[index]?.element.nativeElement;
       if (tabElement) {
@@ -442,7 +482,7 @@ export class CuteTabGroup extends CuteLayoutControl {
   private _adjustActiveIndex(prevIndex: number, newIndex: number) {
     if (this.selectedIndex === prevIndex) {
       this.selectedIndex = newIndex;
-    } else if (this.selectedIndex !== undefined) {
+    } else if (this.selectedIndex != null) {
       const min = Math.min(prevIndex, newIndex);
       const max = Math.max(prevIndex, newIndex);
       if (this.selectedIndex >= min && this.selectedIndex <= max) {
@@ -512,14 +552,17 @@ export class CuteTabGroup extends CuteLayoutControl {
 
     this.tabRemoved.emit(index);
 
-    if (wasActive && this.tabs.length > 0) {
-      const newIndex = Math.min(index, this.tabs.length - 1);
-      if (newIndex == index) {
-        // To bypass verification
-        this._selectedIndex = undefined;
+    if (this.tabs.length > 0) {
+      let newIndex: number;
+      if (wasActive) {
+        newIndex = Math.min(index, this.tabs.length - 1);
+      } else {
+        newIndex = this.tabs.toArray().findIndex(t => t.active);
       }
-      this.selectedIndex = newIndex;
-      this.tabs.get(newIndex)?.link?.focus();
+
+      // To bypass verification
+      this._selectedIndex = null;
+      await this.selectTab(newIndex);
     }
 
     this.checkScrollButtons();
@@ -527,21 +570,22 @@ export class CuteTabGroup extends CuteLayoutControl {
     //this.markForCheck();
   }
 
-  override ngAfterViewInit() {
-    super.ngAfterViewInit();
-
-    this.checkScrollButtons();
-    this.setupScrollListener();
-  }
-
   override ngAfterContentInit() {
     super.ngAfterContentInit();
     if (this.tabs) {
       const tabsArray = this.tabs.toArray();
       if (this._indexToChange == null) {
-        this.selectedIndex = Math.max( tabsArray.findIndex(t => !t.disabled), 0);
+        this._indexToChange = Math.max( tabsArray.findIndex(t => !t.disabled), 0);
       }
+      this.selectedIndex = this._indexToChange;
     }
+  }
+
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+
+    this.checkScrollButtons();
+    this.setupScrollListener();
   }
 
   override ngOnDestroy() {

@@ -3,8 +3,9 @@
        cdkDropList
        [cdkDropListOrientation]="isHorizontal ? 'horizontal' : 'vertical'"
        (cdkDropListDropped)="onDrop($event)">
-    <nav [cuteNav]="isHorizontal ? (underlineTabs ? 'underline' : 'tabs') : 'pills'"
+    <nav #nav="cuteNav" [cuteNav]="isHorizontal ? (underlineTabs ? 'underline' : 'tabs') : 'pills'"
          [selectedIndex]="selectedIndex"
+         [orientation]="isHorizontal ? 'horizontal' : 'vertical'"
          [alignment]="alignTabs"
          [stretchItems]="stretchTabs"
          [preserveTabContent]="preserveContent"
@@ -18,16 +19,17 @@
         <li cute-nav-item
             cdkDrag
             [cdkDragDisabled]="!dragEnabled || tabCount <= 1"
-            [cdkDragData]="tab">
+            [cdkDragData]="tab"
+            [class.dynamic]="tab._isDynamic">
           <a href="#" cute-nav-link
              [cuteObserveVisibility]="1"
              [cuteObserveVisibilityRoot]="headerScroll"
              (cuteObserveVisibility)="tab._visibilityChanged($event)"
              [active]="tab.active"
              [disabled]="tab.disabled"
+             [aria-controls]="tab.id"
              [id]="tab.ariaLabelledby || undefined"
              [attr.aria-disabled]="tab.disabled"
-             [attr.aria-controls]="tab.id"
              [attr.tabindex]="tab.active && !tab.disabled ? 0 : -1"
              role="tab"
              #tabLink>
@@ -49,7 +51,7 @@
               <button cuteButton="close-button"
                       magnitude="smallest"
                       tabIndex="-1"
-                      (click)="removeTab(i); $event.preventDefault();"
+                      (click)="removeTab(i); $event.stopImmediatePropagation(); $event.preventDefault();"
                       aria-label="Close tab">
               </button>
             }
@@ -99,9 +101,8 @@
 
 </div>
 
-<div class="tab-content-wrapper">
-<!--  <div class="tab-content">-->
-    <ng-content></ng-content>
-    <ng-container #dynamicTabs></ng-container>
-<!--  </div>-->
+<!-- Tab group's outlet  -->
+<div cuteTabBodyWrapper>
+  <ng-content></ng-content>
+  <ng-container #dynamicTabs></ng-container>
 </div>

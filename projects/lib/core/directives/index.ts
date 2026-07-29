@@ -1,4 +1,5 @@
 export * from "./src/disable-context-menu";
+export * from "./src/click-inside";
 export * from "./src/click-outside";
 export * from "./src/copy-to-clipboard";
 export * from "./src/time-ago";

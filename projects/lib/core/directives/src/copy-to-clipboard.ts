@@ -33,7 +33,7 @@ export class CuteCopyToClipboard {
   constructor() {}
 
   @HostListener('click')
-  onClick() {
+  protected onClick() {
     if (this.data) {
       if (window.isSecureContext) {
         try {

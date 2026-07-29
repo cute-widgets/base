@@ -48,6 +48,7 @@ let nextId: number = 0;
     "class": "cute-tab tab-pane",
     "[class.fade]": "_animationEnabled",
     "[class.active]": "active",
+    "[class.dynamic]": "_isDynamic",
     '[attr.aria-labelledby]': 'ariaLabelledby || null',
     '[attr.id]': 'id || null',
     "role": "tabpanel",
@@ -104,13 +105,7 @@ export class CuteTab extends CuteFocusableControl {
   set active(value: boolean) {
     if (value !== this._active) {
       this._active = value;
-
-      if (this._animationEnabled) {
-        setTimeout(() => this.toggleClass("show", value), 150);
-      } else {
-        this.toggleClass("show", value);
-      }
-
+      this.toggleClass("show", value);
       this._stateChanges.next();
     }
   }
@@ -136,7 +131,7 @@ export class CuteTab extends CuteFocusableControl {
   /** Emits whenever the internal state of the tab changes. */
   readonly _stateChanges = new Subject<void>();
 
-  /** Whether the tab content was loaded */
+  /** Whether the tab content has been loaded. */
   loaded = signal<boolean>(false);
 
   /** Template inside the CuteTab view that contains an `<ng-content>`. */

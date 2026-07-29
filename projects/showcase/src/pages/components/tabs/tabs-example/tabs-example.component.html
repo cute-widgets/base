@@ -14,13 +14,15 @@
 
     <cute-checkbox [(ngModel)]="preserveContent">Preserve content</cute-checkbox>
     <cute-checkbox [(ngModel)]="stretchTabs">Stretch Tabs</cute-checkbox>
+<!--    <cute-checkbox [(ngModel)]="dynamicHeight">Dynamic height</cute-checkbox>-->
     <button #b1 cute-button (click)="openTab()" style="max-width: 600px;">Open new Tab</button>
 
-    <!-- Basic use of the tab group -->
+    <!-- Basic usage of the tab group  height: 250px;  -->
     <cute-tab-group #dynTab
                     [headerPosition]="position.value"
                     [preserveContent]="preserveContent"
                     [cute-stretch-tabs]="stretchTabs"
+                    [dynamicHeight]="dynamicHeight"
                     [dragEnabled]="false"
                     style="height: 250px; max-width: 600px"
                     (selectedIndexChange)="log('(Tabs) indexChange:', $event)"
