@@ -257,7 +257,6 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
 
   readonly panelId = `cute-menu-panel-${menuPanelUid++}`;
 
-  constructor(...args: unknown[]);
   constructor() {
     const defaultOptions = inject<CuteMenuDefaultOptions>(CUTE_MENU_DEFAULT_OPTIONS);
     this.overlayPanelClass = defaultOptions.overlayPanelClass || '';
@@ -278,6 +277,7 @@ export class CuteMenu implements CuteMenuPanel<CuteMenuItem>, AfterContentInit, 
       .withWrap()
       .withTypeAhead()
       .withHomeAndEnd();
+
     this._keyManager.tabOut.subscribe(() => this.closed.emit('tab'));
 
     // If a user manually (programmatically) focuses a menu item, we need to reflect that focus

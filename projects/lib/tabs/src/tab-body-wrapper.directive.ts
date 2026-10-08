@@ -16,19 +16,19 @@ export class CuteTabBodyWrapper implements AfterViewInit {
   constructor() {}
 
   ngAfterViewInit() {
-    if (!this._initHeight && !this._tabGroup.dynamicHeight && ["top","bottom"].indexOf(this._tabGroup.headerPosition)>=0) {
-
-      const wrapper = this._elementRef.nativeElement;
-      const style = getComputedStyle(wrapper);
-      const rect = wrapper.getBoundingClientRect();
-      if (style.height != "") {
-        this._initHeight = parseFloat(style.height);
-        if (this._initHeight > 0) {
-          wrapper.style.height = this._initHeight + 'px';
-        }
-      }
-      // console.debug("Wrapper.Height=", style.height);
-    }
+    // if (!this._initHeight && !this._tabGroup.dynamicHeight && ["top","bottom"].indexOf(this._tabGroup.headerPosition)>=0) {
+    //
+    //   const wrapper = this._elementRef.nativeElement;
+    //   const style = getComputedStyle(wrapper);
+    //   const rect = wrapper.getBoundingClientRect();
+    //   if (style.height != "") {
+    //     this._initHeight = parseFloat(style.height);
+    //     if (this._initHeight > 0) {
+    //       wrapper.style.height = this._initHeight + 'px';
+    //     }
+    //   }
+    //   // console.debug("Wrapper.Height=", style.height);
+    // }
   }
 
 }

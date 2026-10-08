@@ -226,7 +226,6 @@ export class CuteInput extends CuteInputControl
   @Input()
   get type(): string { return this._type; }
   set type(value: string) {
-    const prevType = this._type;
     this._type = value || 'text';
     this._validateType();
 
@@ -236,11 +235,8 @@ export class CuteInput extends CuteInputControl
     if (!this._isTextarea && getSupportedInputTypes().has(this._type)) {
       (this._elementRef.nativeElement as HTMLInputElement).type = this._type;
     }
-    // if (this._type !== prevType) {
-    //   this._ensureWheelDefaultBehavior();
-    // }
   }
-  protected _type = 'text';
+  protected _type: string = 'text';
 
   /** An object used to control when error messages are shown. */
   @Input()
@@ -315,7 +311,6 @@ export class CuteInput extends CuteInputControl
     'week',
   ].filter(t => getSupportedInputTypes().has(t));
 
-  constructor(...args: unknown[]);
   constructor() {
     super();
     const parentForm = inject(NgForm, {optional: true});
@@ -433,6 +428,15 @@ export class CuteInput extends CuteInputControl
     this.value = newValue ?? "";
   }
 
+  //++ CWT: 
+  /**
+   * Forces to update and validate the current input value in the form's model.
+   */
+  updateValue(): void {
+    this._onChange(this.value);
+  }
+  //--
+
   override ngAfterViewInit() {
     super.ngAfterViewInit();
     if (this._platform.isBrowser) {
@@ -519,17 +523,18 @@ export class CuteInput extends CuteInputControl
 
     //++ CWT: We need to update input value with display format or input mask of the control's model
     if (this.ngControl && this.ngControl.valueAccessor===this) {
-      this.writeValue(this.ngControl.value);
+      // ngControl's value updated after the focus-change has been emitted, so we run microtask
+      queueMicrotask(() => {
+        this.writeValue(this.ngControl!.value)
 
-      if (isFocused) {
-        Promise.resolve().then(() => {
+        if (isFocused) {
           element.select();
-        });
-      }
+        }
+      });
+    }
 
-      if (!isFocused) {
-        this._onTouched();
-      }
+    if (!isFocused) {
+      this._onTouched();
     }
     //--
 

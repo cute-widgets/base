@@ -83,7 +83,7 @@ export class CuteChipSelectionChange {
     ],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CuteChipAction, CuteButton]
+    imports: [CuteButton],
 })
 export class CuteChipOption extends CuteChip implements OnInit {
   /** Default chip options. */

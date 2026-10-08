@@ -1,3 +1,7 @@
+## Changes in version 21.0.4 (2026-08-10)
+
+feat(CuteWidget): adds addEventListener() and removeEventListener() delegation methods that implement `HasEventTargetAddRemove` interface. 
+
 ## Changes in version 21.0.3 (2026-07-29)
 
 ### Fixes

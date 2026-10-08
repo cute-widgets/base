@@ -31,20 +31,17 @@ export interface CuteCheckboxDefaultOptions {
   disabledInteractive?: boolean;
 }
 
+export const checkboxDefaults: CuteCheckboxDefaultOptions = {
+  color: 'primary',
+  clickAction: 'check-indeterminate',
+  disabledInteractive: false,
+};
+
 /** Injection token to be used to override the default options for `cute-checkbox`. */
 export const CUTE_CHECKBOX_DEFAULT_OPTIONS = new InjectionToken<CuteCheckboxDefaultOptions>(
     'cute-checkbox-default-options',
     {
         providedIn: 'root',
-        factory: CUTE_CHECKBOX_DEFAULT_OPTIONS_FACTORY,
+        factory: () => checkboxDefaults,
     },
 );
-
-/** @docs-private */
-export function CUTE_CHECKBOX_DEFAULT_OPTIONS_FACTORY(): CuteCheckboxDefaultOptions {
-    return {
-      color: 'primary',
-      clickAction: 'check-indeterminate',
-      disabledInteractive: false,
-    };
-}

@@ -9,11 +9,10 @@
 
 import {NgModule} from "@angular/core";
 import {CuteObserveVisibility, CuteVisibilityObserver, IntersectionObserverFactory} from "./observe-visibility";
-import {CommonModule} from "@angular/common";
 import {CuteObserveContent} from "./observe-content";
 
 @NgModule({
-  imports: [CommonModule, CuteObserveVisibility, CuteObserveContent],
+  imports: [CuteObserveVisibility, CuteObserveContent],
   exports: [CuteObserveVisibility, CuteObserveContent],
   providers: [
     IntersectionObserverFactory,

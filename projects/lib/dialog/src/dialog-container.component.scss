@@ -9,6 +9,12 @@
   max-height: inherit;
   min-width: inherit;
   max-width: inherit;
+
+  /*
+  :is(.fullscreen-dialog) & {
+    --bs-modal-width: 100%;
+  }
+  */
 }
 
 .cute-dialog-component-host {

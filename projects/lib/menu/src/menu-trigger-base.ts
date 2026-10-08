@@ -68,6 +68,9 @@ export const MENU_PANEL_TOP_PADDING = 8;
 /** Mapping between menu panels and the last trigger that opened them. */
 const PANELS_TO_TRIGGERS = new WeakMap<CuteMenuPanel, CuteMenuTriggerBase>();
 
+/** Currently opened Menu's trigger. */
+let lastActivatedTrigger: CuteMenuTriggerBase|undefined = undefined;
+
 /** Directive applied to an element that should trigger a `cute-menu`. */
 @Directive()
 export abstract class CuteMenuTriggerBase implements OnDestroy {
@@ -140,6 +143,8 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
           this._parentCuteMenu.closed.emit(reason);
         }
       });
+    } else {
+      this._destroyMenu();
     }
 
     this._menuItemInstance?._setTriggersSubmenu(this._triggersSubmenu());
@@ -218,6 +223,10 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
       previousTrigger._closeMenu();
     }
 
+    if (!this._triggersSubmenu() && lastActivatedTrigger && lastActivatedTrigger !== this) {
+      lastActivatedTrigger._closeMenu();
+    }
+
     const overlayRef = this._createOverlay(menu);
     const overlayConfig = overlayRef.getConfig();
     const positionStrategy = overlayConfig.positionStrategy as FlexibleConnectedPositionStrategy;
@@ -228,7 +237,7 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
       overlayConfig.hasBackdrop =
         menu.hasBackdrop == null ? !this._triggersSubmenu() : menu.hasBackdrop;
     } else {
-      overlayConfig.hasBackdrop = false;
+      overlayConfig.hasBackdrop = menu.hasBackdrop ?? false;
     }
 
     // We need the `hasAttached` check for the case where the user kicked off a removal animation,
@@ -260,6 +269,10 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
         positionStrategy.withLockedPosition(false).reapplyLastPosition();
         positionStrategy.withLockedPosition(true);
       });
+    }
+
+    if (!this._triggersSubmenu()) {
+      lastActivatedTrigger = this;
     }
   }
 
@@ -310,6 +323,10 @@ export abstract class CuteMenuTriggerBase implements OnDestroy {
 
     if (menu && this._ownsMenu(menu)) {
       PANELS_TO_TRIGGERS.delete(menu);
+    }
+
+    if (lastActivatedTrigger && lastActivatedTrigger==this) {
+      lastActivatedTrigger = undefined;
     }
 
     // Always restore focus if the user is navigating using the keyboard or the menu was opened

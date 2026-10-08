@@ -20,7 +20,7 @@ import {Directionality} from '@angular/cdk/bidi';
 import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
 import {ESCAPE, hasModifierKey} from '@angular/cdk/keycodes';
 import {Platform} from '@angular/cdk/platform';
-import {CdkScrollable, ScrollDispatcher, ViewportRuler} from '@angular/cdk/scrolling';
+import {CdkScrollable, ViewportRuler} from '@angular/cdk/scrolling';
 import {
   AfterContentInit,
   AfterViewInit,
@@ -111,13 +111,12 @@ export class CuteDrawerContent extends CdkScrollable implements AfterContentInit
   private _changeDetectorRef = inject(ChangeDetectorRef);
   _container = inject(CuteDrawerContainer);
 
-  constructor(...args: unknown[]);
   constructor() {
-    const elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-    const scrollDispatcher = inject(ScrollDispatcher);
-    const ngZone = inject(NgZone);
+    //const elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+    //const scrollDispatcher = inject(ScrollDispatcher);
+    //const ngZone = inject(NgZone);
 
-    super(elementRef, scrollDispatcher, ngZone);
+    super();
   }
 
   ngAfterContentInit() {

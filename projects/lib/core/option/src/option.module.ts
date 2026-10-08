@@ -1,5 +1,4 @@
 import {NgModule, Type} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {CuteOption} from './option.component';
 import {CuteOptgroup} from './optgroup.component';
 
@@ -9,7 +8,7 @@ const TYPES: (any | Type<any>)[] = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...TYPES],
+  imports: TYPES,
   exports: TYPES,
   declarations: [],
 })

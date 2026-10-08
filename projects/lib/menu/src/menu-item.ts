@@ -39,10 +39,11 @@ import {CuteMenuPanel, CUTE_MENU_PANEL} from './menu-panel';
     'class': 'cute-menu-item',
     '[class.active]': '_highlighted',
     '[class.cute-menu-item-submenu-trigger]': '_triggersSubmenu',
-    //'[class.disabled]': 'disabled',
+    '[class.cute-menu-item-disabled]': 'disabled',
+    '[class.cute-menu-item-disabled-interactive]': 'disabledInteractive',
     '[attr.tabindex]': '_getTabIndex()',
-    '[attr.aria-disabled]': 'disabled',
-    '[attr.disabled]': 'disabled || null',
+    '[attr.aria-disabled]': '_getAriaDisabled()',
+    '[attr.disabled]': '_getDisabled()',
     '(click)': '_checkDisabled($event)',
     '(mouseenter)': '_handleMouseEnter()',
   },
@@ -50,6 +51,7 @@ import {CuteMenuPanel, CUTE_MENU_PANEL} from './menu-panel';
   encapsulation: ViewEncapsulation.None
 })
 export class CuteMenuItem implements FocusableOption, AfterViewInit, OnDestroy {
+  protected _isAnchor: boolean;
   private _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private _document = inject(DOCUMENT);
   private _focusMonitor = inject(FocusMonitor);
@@ -61,6 +63,13 @@ export class CuteMenuItem implements FocusableOption, AfterViewInit, OnDestroy {
 
   /** Whether the menu item is disabled. */
   @Input({transform: booleanAttribute}) disabled: boolean = false;
+
+  /**
+   * Natively disabled menu items prevent focus and any pointer events from reaching the item.
+   * In some scenarios this might not be desirable, because it can prevent users from finding out
+   * why the item is disabled (e.g. via tooltip).
+   */
+  @Input({transform: booleanAttribute}) disabledInteractive: boolean = false;
 
   /** Whether ripples are disabled on the menu item. */
   @Input({transform: booleanAttribute}) disableRipple: boolean = false;
@@ -77,10 +86,9 @@ export class CuteMenuItem implements FocusableOption, AfterViewInit, OnDestroy {
   /** Whether the menu item acts as a trigger for a submenu. */
   protected _triggersSubmenu: boolean = false;
 
-  constructor(...args: unknown[]);
-
   constructor() {
     this._parentMenu?.addItem?.(this);
+    this._isAnchor = this._elementRef.nativeElement.tagName === 'A';
   }
 
   /** Focuses the menu item. */
@@ -114,8 +122,21 @@ export class CuteMenuItem implements FocusableOption, AfterViewInit, OnDestroy {
   }
 
   /** Used to set the `tabindex`. */
-  _getTabIndex(): string {
-    return this.disabled ? '-1' : '0';
+  protected _getTabIndex(): string {
+    return this.disabled && !this.disabledInteractive ? '-1' : '0';
+  }
+
+  /** Gets the `aria-disabled` value for the menu item. */
+  protected _getAriaDisabled(): boolean | null {
+    if (this._isAnchor) {
+      return this.disabled || null;
+    }
+    return this.disabled && this.disabledInteractive ? true : null;
+  }
+
+  /** Gets the `disabled` attribute value for the menu item. */
+  protected _getDisabled(): boolean | null {
+    return this.disabledInteractive || !this.disabled ? null : true;
   }
 
   /** Returns the host DOM element. */
@@ -124,7 +145,7 @@ export class CuteMenuItem implements FocusableOption, AfterViewInit, OnDestroy {
   }
 
   /** Prevents the default element actions if it is disabled. */
-  _checkDisabled(event: Event): void {
+  protected _checkDisabled(event: Event): void {
     if (this.disabled) {
       event.preventDefault();
       event.stopPropagation();
@@ -132,14 +153,14 @@ export class CuteMenuItem implements FocusableOption, AfterViewInit, OnDestroy {
   }
 
   /** Emits to the hover stream. */
-  _handleMouseEnter() {
+  protected _handleMouseEnter() {
     this._hovered.next(this);
   }
 
   /** Gets the label to be used when determining whether the option should be focused. */
   getLabel(): string {
     const clone = this._elementRef.nativeElement.cloneNode(true) as HTMLElement;
-    const icons = clone.querySelectorAll('cute-icon, .material-icons');
+    const icons = clone.querySelectorAll('cute-icon, .material-icons, .bi');
 
     // Strip away icons, so they don't show up in the text.
     for (let i = 0; i < icons.length; i++) {

@@ -14,12 +14,11 @@ import {
   Component,
   ComponentRef,
   EventEmitter, inject,
-  OnDestroy,
   ViewEncapsulation,
 } from '@angular/core';
 import {CuteDialogConfig} from './dialog-config';
 import {CdkDialogContainer} from '@angular/cdk/dialog';
-import {ComponentPortal, PortalModule} from '@angular/cdk/portal';
+import {CdkPortalOutlet, ComponentPortal} from '@angular/cdk/portal';
 import {CuteDialogStage} from "./dialog-stage.component";
 import {coerceNumberProperty} from "@angular/cdk/coercion";
 import {_animationsDisabled, bsBreakpoints} from "@cute-widgets/base/core";
@@ -35,6 +34,7 @@ interface LegacyDialogAnimationEvent {
 
 const TRANSITION_DURATION_PROPERTY = '--cute-dialog-transition-duration';
 
+/** Class added when the full-screen strategy is defined in the dialog's config. */
 const FULLSCREEN_CLASS = "fullscreen-dialog";
 
 /** Class added when the dialog is open. */
@@ -72,9 +72,9 @@ export const CLOSE_ANIMATION_DURATION = 300;  //75
     // Disabled for consistency with the non-MDC dialog container.
     // tslint:disable-next-line:validate-decorators
     changeDetection: ChangeDetectionStrategy.Default,
-    imports: [PortalModule, CuteDialogStage]
+    imports: [CdkPortalOutlet, CuteDialogStage]
 })
-export class CuteDialogContainer extends CdkDialogContainer<CuteDialogConfig> implements OnDestroy {
+export class CuteDialogContainer extends CdkDialogContainer<CuteDialogConfig> {
   /** Emits when an animation state changes. */
   _animationStateChanged = new EventEmitter<LegacyDialogAnimationEvent>();
 
@@ -198,14 +198,14 @@ export class CuteDialogContainer extends CdkDialogContainer<CuteDialogConfig> im
       // all subscriptions have been fired as expected. This is not an ideal solution, but
       // there doesn't seem to be any other good way. Alternatives that have been considered:
       //   1. Deferring `DialogRef.close`. This could be a breaking change due to a new microtask.
-      //      Also this issue is specific to the MDC implementation where the dialog could
+      //      Also, this issue is specific to the MDC implementation where the dialog could
       //      technically be closed synchronously. In the non-MDC one, Angular animations are used
       //      and closing always takes at least a tick.
       //   2. Ensuring that user subscriptions to `backdropClick`, `keydownEvents` in the dialog
       //      ref are first. This would solve the issue, but has the risk of memory leaks and also
       //      doesn't solve the case where consumers call `DialogRef.close` in their subscriptions.
       // Based on the fact that this is specific to the MDC-based implementation of the dialog
-      // animations, the defer is applied here.
+      // animations, the deferring is applied here.
       Promise.resolve().then(() => this._finishDialogClose());
     }
   }
@@ -271,7 +271,7 @@ export class CuteDialogContainer extends CdkDialogContainer<CuteDialogConfig> im
 
   /**
    * Callback for when the open dialog animation has finished. Intended to
-   * be called by sub-classes that use different animation implementations.
+   * be called by subclasses that use different animation implementations.
    */
   protected _openAnimationDone(totalTime: number) {
     if (this._config.delayFocusTrap) {

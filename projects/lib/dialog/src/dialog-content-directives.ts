@@ -133,9 +133,9 @@ export abstract class CuteDialogLayoutSection implements OnInit, OnDestroy {
   selector: '[cute-dialog-title], [cuteDialogTitle]',
   exportAs: 'cuteDialogTitle',
   host: {
-    'class': 'cute-dialog-title modal-title user-select-none',
+    'class': 'cute-dialog-title modal-title d-flex user-select-none pe-none',
     '[id]': 'id || null',
-    '[style]': '{"pointer-events":"none", "padding": !_header ? "var(--bs-modal-header-padding)" : undefined}',
+    '[style]': '{"padding": !_header ? "var(--bs-modal-header-padding)" : undefined}',
   },
 })
 export class CuteDialogTitle extends CuteDialogLayoutSection {
@@ -201,7 +201,6 @@ export class CuteDialogFooter extends CuteDialogLayoutSection {
     this._dialogRef._containerInstance?._updateActionSectionCount?.(-1);
   }
 }
-
 
 /**
  * Finds the closest CuteDialogRef to an element by looking at the DOM.

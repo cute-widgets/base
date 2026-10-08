@@ -86,7 +86,7 @@ for detecting when an input becomes autofilled and changing the appearance of th
 
 ### Accessibility
 
-The `matNativeControl` directive works with native `<input>` to provide an accessible experience.
+The `cuteNativeControl` directive works with native `<input>` to provide an accessible experience.
 
 #### Aria attributes
 

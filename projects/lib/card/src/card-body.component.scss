@@ -3,6 +3,7 @@
   flex-direction: column;
   position: relative;
   gap: 0.5rem;
+  overflow: auto;
 
   .cute-card-title__wrapper:empty {
     display: none;

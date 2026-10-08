@@ -18,8 +18,9 @@ import {
   Renderer2, AfterViewInit, OnInit, AfterContentInit, booleanAttribute, isDevMode, InjectionToken, DestroyRef,
 } from '@angular/core';
 import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
-import {Observable, Subscriber} from "rxjs";
 import {RichThemeColor} from "@cute-widgets/base/core";
+import {Observable, Subscriber} from "rxjs";
+import {HasEventTargetAddRemove} from "rxjs/internal/observable/fromEvent";
 
 export interface ThematicControl {
   /** Theme color palette for the component. */
@@ -46,6 +47,9 @@ export interface CuteWidget extends ThematicControl {
   setAttribute(name: string, value: string, namespace?: string | null | undefined): void;
   hasAttributes(...attributes: string[]): boolean;
   markForCheck(): void;
+  addEventListener(eventName: string, listener: EventListenerOrEventListenerObject, options?:  boolean | AddEventListenerOptions): void;
+  removeEventListener(eventName: string, listener: EventListenerOrEventListenerObject, options?:  boolean | AddEventListenerOptions): void;
+  dispatchEvent(event: Event): boolean;
 }
 
 /** Widget's injection token */
@@ -64,7 +68,7 @@ export const CUTE_WIDGET = new InjectionToken<CuteWidget>("CUTE-WIDGET");
     providers: [{provide: CUTE_WIDGET, useExisting: CuteBaseControl}]
 })
 export abstract class CuteBaseControl
-            implements CuteWidget, OnInit, AfterViewInit, AfterContentInit, OnChanges, OnDestroy
+            implements CuteWidget, OnInit, AfterViewInit, AfterContentInit, OnChanges, OnDestroy, HasEventTargetAddRemove<Event>
 {
   private readonly _uniqueId:  string | undefined;
 
@@ -356,6 +360,49 @@ export abstract class CuteBaseControl
   /** Toggles the `disabled` state of the component */
   toggleDisabled(): void {
     this.disabled = !this.disabled;
+  }
+
+  /**
+   * Sets up a function that will be called whenever the specified event is delivered to the `CuteWidget`.
+   * Implementation of {@link HasEventTargetAddRemove} interface.
+   *
+   * @param eventName Event name/type.
+   * @param listener Event handler.
+   * @param options Listener options.
+   *
+   * @since 21.1.0
+   */
+  addEventListener(eventName: string, listener: EventListenerOrEventListenerObject, options?:  boolean | AddEventListenerOptions): void {
+    this._nativeElement.addEventListener(eventName, listener, options);
+  }
+
+  /**
+   * Removes an event listener previously registered with addEventListener() from the `CuteWidget`.
+   * Implementation of {@link HasEventTargetAddRemove} interface.
+   *
+   * @param eventName Event name/type.
+   * @param listener Event handler.
+   * @param options Listener options.
+   *
+   * @since 21.1.0
+   */
+  removeEventListener(eventName: string, listener: EventListenerOrEventListenerObject, options?:  boolean | AddEventListenerOptions): void {
+    this._nativeElement.removeEventListener(eventName, listener, options);
+  }
+
+  /**
+   * Sends an Event to the `CuteWidget`, (synchronously) invoking the affected event listeners in the appropriate order.
+   * The normal event processing rules (including the capturing and optional bubbling phase).
+
+   * @param event Event object.
+   * @returns _false_ if event is cancelable, and at least one of the event handlers which received event called Event.preventDefault().
+   *          Otherwise _true_.
+   * @throws InvalidStateError DomException – Thrown if the event's type was not specified during event initialization.
+   *
+   * @since 21.1.0
+   */
+  dispatchEvent(event: Event): boolean {
+    return this._nativeElement.dispatchEvent(event);
   }
 
   ngOnInit() {

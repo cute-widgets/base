@@ -124,7 +124,7 @@ export class CuteDialog implements OnDestroy {
   ): CuteDialogRef<T, R>;
 
   open<T, D = any, R = any>(
-    template: ComponentType<T> | TemplateRef<T>,
+    componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
     config?: CuteDialogConfig<D>,
   ): CuteDialogRef<T, R>;
 

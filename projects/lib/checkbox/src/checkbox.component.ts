@@ -23,8 +23,8 @@ import {
 } from '@angular/core';
 import {AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from "@angular/forms";
 import {
+  checkboxDefaults,
   CUTE_CHECKBOX_DEFAULT_OPTIONS,
-  CUTE_CHECKBOX_DEFAULT_OPTIONS_FACTORY,
   CuteCheckboxDefaultOptions
 } from "./checkbox.config";
 import {CuteInputControl} from '@cute-widgets/base/abstract';
@@ -42,7 +42,7 @@ export interface CuteCheckboxChange {
 let nextUniqueId = 0;
 
 // Default checkbox configuration.
-const defaults = CUTE_CHECKBOX_DEFAULT_OPTIONS_FACTORY();
+const defaults = checkboxDefaults;
 
 @Component({
     selector: 'cute-checkbox, cute-slide-toggle:not([cuteToggleSwitch])',
@@ -52,6 +52,7 @@ const defaults = CUTE_CHECKBOX_DEFAULT_OPTIONS_FACTORY();
     host: {
       'class': 'cute-checkbox',
       '[class.cute-checkbox-disabled]': 'disabled',
+      '[class.cute-checkbox-checked]': 'checked',
       '[class.cute-checkbox-disabled-interactive]': 'disabledInteractive',
       '[attr.tabindex]': 'null',
       '[attr.aria-label]': 'null',
@@ -167,11 +168,10 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
   @ViewChild('label')
   private _labelElement!: ElementRef<HTMLInputElement>;
 
-  constructor(...args: unknown[]);
   constructor() {
     super();
-    this._options = this._options || defaults;
-    this.color = this._options.color || defaults.color;
+    this._options = this._options || checkboxDefaults;
+    this.color = this._options.color || checkboxDefaults.color;
     this.disabledInteractive = this._options?.disabledInteractive ?? false;
     //++ CWT
     if (this._nativeElement.nodeName.toLowerCase()==="cute-slide-toggle") {
@@ -321,7 +321,7 @@ export class CuteCheckbox extends CuteInputControl implements Validator {
    *  bubbles when the label is clicked.
    */
   protected _preventBubblingFromLabel(event: MouseEvent) {
-    if (!!event.target && this._labelElement.nativeElement.contains(event.target as HTMLElement)) {
+    if (event.target && this._inputElement && event.target !== this._inputElement.nativeElement) {
       event.stopPropagation();
     }
   }

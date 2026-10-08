@@ -46,7 +46,6 @@ its trigger. The position can be changed using the `xPosition` (`before | after`
               "region": "menu-position"}) -->
 
 ### Nested menu
-
 `CuteWidgets` supports the ability for an `cute-menu-item` to open a submenu. To do so, you have to define
 your root menu and submenus, in addition to setting the `[cuteMenuTriggerFor]` on the `cute-menu-item`
 that should trigger the submenu:
@@ -54,6 +53,18 @@ that should trigger the submenu:
 <!-- example({"example": "menu-nested",
               "file": "menu-nested-example.html",
               "region": "sub-menu"}) -->
+
+### Context menu
+A context menu is a menu that is triggered by right-clicking in a specific area, rather than
+clicking on a trigger element. It is re-positioned if the user right-clicks somewhere else in the
+area and will be closed if the user clicks away.
+
+You can set up a `cute-menu` as a context menu by adding the `cuteContextMenuTriggerFor` directive
+to your container and binding it to a menu instance.
+
+Note that by default context menus don't create a backdrop element in order to allow the user to
+right-click somewhere else. You can opt into the backdrop by explicitly setting
+`[hasBackdrop]="true"` on the menu.
 
 ### Lazy rendering
 By default, the menu content will be initialized even when the panel is closed. To defer

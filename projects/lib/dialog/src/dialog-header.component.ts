@@ -12,7 +12,7 @@
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
-  Component, HostListener,
+  Component, DOCUMENT, HostListener, inject,
   Input, OnInit, ViewChild,
   ViewEncapsulation
 } from "@angular/core";
@@ -35,11 +35,11 @@ import {CuteDialogConfig} from "./dialog-config";
            [cdkDragDisabled]="!draggable || container.isFullScreenDialog()"
            [style.cursor]="getCursorStyle()"
       >
-          <ng-content select="[cute-dialog-title], [cuteDialogTitle]"></ng-content>
-          <ng-content></ng-content>
-          <button cuteButton="close-button"
-                  magnitude="small"
-                  cute-dialog-close></button>
+        <ng-content select="[cute-dialog-title], [cuteDialogTitle]"></ng-content>
+        <ng-content></ng-content>
+        <button cuteButton="close-button"
+                magnitude="small"
+                cute-dialog-close></button>
       </div>
     `,
     host: {
@@ -55,6 +55,10 @@ import {CuteDialogConfig} from "./dialog-config";
   ]
 })
 export class CuteDialogHeader implements OnInit {
+  private _focusedElem: Element|null = null;
+
+  protected document = inject(DOCUMENT);
+  protected container = inject(CuteDialogContainer);
 
   @ViewChild('header', {read: CdkDrag, static: true})
   protected cdkDragEl: CdkDrag | undefined;
@@ -72,10 +76,8 @@ export class CuteDialogHeader implements OnInit {
   set draggable(value: boolean) {this._draggable = value;}
   private _draggable: boolean = false;
 
-  constructor(
-    protected container: CuteDialogContainer
-  ) {
-    this.config = container._config;
+  constructor() {
+    this.config = this.container._config;
     // Assign an initial value based on the `draggable` property of the `CuteDialogConfig` object.
     // User can override this value by setting his/her value to the `draggable` input property
     this.draggable = !!this.config.draggable;
@@ -91,11 +93,16 @@ export class CuteDialogHeader implements OnInit {
   @HostListener("mousedown", ["$event"])
   protected onMouseDown(event: MouseEvent) {
     this.isMouseDown = true;
+    this._focusedElem = this.document.activeElement;
   }
 
-  @HostListener("mouseup", ["$event"])
+  @HostListener("window:mouseup", ["$event"])
   protected onMouseUp(event: MouseEvent) {
     this.isMouseDown = false;
+    if (this._focusedElem) {
+      (this._focusedElem as HTMLElement).focus();
+      this._focusedElem = null;
+    }
   }
 
   ngOnInit() {

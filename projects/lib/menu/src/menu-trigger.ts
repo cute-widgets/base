@@ -99,8 +99,6 @@ export class CuteMenuTrigger extends CuteMenuTriggerBase implements AfterContent
     // tslint:disable-next-line:no-output-on-prefix
   @Output() readonly onMenuClose: EventEmitter<void> = this.menuClosed;
 
-  constructor(...args: unknown[]);
-
   constructor() {
     super(true);
 
